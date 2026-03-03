@@ -1,15 +1,15 @@
 plugins {
-    id "application";
+	id "application";
 }
 
 def defaultMainClassName = "cosc202.andie.Andie";
 
 application {
-    mainClass = project.hasProperty("mainClass") ? project.getProperty("mainClass") : defaultMainClassName;
+	mainClass = project.hasProperty("mainClass") ? project.getProperty("mainClass") : defaultMainClassName;
 }
 
 repositories {
-    mavenCentral();
+	mavenCentral();
 }
 
 dependencies {
@@ -17,139 +17,185 @@ dependencies {
 }
 
 run {
-    standardInput = System.in;
+	standardInput = System.in;
 }
 
 test {
-    useJUnitPlatform();
+	useJUnitPlatform();
 
-    testLogging {
-        showStandardStreams = true;
-    }
+	testLogging {
+		showStandardStreams = true;
+	}
 }
 
 /* convenience tasks for working with a project */
 
+def layout = project.layout;
+
 tasks.register("createMissingSourceDirs") {
-    group = "Project";
-    description = "Create all of the missing source directories for this project.";
-    doFirst {
-        sourceSets.each { def sourceRoot ->
-            sourceRoot.allSource.srcDirTrees.each { def sourceDir ->
-                if(!sourceDir.dir.exists()) {
-                    println "Creating source ${sourceDir}";
-                    mkdir sourceDir.dir;
-                }
-            }
-        }
-    }
+	group = "Project";
+	description = "Create all of the missing source directories for this project.";
+
+	def javaExtension = project.extensions.findByType(JavaPluginExtension);
+
+	def sourceDirs = provider {
+		javaExtension?.sourceSets?.collectMany { it.allSource.srcDirs } ?: [];
+	}    
+
+	doLast {
+		// Resolve the provider once, then iterate the files
+		sourceDirs.get().each { File dir ->
+			if (!dir.exists()) {
+				println "Creating source directory: ${dir}";
+				dir.mkdirs();
+			}
+		}
+	}
 }
 
 tasks.register("deleteEmptySourceDirs") {
-    group = "Project";
-    description = "Delete empty source directories.";
-    doFirst {
-        sourceSets.each { def sourceRoot ->
-            sourceRoot.allSource.srcDirTrees.each { def sourceDir ->
-                if(sourceDir.dir.exists() && sourceDir.dir.isDirectory() && sourceDir.dir.list().length == 0) {
-                    println "Removing empty source ${sourceDir}";
-                    sourceDir.dir.delete();
-                }
-            }
-        }
-    }
+	group = "Project";
+	description = "Delete empty source directories.";
+
+	def javaExtension = project.extensions.findByType(JavaPluginExtension);
+
+	def sourceDirs = provider {
+		javaExtension?.sourceSets?.collectMany { it.allSource.srcDirs } ?: [];
+	}
+
+	doLast {
+		sourceDirs.get().each { File sourceDir ->
+			if (sourceDir.exists() && sourceDir.isDirectory() && sourceDir.list()?.length == 0) {
+				println "Removing empty source directory: ${sourceDir}";
+				sourceDir.delete();
+			}
+		}
+	}
 }
 
 tasks.register("openProjectDir") {
-    group = "Project";
-    description = "Open the project directory in the system file manager.";
-    doFirst {
-        println("Opening: " + file(projectDir));
-        java.awt.Desktop.getDesktop().open(file(projectDir));
-    }
+	group = "Project";
+	description = "Open the project directory in the system file manager.";
+
+	doLast {
+		def projectDir = layout.projectDirectory.asFile;
+		println("Opening: " + projectDir);
+		java.awt.Desktop.getDesktop().open(projectDir);
+	}
 }
 
 tasks.register("openBuildDir") {
-    group = "Project";
-    description = "Open the project build directory in the system file manager.";
-    doFirst {
-        println("Opening: " + file(buildDir));
-        java.awt.Desktop.getDesktop().open(file(buildDir));
-    }
+	group = "Project";
+	description = "Open the project build directory in the system file manager.";
+
+	doLast {
+		def buildDir = layout.buildDirectory.get().asFile;
+		println("Opening: " + buildDir);
+		java.awt.Desktop.getDesktop().open(buildDir);
+	}
 }
 
 tasks.register("openInTerminal") {
-    group = "Project";
-    description = "Open the project directory in a terminal.";
-    doLast {
-        def osName = System.getProperty("os.name").toLowerCase()
+	group = "Project";
+	description = "Open the project directory in a terminal.";
 
-        if (osName.contains("mac")) {
-            exec {
-                commandLine 'open', '-a', 'Terminal', '.'
-                workingDir projectDir
-            }
-        } else if (osName.contains("win")) {
-            exec {
-                commandLine 'powershell', '-NoExit', '-Command', 'Start-Process', 'powershell.exe'
-                workingDir projectDir
-            }
-        }        
-    }
+	def execSvc = services.get(ExecOperations);
+
+	def projectDir = layout.projectDirectory.asFile;
+
+	doLast {
+		def osName = System.getProperty("os.name").toLowerCase();
+
+		if (osName.contains("mac")) {
+			execSvc.exec {
+				commandLine 'open', '-a', 'Terminal', '.' workingDir projectDir
+			}
+		} else if (osName.contains("win")) {
+			execSvc.exec {
+				commandLine 'cmd', '/c', 'start', 'powershell' workingDir projectDir
+			}
+		}
+	}
 }
 
 tasks.register("createGitIgnore") {
-    group = "Project";
-    description = "Create the project's .gitignore file.";
+	group = "Project";
+	description = "Create the project's .gitignore file.";
 
-    def gitIgnored="""
-		.gradle/
-		.nb-gradle/
-		.settings/
-		nbproject/
-		build/
-		bin/
-		dist/
-		tmp/
-		.classpath
-		.project
-		*.zip
-		*.tgz
-		*.tar.gz
-		*.class
-		*.jar
-		*.orig
-		.DS_Store
-		!gradle-wrapper.jar
-		""";
+	def gitIgnored=
+			"""
+			.gradle/
+			.nb-gradle/
+			.settings/
+			nbproject/
+			build/
+			bin/
+			dist/
+			tmp/
+			.classpath
+			.project
+			*.zip
+			*.tgz
+			*.tar.gz
+			*.class
+			*.jar
+			*.orig
+			.DS_Store
+			!gradle-wrapper.jar
+			""";
 
-    doLast {
-        def file = new File(projectDir, ".gitignore");
-        if ( !file.exists() ) {
-            println("Creating .gitignore");
+	doLast {
+		def projectDir = layout.projectDirectory.asFile;
+		def file = new File(projectDir, ".gitignore");
+		if ( !file.exists() ) {
+			println("Creating .gitignore");
 
-            gitIgnored.lines().each { f ->
-                if(!f.trim().isBlank()) {
-                    file.append(f.trim()+"\n");
-                }
-            }
+			gitIgnored.lines().each { f ->
+				if(!f.trim().isBlank()) {
+					file.append(f.trim()+"\n");
+				}
+			}
 
-        } else {
-            println(".gitignore already exists");
-        }
-    }
+		} else {
+			println(".gitignore already exists");
+		}
+	}
 }
 
 tasks.register("info") {
-    group = "Project";
-    description = "Show version and location information for Java, Gradle, and project.";
-    doLast {
-        println "Java Version: " + org.gradle.internal.jvm.Jvm.current();
-        println "Java Home: " + org.gradle.internal.jvm.Jvm.current().getJavaHome();
-        println "Gradle Version: ${gradle.gradleVersion}";
-        println "Gradle Home: ${gradle.gradleHomeDir}";
-        println "Gradle User Home: ${gradle.gradleUserHomeDir}";
-        println "Project Location: ${projectDir}";
-        println "Project Build Location: ${buildDir}";
-    }
+	group = "Project"
+	description = "Show version and location information for Java, Gradle, and project."
+
+	def javaVersion = System.getProperty("java.version");
+	def javaHome = System.getProperty("java.home");
+	def gradleVersion = gradle.gradleVersion;
+	def gradleHome = gradle.gradleHomeDir;
+	def gradleUserHome = gradle.gradleUserHomeDir;
+	def projectDir = layout.projectDirectory.asFile;
+	def buildDir = layout.buildDirectory.get().asFile;
+
+	doLast {
+		// Use only the captured local variables here
+		println "--------------------------------------------------------------";
+		println "Java Version:      ${javaVersion}";
+		println "Java Home:         ${javaHome}";
+		println "Gradle Version:    ${gradleVersion}";
+		println "Gradle Home:       ${gradleHome}";
+		println "Gradle User Home:  ${gradleUserHome}";
+		println "Project Location:  ${projectDir}";
+		println "Build Location:    ${buildDir}";
+		println "--------------------------------------------------------------";
+	}
+}
+
+tasks.register("generateWrapper", Wrapper) {
+	group = "Project";
+	description = "Generate a specific version of the Gradle wrapper in the project.";
+	
+	gradleVersion = "9.2.1"
+	distributionType = Wrapper.DistributionType.BIN;
+
+	doLast {
+		println "Generated wrapper for Gradle ${gradleVersion}";
+	}
 }

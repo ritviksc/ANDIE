@@ -9,6 +9,7 @@ import javax.imageio.*;
  * Main class for A Non-Destructive Image Editor (ANDIE).
  * @shari838S
  * @hanro194
+ * @taima325
  * </p>
  *
  * <p>

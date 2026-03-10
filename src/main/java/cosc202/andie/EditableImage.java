@@ -7,6 +7,7 @@ import javax.imageio.*;
 
 /**
  * <p>
+ * @vanlo528
  * An image with a set of operations applied to it.
  * </p>
  *

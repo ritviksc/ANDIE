@@ -10,8 +10,7 @@ import javax.swing.*;
  * @taima325
  * @shari838 
  * @hanro194 
-@vanlo528
- * @hanro194
+ * @vanlo528
  * </p>
  *
  * <p>

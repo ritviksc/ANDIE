@@ -5,6 +5,7 @@ import java.awt.image.*;
 /**
  * <p>
  * ImageOperation to convert an image from colour to greyscale.
+ * @hanro194
  * </p>
  *
  * <p>

@@ -16,40 +16,29 @@ import java.util.Arrays;
 public class SharpenFilter implements ImageOperation, java.io.Serializable {
 
     /**
-     * The size of filter to apply. A radius of 1 is a 3x3 filter, a radius of 2
-     * a 5x5 filter, and so forth.
-     */
-    private int radius;
-
-    /**
      * <p>
-     * Construct a Mean filter with the given size.
+     * Construct a Sharpen filter.
      * </p>
      *
      * <p>
-     * The size of the filter is the 'radius' of the convolution kernel used. A
-     * size of 1 is a 3x3 filter, 2 is 5x5, and so on. Larger filters give a
-     * stronger blurring effect.
+     * A filter that enhances the difference between pixels.
      * </p>
      *
-     * @param radius The radius of the newly constructed MeanFilter
      */
     @SuppressWarnings("unused")
     SharpenFilter() {
     }
     /**
      * <p>
-     * Apply a Mean filter to an image.
+     * Apply a Sharpen filter to an image.
      * </p>
      *
      * <p>
-     * As with many filters, the Mean filter is implemented via convolution. The
-     * size of the convolution kernel is specified by the {@link radius}. Larger
-     * radii lead to stronger blurring.
+     * As with many filters, the Sharpen filter is implemented via convolution.
      * </p>
      *
      * @param input The image to apply the Mean filter to.
-     * @return The resulting (blurred)) image.
+     * @return The resulting (sharpened) image.
      */
     @Override
     public BufferedImage apply(BufferedImage input) {

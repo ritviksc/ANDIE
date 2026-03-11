@@ -1,6 +1,8 @@
-Sharpen filter 
+Robert
+Sharpen filter
 Gaussian blur filter
 Median filter
+
 Image thresholding
 Image inversion
 Colour channel swapping

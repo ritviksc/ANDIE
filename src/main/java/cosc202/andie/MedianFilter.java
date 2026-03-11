@@ -81,8 +81,8 @@ public class MedianFilter implements ImageOperation, java.io.Serializable {
     public BufferedImage apply(BufferedImage input) {
         int size = (2 * radius + 1);
         
-        int horizontalClusters = input.getWidth()/size;
-        int verticalClusters = input.getHeight()/size;
+        int horizontalClusters = input.getWidth();
+        int verticalClusters = input.getHeight();
         int[][] colours = new int[4][size*size]; // 1 alpha channel and 3 colour channels and size*size number of pixels
                                                  // 0 => alpha
                                                  // 1 => red
@@ -96,14 +96,14 @@ public class MedianFilter implements ImageOperation, java.io.Serializable {
                                 
                 for(int y = 0; y < size; y++){
                     for(int x = 0; x < size; x++){
-                        int argb = input.getRGB(x, y);
+                        int argb = input.getRGB(cx + x, cy + y);
 
                         int a = (argb & 0xFF000000) >>> 24;
                         int r = (argb & 0x00FF0000) >> 16;
                         int g = (argb & 0x0000FF00) >> 8;
                         int b = (argb & 0x000000FF);
                         
-                        System.out.println(Integer.toBinaryString(argb));
+                        // System.out.println(Integer.toBinaryString(argb));
                         
                         colours[ALPHA][pos] = a;
                         colours[RED][pos] = r;
@@ -133,8 +133,8 @@ public class MedianFilter implements ImageOperation, java.io.Serializable {
                     for(int x = 0; x < size; x++){
                         
                         int argb = (aAve << 24) | (rAve << 16) | (gAve << 8) | bAve; // Creates new argb value by assigning the new bit medians
-                        System.out.println(Integer.toBinaryString(argb));
-                        input.setRGB(x, y, argb);
+                        // System.out.println(Integer.toBinaryString(argb));
+                        input.setRGB(cx + x, cy + y, argb);
                         
                     }
                 } 

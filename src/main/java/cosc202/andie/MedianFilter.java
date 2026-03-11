@@ -5,7 +5,7 @@ import java.util.*;
 
 /**
  * <p>
- * ImageOperation to apply a Median (simple blur) filter.
+ * ImageOperation to apply a Median (complex blur) filter.
  * </p>
  *
  * <p>
@@ -74,19 +74,97 @@ public class MedianFilter implements ImageOperation, java.io.Serializable {
      */
     @Override
     public BufferedImage apply(BufferedImage input) {
-        int size = (2 * radius + 1) * (2 * radius + 1);
-        float[] array = new float[size];
-        Arrays.fill(array, 1.0f / size);
+        int size = (2 * radius + 1);
+        
+        int horizontalClusters = input.getWidth()/size;
+        int verticalClusters = input.getHeight()/size;
+        int[][] colours = new int[4][size*size]; // 1 alpha channel and 3 colour channels and size*size number of pixels
+                                                 // 0 => alpha
+                                                 // 1 => red
+                                                 // 2 => green
+                                                 // 3 => blue
+        int ALPHA = 0;
+        int RED = 1;
+        int GREEN = 2;
+        int BLUE = 3;
+        
+//        int argb = input.getRGB(1, 1);
+//        /* >> sets shifted-in bits to match the sign (high order) bit
+//        * >>> sets shifted-in bits to zero always
+//         */
+//        int a = (argb & 0xFF000000) >>> 24;
+//        int r = (argb & 0x00FF0000) >> 16;
+//        int g = (argb & 0x0000FF00) >> 8;
+//        int b = (argb & 0x000000FF);
+        int argb, a, r, g, b;
 
-        Kernel kernel = new Kernel(2 * radius + 1, 2 * radius + 1, array);
-        ConvolveOp convOp = new ConvolveOp(kernel);
-        
-        
+        for (int cy = 0; cy < verticalClusters; cy++) {
+            for (int cx = 0; cx < horizontalClusters; cx++) {
+                
+                int pos = 0; // The position in the current array
+                
+                for(int y = 0; y < size; y++){
+                    for(int x = 0; x < size; x++){
+                        argb = input.getRGB(x, y);
+
+                        a = (argb & 0xFF000000) >>> 24;
+                        r = (argb & 0x00FF0000) >> 16;
+                        g = (argb & 0x0000FF00) >> 8;
+                        b = (argb & 0x000000FF);
+                        
+                        colours[ALPHA][pos] = a;
+                        colours[RED][pos] = r;
+                        colours[GREEN][pos] = g;
+                        colours[BLUE][pos] = b;
+                        
+                        
+                    }
+                } // Gets the rgb values of the cluster and stores them in a 2d array
+                
+                int aAve;
+                int rAve;
+                int gAve;
+                int bAve;
+                
+                for(int colour = 0; colour < 4; colour++){
+                    
+                    int currentAverage = 0;
+                    
+                    for(int i = 0; i < size*size; i++){
+                    
+                        currentAverage += colours[colour][i];
+                        
+                    }
+                    
+                    currentAverage /= (size*size);
+                    
+                    switch(colour){ // Assign each colour channel its new average
+                        
+                        case 0:
+                            
+                            aAve = currentAverage;
+                        
+                        case 1:
+                            
+                            rAve = currentAverage;
+                        
+                        case 2:
+                            
+                            gAve = currentAverage;
+                        
+                        case 3:
+                            
+                            bAve = currentAverage;
+                        
+                    }
+                    
+                }
+
+            }
+        }
         
         
         BufferedImage output = new BufferedImage(input.getColorModel(), input.copyData(null), input.isAlphaPremultiplied(), null);
-        convOp.filter(input, output);
-
         return output;
     }
 

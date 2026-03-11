@@ -280,7 +280,7 @@ public class FilterActions {
                 // Pop-up dialog box to ask for the radius value.
                 SpinnerNumberModel radiusModel = new SpinnerNumberModel(1, 1, 10, 1);
                 JSpinner radiusSpinner = new JSpinner(radiusModel);
-                int option = JOptionPane.showOptionDialog(null, radiusSpinner, "Enter filter radius. MAXIMUM OF tbd", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+                int option = JOptionPane.showOptionDialog(null, radiusSpinner, "Enter filter radius. MAXIMUM OF 10", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 
                 // Check the return value from the dialog box.
                 if (option == JOptionPane.CANCEL_OPTION) {
@@ -288,7 +288,7 @@ public class FilterActions {
                 } else if (option == JOptionPane.OK_OPTION) {
                     radius = radiusModel.getNumber().intValue();
                 }
-            }while(radius >= 10 || radius <= 0); //Enforce a hard limit on a O(n^4) operation
+            }while(radius >= 11 || radius <= 0); // Enforce a hard limit on a O(n^4) operation
             // Create and apply the filter
             target.getImage().apply(new MedianFilter(radius));
             target.repaint();

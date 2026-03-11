@@ -42,6 +42,7 @@ public class FilterActions {
     public FilterActions() {
         actions = new ArrayList<>();
         actions.add(new MeanFilterAction("Mean filter", null, "Apply a mean filter", KeyEvent.VK_M));
+        actions.add(new SharpenFilterAction("Sharpen filter", null, "Apply a sharpen filter", KeyEvent.VK_S));
     }
 
     /**
@@ -87,7 +88,7 @@ public class FilterActions {
 
         /**
          * <p>
-         * Callback for when the convert-to-grey action is triggered.
+         * Callback for when the mean-filter-action action is triggered.
          * </p>
          *
          * <p>
@@ -118,6 +119,53 @@ public class FilterActions {
 
             // Create and apply the filter
             target.getImage().apply(new MeanFilter(radius));
+            target.repaint();
+            target.getParent().revalidate();
+        }
+
+    }
+    
+    /**
+     * <p>
+     * Action to sharpen an image with a sharpening filter.
+     * </p>
+     *
+     * @see SharpenFilter
+     */
+    public class SharpenFilterAction extends ImageAction {
+
+        /**
+         * <p>
+         * Create a new mean-filter action.
+         * </p>
+         *
+         * @param name The name of the action (ignored if null).
+         * @param icon An icon to use to represent the action (ignored if null).
+         * @param desc A brief description of the action (ignored if null).
+         * @param mnemonic A mnemonic key to use as a shortcut (ignored if
+         * null).
+         */
+        SharpenFilterAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+            super(name, icon, desc, mnemonic);
+        }
+
+        /**
+         * <p>
+         * Callback for when the sharpen-filter-action action is triggered.
+         * </p>
+         *
+         * <p>
+         * This method is called whenever the SharpenFilterAction is triggered.
+         * It then applies a {@link SharpenFilter}
+         * </p>
+         *
+         * @param e The event triggering this callback.
+         */
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            // Create and apply the filter
+            target.getImage().apply(new SharpenFilter());
             target.repaint();
             target.getParent().revalidate();
         }

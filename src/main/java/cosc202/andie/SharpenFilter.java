@@ -43,7 +43,7 @@ public class SharpenFilter implements ImageOperation, java.io.Serializable {
     @Override
     public BufferedImage apply(BufferedImage input) {
         
-        float[] array = {0, -1/2.0f, 0
+        float[] array = {0, -1/2.0f, 0,
                         -1/2.0f, 3.0f, -1/2.0f,
                         0, -1/2.0f, 0
         };

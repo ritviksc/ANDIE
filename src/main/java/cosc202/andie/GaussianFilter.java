@@ -73,18 +73,41 @@ public class GaussianFilter implements ImageOperation, java.io.Serializable {
      */
     @Override
     public BufferedImage apply(BufferedImage input) {
+        
         int size = (2 * radius + 1) * (2 * radius + 1);
+
         float[] array = new float[size];
-        float rho = (float) (1/3.0*radius);
-        for(int y = 0; y < Math.sqrt(size); y++){
-            for(int x = 0; x < Math.sqrt(x); x++){
+        float rho = (float) (1/3.0*radius); // Used in calculating Gaussian
+        float sum = 0f; // Running total for normalisation
+        int pos = 0; // For tracking where we are in the array
+        for(int y = -radius; y <= radius; y++){
+            
+            for(int x = -radius; x <= radius; x++){
                 
-                array[3*y+x] = getGaussianValue(x, y, rho);
+                System.out.println(x + " " + y);
+                array[pos] = getGaussianValue(x, y, rho);
+                sum += array[pos];
+                pos++;
                 
             }
             
         }
-        Arrays.fill(array, 1.0f / size);
+        
+        pos = 0; // Go back to the start of the list
+        
+        for(int y = -radius; y <= radius; y++){
+            
+            for(int x = -radius; x <= radius; x++){
+
+                array[pos] /= sum;  // Normalise each value
+                System.out.print(array[pos] + "   ");
+                pos++;
+                
+            }
+            
+            System.out.println();
+            
+        }
 
         Kernel kernel = new Kernel(2 * radius + 1, 2 * radius + 1, array);
         ConvolveOp convOp = new ConvolveOp(kernel);
@@ -102,7 +125,11 @@ public class GaussianFilter implements ImageOperation, java.io.Serializable {
      */
     private static float getGaussianValue(int x, int y, float rho){
         
-        float value = (float) ((float) (1/(2*Math.PI*(rho*rho)))*Math.exp(-((x*x)+(y*y))/(2*(rho*rho))));
+        float firstHalf = 1f/(2*(float) Math.PI*(rho*rho));
+        float exponent = -((x * x + y * y) / (2f * rho * rho));
+        float secondHalf = (float) Math.exp(exponent);
+        
+        float value = firstHalf*secondHalf;
         
         return value;
     }

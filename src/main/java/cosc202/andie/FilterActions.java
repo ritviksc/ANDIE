@@ -44,6 +44,7 @@ public class FilterActions {
         actions.add(new MeanFilterAction("Mean filter", null, "Apply a mean filter", KeyEvent.VK_M));
         actions.add(new SharpenFilterAction("Sharpen filter", null, "Apply a sharpen filter", KeyEvent.VK_S));
         actions.add(new GaussianFilterAction("Gaussian filter", null, "Apply a Gaussian filter", KeyEvent.VK_G));
+        actions.add(new MedianFilterAction("Median filter", null, "Apply a Median filter", KeyEvent.VK_E));
     }
 
     /**
@@ -228,6 +229,68 @@ public class FilterActions {
             
             // Create and apply the filter
             target.getImage().apply(new GaussianFilter(radius));
+            target.repaint();
+            target.getParent().revalidate();
+        }
+
+    }
+    
+    
+    /**
+     * <p>
+     * Action to apply a Median blur an image with a Median blurring filter.
+     * </p>
+     *
+     * @see MedianFilter
+     */
+    public class MedianFilterAction extends ImageAction {
+
+        /**
+         * <p>
+         * Create a new Median-filter action.
+         * </p>
+         *
+         * @param name The name of the action (ignored if null).
+         * @param icon An icon to use to represent the action (ignored if null).
+         * @param desc A brief description of the action (ignored if null).
+         * @param mnemonic A mnemonic key to use as a shortcut (ignored if
+         * null).
+         */
+        MedianFilterAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+            super(name, icon, desc, mnemonic);
+        }
+
+        /**
+         * <p>
+         * Callback for when the Median-filter-action action is triggered.
+         * </p>
+         *
+         * <p>
+         * This method is called whenever the MedianFilterAction is triggered.
+         * It then applies a {@link MedianFilter}
+         * </p>
+         *
+         * @param e The event triggering this callback.
+         */
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Determine the radius - ask the user.
+            int radius = 1;
+            do{
+                // Pop-up dialog box to ask for the radius value.
+                SpinnerNumberModel radiusModel = new SpinnerNumberModel(1, 1, 10, 1);
+                JSpinner radiusSpinner = new JSpinner(radiusModel);
+                int option = JOptionPane.showOptionDialog(null, radiusSpinner, "Enter filter radius. MAXIMUM OF tbd", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+
+                // Check the return value from the dialog box.
+                if (option == JOptionPane.CANCEL_OPTION) {
+                    return;
+                } else if (option == JOptionPane.OK_OPTION) {
+                    radius = radiusModel.getNumber().intValue();
+                }
+            }while(radius >= 10 || radius <= 0); //Enforce a hard limit on a O(n^4) operation
+            // Create and apply the filter
+            target.getImage().apply(new MedianFilter(radius));
             target.repaint();
             target.getParent().revalidate();
         }

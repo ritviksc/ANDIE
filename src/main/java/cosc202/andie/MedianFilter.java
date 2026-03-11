@@ -24,8 +24,8 @@ import java.util.*;
 public class MedianFilter implements ImageOperation, java.io.Serializable {
 
     /**
-     * The size of the neighbourhood to apply. A radius of 1 is a 3x3 neighbourhood, a radius of 2
-     * a 5x5 neighbourhood, and so forth.
+     * The size of the cluster to apply. A radius of 1 is a 3x3 cluster, a radius of 2
+     * a 5x5 cluster, and so forth.
      */
     private int radius;
     private static final int ALPHA = 0;
@@ -74,7 +74,7 @@ public class MedianFilter implements ImageOperation, java.io.Serializable {
      * </p>
      *
      * @param input The image to apply the Median filter to.
-     * @return The resulting (blurred)) image.
+     * @return The resulting (blurred) image.
      */
     @Override
     
@@ -88,59 +88,47 @@ public class MedianFilter implements ImageOperation, java.io.Serializable {
                                                  // 1 => red
                                                  // 2 => green
                                                  // 3 => blue
-        
-        
-        int argb = input.getRGB(1, 1);
-        /* >> sets shifted-in bits to match the sign (high order) bit
-        * >>> sets shifted-in bits to zero always
-         */
-        int a = (argb & 0xFF000000) >>> 24;
-        int r = (argb & 0x00FF0000) >> 16;
-        int g = (argb & 0x0000FF00) >> 8;
-        int b = (argb & 0x000000FF);
 
         for (int cy = 0; cy < verticalClusters; cy++) {
             for (int cx = 0; cx < horizontalClusters; cx++) {
                 
                 int pos = 0; // The position in the current array
-                int aAve = 0;
-                int rAve = 0;
-                int gAve = 0;
-                int bAve = 0;
-                
+                                
                 for(int y = 0; y < size; y++){
                     for(int x = 0; x < size; x++){
-                        argb = input.getRGB(x, y);
+                        int argb = input.getRGB(x, y);
 
-                        a = (argb & 0xFF000000) >>> 24;
-                        r = (argb & 0x00FF0000) >> 16;
-                        g = (argb & 0x0000FF00) >> 8;
-                        b = (argb & 0x000000FF);
+                        int a = (argb & 0xFF000000) >>> 24;
+                        int r = (argb & 0x00FF0000) >> 16;
+                        int g = (argb & 0x0000FF00) >> 8;
+                        int b = (argb & 0x000000FF);
                         
                         
                         colours[ALPHA][pos] = a;
                         colours[RED][pos] = r;
                         colours[GREEN][pos] = g;
                         colours[BLUE][pos] = b;
-                        
+                        pos++;
                         
                     }
                 } // Gets the rgb values of the cluster and stores them in a 2d array
+                
+                
                 for (int[] colour : colours) { // Sort each array
                     Arrays.sort(colour);
                 }
                 
                 int mean = (size*size/2) + 1;
                 
-                aAve = colours[ALPHA][mean];
-                rAve = colours[RED][mean];
-                gAve = colours[GREEN][mean];
-                bAve = colours[BLUE][mean]; // Get the mean for each colour
+                int aAve = colours[ALPHA][mean];
+                int rAve = colours[RED][mean];
+                int gAve = colours[GREEN][mean];
+                int bAve = colours[BLUE][mean]; // Get the mean for each colour
                 
                 for(int y = 0; y < size; y++){
                     for(int x = 0; x < size; x++){
                         
-                        argb = (aAve << 24) | (rAve << 16) | (gAve << 8) | bAve; // Creates new argb value by assigning the new bit averages
+                        int argb = (aAve << 24) | (rAve << 16) | (gAve << 8) | bAve; // Creates new argb value by assigning the new bit medians
                         
                         input.setRGB(x, y, argb);
                         
@@ -150,9 +138,7 @@ public class MedianFilter implements ImageOperation, java.io.Serializable {
             }
         }
         
-        
-        BufferedImage output = new BufferedImage(input.getColorModel(), input.copyData(null), input.isAlphaPremultiplied(), null);
-        return output;
+        return input;
     }
 
 }

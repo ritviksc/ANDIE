@@ -103,6 +103,7 @@ public class MedianFilter implements ImageOperation, java.io.Serializable {
                         int g = (argb & 0x0000FF00) >> 8;
                         int b = (argb & 0x000000FF);
                         
+                        System.out.println(Integer.toBinaryString(argb));
                         
                         colours[ALPHA][pos] = a;
                         colours[RED][pos] = r;
@@ -116,9 +117,12 @@ public class MedianFilter implements ImageOperation, java.io.Serializable {
                 
                 for (int[] colour : colours) { // Sort each array
                     Arrays.sort(colour);
+                    // System.out.println(Arrays.toString(colour));
                 }
                 
-                int mean = (size*size/2) + 1;
+                int mean = (size*size/2) + 1; //1110 1100   1110 1110   1111 1011
+                
+                
                 
                 int aAve = colours[ALPHA][mean];
                 int rAve = colours[RED][mean];
@@ -129,7 +133,7 @@ public class MedianFilter implements ImageOperation, java.io.Serializable {
                     for(int x = 0; x < size; x++){
                         
                         int argb = (aAve << 24) | (rAve << 16) | (gAve << 8) | bAve; // Creates new argb value by assigning the new bit medians
-                        
+                        System.out.println(Integer.toBinaryString(argb));
                         input.setRGB(x, y, argb);
                         
                     }

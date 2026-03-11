@@ -8,15 +8,16 @@ Image thresholding
 Image inversion
 Colour channel swapping
 
-Multilingual support
-
 Ritvik
 Image resize
 Image rotations: 90◦ left; 90◦ right; 180◦
 Image flip: Horizontal; Vertical
 
+Loek
 Image export
 Exception handling
+Multilingual support
+
 Other error avoidance/prevention
 User experience
 README documentation

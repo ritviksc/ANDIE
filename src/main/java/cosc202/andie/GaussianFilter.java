@@ -35,7 +35,7 @@ public class GaussianFilter implements ImageOperation, java.io.Serializable {
      * stronger blurring effect.
      * </p>
      *
-     * @param radius The radius of the newly constructed MeanFilter
+     * @param radius The radius of the newly constructed GaussianFilter
      */
     GaussianFilter(int radius) {
         this.radius = radius;
@@ -47,7 +47,7 @@ public class GaussianFilter implements ImageOperation, java.io.Serializable {
      * </p
      * >
      * <p>
-     * By default, a Gaussian filter has radius 1.
+     * By default, a Gaussian filter has radius 1 (3x3).
      * </p>
      *
      * @see MeanFilter(int)
@@ -63,13 +63,13 @@ public class GaussianFilter implements ImageOperation, java.io.Serializable {
      * </p>
      *
      * <p>
-     * As with many filters, the Mean filter is implemented via convolution. The
+     * As with many filters, the Gaussian filter is implemented via convolution. The
      * size of the convolution kernel is specified by the {@link radius}. Larger
-     * radii lead to stronger blurring.
+     * radii lead to stronger blurring with smaller radii giving much weaker blurs.
      * </p>
      *
-     * @param input The image to apply the Mean filter to.
-     * @return The resulting (blurred)) image.
+     * @param input The image to apply the Gaussian filter to.
+     * @return The resulting (blurred) image.
      */
     @Override
     public BufferedImage apply(BufferedImage input) {
@@ -77,15 +77,14 @@ public class GaussianFilter implements ImageOperation, java.io.Serializable {
         int size = (2 * radius + 1) * (2 * radius + 1);
 
         float[] array = new float[size];
-        float rho = (float) (1/3.0*radius); // Used in calculating Gaussian
+        float sigma = (float) (1/3.0*radius); // Used in calculating Gaussian
         float sum = 0f; // Running total for normalisation
         int pos = 0; // For tracking where we are in the array
         for(int y = -radius; y <= radius; y++){
             
             for(int x = -radius; x <= radius; x++){
                 
-                System.out.println(x + " " + y);
-                array[pos] = getGaussianValue(x, y, rho);
+                array[pos] = getGaussianValue(x, y, sigma);
                 sum += array[pos];
                 pos++;
                 
@@ -100,12 +99,12 @@ public class GaussianFilter implements ImageOperation, java.io.Serializable {
             for(int x = -radius; x <= radius; x++){
 
                 array[pos] /= sum;  // Normalise each value
-                System.out.print(array[pos] + "   ");
+//                System.out.print(array[pos] + "   "); // Print the array to console
                 pos++;
                 
             }
             
-            System.out.println();
+//            System.out.println(); // Prints new line for array
             
         }
 
@@ -116,17 +115,19 @@ public class GaussianFilter implements ImageOperation, java.io.Serializable {
 
         return output;
     }
-    /**
+    /** <p>
+     * A function that returns the Gaussian value at a given set of co-ordinates and sigma
+     * </p>
      * 
-     * @param x
-     * @param y
-     * @param rho 
-     * @return The value of the Gaussian function at the point
+     * @param x the x co-ordinate
+     * @param y the y co-ordinate
+     * @param sigma the sigma value
+     * @return The value of the Gaussian function at the given point
      */
-    private static float getGaussianValue(int x, int y, float rho){
+    private static float getGaussianValue(int x, int y, float sigma){
         
-        float firstHalf = 1f/(2*(float) Math.PI*(rho*rho));
-        float exponent = -((x * x + y * y) / (2f * rho * rho));
+        float firstHalf = 1f/(2*(float) Math.PI*(sigma*sigma));
+        float exponent = -((x*x + y*y) / (2f*(sigma*sigma)));
         float secondHalf = (float) Math.exp(exponent);
         
         float value = firstHalf*secondHalf;

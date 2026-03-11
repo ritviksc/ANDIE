@@ -18,6 +18,8 @@ Image export
 Multilingual support
 
 Exception handling
+Multilingual support
+
 Other error avoidance/prevention
 User experience
 README documentation

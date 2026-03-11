@@ -80,28 +80,30 @@ public class MedianFilter implements ImageOperation, java.io.Serializable {
     
     public BufferedImage apply(BufferedImage input) {
         int size = ((2 * radius) + 1);
-        
+        BufferedImage output = new BufferedImage(input.getColorModel(), input.copyData(null), input.isAlphaPremultiplied(), null);
         int horizontalClusters = input.getWidth() - size;
         int verticalClusters = input.getHeight() - size;
+        
         int[][] colours = new int[4][size*size]; // 1 alpha channel and 3 colour channels and size*size number of pixels
                                                  // 0 => alpha
                                                  // 1 => red
                                                  // 2 => green
                                                  // 3 => blue
-
+        int median = (size*size) / 2;
         for (int cy = size; cy < verticalClusters; cy++) {
             for (int cx = size; cx < horizontalClusters; cx++) {
                 
                 int pos = 0; // The position in the current array
-                for(int y = -radius; y < radius; y++){
-                    for(int x = -radius; x < radius; x++){
+                for(int y = -radius; y <= radius; y++){
+                    for(int x = -radius; x <= radius; x++){
 
                         int argb = input.getRGB(cx + x, cy + y);
-
-                        int a = (argb & 0xFF000000) >>> 24;
-                        int r = (argb & 0x00FF0000) >> 16;
-                        int g = (argb & 0x0000FF00) >> 8;
-                        int b = (argb & 0x000000FF);
+                        
+                        int a = (argb >>> 24) & 0xFF;
+                        int r = (argb >>> 16) & 0xFF;
+                        int g = (argb >>> 8) & 0xFF;
+                        int b = argb & 0xFF;
+                        
                         
 
                         colours[ALPHA][pos] = a;
@@ -119,8 +121,7 @@ public class MedianFilter implements ImageOperation, java.io.Serializable {
                     // System.out.println(Arrays.toString(colour));
                 }
                 
-                int median = size/2;
-                if(size % 2 == 1) median++;
+                
                 
                 
                 
@@ -128,21 +129,15 @@ public class MedianFilter implements ImageOperation, java.io.Serializable {
                 int rAve = colours[RED][median];
                 int gAve = colours[GREEN][median];
                 int bAve = colours[BLUE][median]; // Get the median for each colour
+                int argb = (aAve << 24) | (rAve << 16) | (gAve << 8) | bAve; // Creates new argb value by assigning the new bits
+                // System.out.println(Integer.toBinaryString(argb));
                 
-                for(int y = -radius; y < radius; y++){
-                    for(int x = -radius; x < radius; x++){
-                        
-                        int argb = (aAve << 24) | (rAve << 16) | (gAve << 8) | bAve; // Creates new argb value by assigning the new bit medians
-                        System.out.println(Integer.toBinaryString(argb));
-                        input.setRGB(cx + x, cy + y, argb);
-                        
-                    }
-                } 
+                output.setRGB(cx, cy, argb);
                 
             }
         }
         
-        return input;
+        return output;
     }
 
 }

@@ -3,9 +3,11 @@ Sharpen filter
 Gaussian blur filter
 Median filter
 
+Maleena
 Image thresholding
 Image inversion
 Colour channel swapping
+
 Multilingual support
 
 Ritvik

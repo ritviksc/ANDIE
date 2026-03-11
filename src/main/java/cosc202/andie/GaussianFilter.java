@@ -46,7 +46,7 @@ public class GaussianFilter implements ImageOperation, java.io.Serializable {
      * </p
      * >
      * <p>
-     * By default, a Gaussian filter has radius 1.
+     * By default, a Gaussian filter has radius 1 (3x3).
      * </p>
      *
      * @see GaussianFilter(int)
@@ -64,6 +64,7 @@ public class GaussianFilter implements ImageOperation, java.io.Serializable {
      * <p>
      * As with many filters, the Gaussian filter is implemented via convolution. The
      * size of the convolution kernel is specified by the {@link radius}. Larger
+
      * radii lead to stronger blurring with smaller values being much weaker.
      * </p>
      *
@@ -99,12 +100,14 @@ public class GaussianFilter implements ImageOperation, java.io.Serializable {
             for(int x = -radius; x <= radius; x++){
 
                 array[pos] /= sum;  // Normalise each value
+
 //                System.out.print(array[pos] + "   "); // Print out the array
                 pos++; // Go to next array slot
                 
             }
             
 //            System.out.println();
+
             
         }
 
@@ -115,6 +118,7 @@ public class GaussianFilter implements ImageOperation, java.io.Serializable {
 
         return output;
     }
+
     /**
      * <p>
      * A function that returns the Gaussian value at a given point
@@ -127,7 +131,9 @@ public class GaussianFilter implements ImageOperation, java.io.Serializable {
     private static float getGaussianValue(int x, int y, float sigma){
         
         float firstHalf = 1f/(2*(float) Math.PI*(sigma*sigma));
+
         float exponent = -((x * x + y * y) / (2f * sigma * sigma));
+
         float secondHalf = (float) Math.exp(exponent);
         
         float value = firstHalf*secondHalf;

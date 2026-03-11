@@ -81,8 +81,8 @@ public class MedianFilter implements ImageOperation, java.io.Serializable {
     public BufferedImage apply(BufferedImage input) {
         int size = ((2 * radius) + 1);
         BufferedImage output = new BufferedImage(input.getColorModel(), input.copyData(null), input.isAlphaPremultiplied(), null);
-        int horizontalClusters = input.getWidth() - size;
-        int verticalClusters = input.getHeight() - size;
+        int horizontalClusters = input.getWidth();
+        int verticalClusters = input.getHeight();
         
         int[][] colours = new int[4][size*size]; // 1 alpha channel and 3 colour channels and size*size number of pixels
                                                  // 0 => alpha
@@ -90,27 +90,55 @@ public class MedianFilter implements ImageOperation, java.io.Serializable {
                                                  // 2 => green
                                                  // 3 => blue
         int median = (size*size) / 2;
-        for (int cy = size; cy < verticalClusters; cy++) {
-            for (int cx = size; cx < horizontalClusters; cx++) {
+        int lastValidPixel = input.getRGB(0, 0);
+        for (int cy = 0; cy < verticalClusters; cy++) {
+            for (int cx = 0; cx < horizontalClusters; cx++) {
                 
                 int pos = 0; // The position in the current array
                 for(int y = -radius; y <= radius; y++){
                     for(int x = -radius; x <= radius; x++){
+                        
+                        try{
+                            int xCorrected;
+                            int yCorrected;
+                            
+                            if(cx + x > 0 && cx + x < horizontalClusters) xCorrected = cx + x;
+                            else if(cx + x < 0) xCorrected = 0;
+                            else xCorrected = horizontalClusters - 1;
+                            
+                            if(cy + y > 0 && cy + y < verticalClusters) yCorrected = cy + y;
+                            else if(cy + y < 0) yCorrected = 0;
+                            else yCorrected = verticalClusters - 1;
+                            
+                            int argb = input.getRGB(xCorrected, yCorrected);
+                            lastValidPixel = argb;
+                            int a = (argb >>> 24) & 0xFF;
+                            int r = (argb >>> 16) & 0xFF;
+                            int g = (argb >>> 8) & 0xFF;
+                            int b = argb & 0xFF;
 
-                        int argb = input.getRGB(cx + x, cy + y);
-                        
-                        int a = (argb >>> 24) & 0xFF;
-                        int r = (argb >>> 16) & 0xFF;
-                        int g = (argb >>> 8) & 0xFF;
-                        int b = argb & 0xFF;
-                        
-                        
+                            colours[ALPHA][pos] = a;
+                            colours[RED][pos] = r;
+                            colours[GREEN][pos] = g;
+                            colours[BLUE][pos] = b;
+                            pos++;
 
-                        colours[ALPHA][pos] = a;
-                        colours[RED][pos] = r;
-                        colours[GREEN][pos] = g;
-                        colours[BLUE][pos] = b;
-                        pos++;
+                        } catch(ArrayIndexOutOfBoundsException e){
+                        
+                            int argb = lastValidPixel;
+                            int a = (argb >>> 24) & 0xFF;
+                            int r = (argb >>> 16) & 0xFF;
+                            int g = (argb >>> 8) & 0xFF;
+                            int b = argb & 0xFF;
+
+                            colours[ALPHA][pos] = a;
+                            colours[RED][pos] = r;
+                            colours[GREEN][pos] = g;
+                            colours[BLUE][pos] = b;
+                            pos++;
+                        
+                        }
+                        
                         
                     }
                 } // Gets the rgb values of the cluster and stores them in a 2d array

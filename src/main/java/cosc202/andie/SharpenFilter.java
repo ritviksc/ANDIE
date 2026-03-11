@@ -37,7 +37,7 @@ public class SharpenFilter implements ImageOperation, java.io.Serializable {
      * As with many filters, the Sharpen filter is implemented via convolution.
      * </p>
      *
-     * @param input The image to apply the Mean filter to.
+     * @param input The image to apply the Sharpen filter to.
      * @return The resulting (sharpened) image.
      */
     @Override

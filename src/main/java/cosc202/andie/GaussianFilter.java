@@ -1,7 +1,6 @@
 package cosc202.andie;
 
 import java.awt.image.*;
-import java.util.*;
 
 /**
  * <p>
@@ -50,7 +49,7 @@ public class GaussianFilter implements ImageOperation, java.io.Serializable {
      * By default, a Gaussian filter has radius 1 (3x3).
      * </p>
      *
-     * @see MeanFilter(int)
+     * @see GaussianFilter(int)
      */
     @SuppressWarnings("unused")
     GaussianFilter() {
@@ -65,11 +64,12 @@ public class GaussianFilter implements ImageOperation, java.io.Serializable {
      * <p>
      * As with many filters, the Gaussian filter is implemented via convolution. The
      * size of the convolution kernel is specified by the {@link radius}. Larger
-     * radii lead to stronger blurring with smaller radii giving much weaker blurs.
+
+     * radii lead to stronger blurring with smaller values being much weaker.
      * </p>
      *
      * @param input The image to apply the Gaussian filter to.
-     * @return The resulting (blurred) image.
+     * @return The resulting (blurred)) image.
      */
     @Override
     public BufferedImage apply(BufferedImage input) {
@@ -84,9 +84,10 @@ public class GaussianFilter implements ImageOperation, java.io.Serializable {
             
             for(int x = -radius; x <= radius; x++){
                 
-                array[pos] = getGaussianValue(x, y, sigma);
-                sum += array[pos];
-                pos++;
+//                System.out.println(x + " " + y);
+                array[pos] = getGaussianValue(x, y, sigma); // Set the value at each co-ordinate
+                sum += array[pos]; // Add to total
+                pos++; // Go to next spot in array
                 
             }
             
@@ -99,12 +100,14 @@ public class GaussianFilter implements ImageOperation, java.io.Serializable {
             for(int x = -radius; x <= radius; x++){
 
                 array[pos] /= sum;  // Normalise each value
-//                System.out.print(array[pos] + "   "); // Print the array to console
-                pos++;
+
+//                System.out.print(array[pos] + "   "); // Print out the array
+                pos++; // Go to next array slot
                 
             }
             
-//            System.out.println(); // Prints new line for array
+//            System.out.println();
+
             
         }
 
@@ -115,19 +118,22 @@ public class GaussianFilter implements ImageOperation, java.io.Serializable {
 
         return output;
     }
-    /** <p>
-     * A function that returns the Gaussian value at a given set of co-ordinates and sigma
+
+    /**
+     * <p>
+     * A function that returns the Gaussian value at a given point
      * </p>
-     * 
      * @param x the x co-ordinate
      * @param y the y co-ordinate
      * @param sigma the sigma value
-     * @return The value of the Gaussian function at the given point
+     * @return The value of the Gaussian function at the point
      */
     private static float getGaussianValue(int x, int y, float sigma){
         
         float firstHalf = 1f/(2*(float) Math.PI*(sigma*sigma));
-        float exponent = -((x*x + y*y) / (2f*(sigma*sigma)));
+
+        float exponent = -((x * x + y * y) / (2f * sigma * sigma));
+
         float secondHalf = (float) Math.exp(exponent);
         
         float value = firstHalf*secondHalf;

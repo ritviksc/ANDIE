@@ -227,7 +227,7 @@ public class EditActions {
 
      /**
      * <p>
-     * Action to resize an image {@link ImageOperation}.
+     * Action to flip an image horizontally {@link ImageOperation}.
      * </p>
      *
      * @see ImageFlipHorizontal#apply(java.awt.image.BufferedImage)
@@ -255,7 +255,7 @@ public class EditActions {
          * </p>
          *
          * <p>
-         * This method is called whenever the FlipAction is triggered. It flips image horizontally  as requested by user.
+         * This method is called whenever the FlipActionHorizontally is triggered. It flips image horizontally as requested by user.
          * </p>
          *
          * @param e The event triggering this callback.
@@ -285,7 +285,7 @@ public class EditActions {
 
          /**
      * <p>
-     * Action to flip an image {@link ImageOperation}.
+     * Action to flip an image vertically {@link ImageOperation}.
      * </p>
      *
      * @see ImageFlipVertically#apply(java.awt.image.BufferedImage)
@@ -313,7 +313,7 @@ public class EditActions {
          * </p>
          *
          * <p>
-         * This method is called whenever the FlipAction is triggered. It flips image vertically as requested by user.
+         * This method is called whenever the FlipActionVertically is triggered. It flips image vertically as requested by user.
          * </p>
          *
          * @param e The event triggering this callback.
@@ -352,7 +352,7 @@ public class EditActions {
 
         /**
          * <p>
-         * Create a new horizontal flip action.
+         * Create a new horizontal rotate action.
          * </p>
          *
          * @param name The name of the action (ignored if null).
@@ -367,11 +367,11 @@ public class EditActions {
 
         /**
          * <p>
-         * Callback for when the flip action is triggered.
+         * Callback for when the RotateAction90C is triggered.
          * </p>
          *
          * <p>
-         * This method is called whenever the FlipAction is triggered. It flips image horizontally  as requested by user.
+         * This method is called whenever the RotateAction90C is triggered. It rotates image as requested by user.
          * </p>
          *
          * @param e The event triggering this callback.
@@ -410,7 +410,7 @@ public class EditActions {
 
         /**
          * <p>
-         * Create a new horizontal flip action.
+         * Create a new rotate action.
          * </p>
          *
          * @param name The name of the action (ignored if null).
@@ -425,11 +425,11 @@ public class EditActions {
 
         /**
          * <p>
-         * Callback for when the flip action is triggered.
+         * Callback for when the RotateAction90CC is triggered.
          * </p>
          *
          * <p>
-         * This method is called whenever the FlipAction is triggered. It flips image horizontally  as requested by user.
+         * This method is called whenever the RotateAction90CC is triggered. It flips rotates image requested by user.
          * </p>
          *
          * @param e The event triggering this callback.
@@ -459,7 +459,7 @@ public class EditActions {
 
     /**
      * <p>
-     * Action to rotate an image 90 degrees clock wise {@link ImageOperation}.
+     * Action to rotate an image 180 degrees {@link ImageOperation}.
      * </p>
      *
      * @see ImageRotate180#apply(java.awt.image.BufferedImage)
@@ -468,7 +468,7 @@ public class EditActions {
 
         /**
          * <p>
-         * Create a new horizontal flip action.
+         * Create a new rotate action.
          * </p>
          *
          * @param name The name of the action (ignored if null).
@@ -483,11 +483,11 @@ public class EditActions {
 
         /**
          * <p>
-         * Callback for when the flip action is triggered.
+         * Callback for when the RotateAction180 is triggered.
          * </p>
          *
          * <p>
-         * This method is called whenever the FlipAction is triggered. It flips image horizontally  as requested by user.
+         * This method is called whenever the RotateAction180 is triggered. It rotates image as requested by user.
          * </p>
          *
          * @param e The event triggering this callback.

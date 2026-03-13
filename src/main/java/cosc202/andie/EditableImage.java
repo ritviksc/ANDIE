@@ -262,8 +262,10 @@ class EditableImage {
      * </p>
      */
     public void undo() {
-        redoOps.push(ops.pop());
-        refresh();
+        if (!ops.isEmpty()){
+            redoOps.push(ops.pop());
+            refresh();
+        }
     }
 
     /**
@@ -273,7 +275,9 @@ class EditableImage {
      * </p>
      */
     public void redo() {
-        apply(redoOps.pop());
+        if (!redoOps.isEmpty()){
+            apply(redoOps.pop());
+        }
     }
 
     /**

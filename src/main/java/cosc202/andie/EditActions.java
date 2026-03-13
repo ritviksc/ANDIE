@@ -40,6 +40,12 @@ public class EditActions {
         actions = new ArrayList<>();
         actions.add(new UndoAction("Undo", null, "Undo", KeyEvent.VK_Z));
         actions.add(new RedoAction("Redo", null, "Redo", KeyEvent.VK_Y));
+        actions.add(new ResizeAction("Resize", null, "Resize the image by scale factor", KeyEvent.VK_R));
+        actions.add(new RotateAction90C("Rotate 90° Clockwise", null, "Rotate the image by 90 degrees clockwise", KeyEvent.VK_F));
+        actions.add(new RotateAction90CC("Rotate 90° Counter ClockWise", null, "Rotate the image by 90 degrees counter clockwise", KeyEvent.VK_1));
+        actions.add(new RotateAction180("Rotate 180°", null, "Rotate the image by  180 degrees", KeyEvent.VK_2));
+        actions.add(new FlipActionHorizontal("Horizontal Flip", null, "Flip image horizontally ", KeyEvent.VK_3));
+        actions.add(new FlipActionVertically("Vertical Flip", null, "Flip image vertically ", KeyEvent.VK_V));
     }
 
     /**
@@ -146,5 +152,371 @@ public class EditActions {
             target.getParent().revalidate();
         }
     }
+
+    /**
+     * <p>
+     * Action to resize an image {@link ImageOperation}.
+     * </p>
+     *
+     * @see ImageResize#apply()
+     */
+    public class ResizeAction extends ImageAction {
+
+        /**
+         * <p>
+         * Create a new resize action.
+         * </p>
+         *
+         * @param name The name of the action (ignored if null).
+         * @param icon An icon to use to represent the action (ignored if null).
+         * @param desc A brief description of the action (ignored if null).
+         * @param mnemonic A mnemonic key to use as a shortcut (ignored if
+         * null).
+         */
+        ResizeAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+            super(name, icon, desc, mnemonic);
+        }
+
+        /**
+         * <p>
+         * Callback for when the resize action is triggered.
+         * </p>
+         *
+         * <p>
+         * This method is called whenever the ResizeAction is triggered. It resizes the image by specfic percentage (out of 100) as set by user.
+         * </p>
+         *
+         * @param e The event triggering this callback.
+         */
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            // Determine the scale factor percentage given
+            int factor = 100;
+
+            if (!target.getImage().hasImage()){
+                // Show Error Dialog if no image is loaded
+                JOptionPane.showMessageDialog(
+                    null,                        
+                    "No image loaded to resize!", // message
+                    "Error",                      // title
+                    JOptionPane.ERROR_MESSAGE     
+                );
+                return;
+            }
+
+            // Pop-up dialog box to ask for the factor value.
+            SpinnerNumberModel factorModel = new SpinnerNumberModel(100, 10, 200, 10);
+            JSpinner factorSpinner = new JSpinner(factorModel);
+            int option = JOptionPane.showOptionDialog(null, factorSpinner, "Enter scale percentage", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+
+            // Check the return value from the dialog box.
+            if (option == JOptionPane.CANCEL_OPTION) {
+                return;
+            } else if (option == JOptionPane.OK_OPTION) {
+                factor = factorModel.getNumber().intValue();
+            }
+
+            if (target.getImage().hasImage()){
+                target.getImage().apply(new ImageResize((double)factor));
+                target.repaint();
+                target.getParent().revalidate();
+            } 
+        }
+    }
+
+     /**
+     * <p>
+     * Action to resize an image {@link ImageOperation}.
+     * </p>
+     *
+     * @see ImageFlipHorizontal#apply(java.awt.image.BufferedImage)
+     */
+    public class FlipActionHorizontal extends ImageAction {
+
+        /**
+         * <p>
+         * Create a new horizontal flip action.
+         * </p>
+         *
+         * @param name The name of the action (ignored if null).
+         * @param icon An icon to use to represent the action (ignored if null).
+         * @param desc A brief description of the action (ignored if null).
+         * @param mnemonic A mnemonic key to use as a shortcut (ignored if
+         * null).
+         */
+        FlipActionHorizontal(String name, ImageIcon icon, String desc, Integer mnemonic) {
+            super(name, icon, desc, mnemonic);
+        }
+
+        /**
+         * <p>
+         * Callback for when the flip action is triggered.
+         * </p>
+         *
+         * <p>
+         * This method is called whenever the FlipAction is triggered. It flips image horizontally  as requested by user.
+         * </p>
+         *
+         * @param e The event triggering this callback.
+         */
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+
+            if (!target.getImage().hasImage()){
+                // Show Error Dialog if no image is loaded
+                JOptionPane.showMessageDialog(
+                    null,                        
+                    "No image loaded to flip!", // message
+                    "Error",                      // title
+                    JOptionPane.ERROR_MESSAGE     
+                );
+                return;
+            }
+
+            if (target.getImage().hasImage()){
+                target.getImage().apply(new ImageFlipHorizontal());
+                target.repaint();
+                target.getParent().revalidate();
+            } 
+        }
+    }
+
+         /**
+     * <p>
+     * Action to flip an image {@link ImageOperation}.
+     * </p>
+     *
+     * @see ImageFlipVertically#apply(java.awt.image.BufferedImage)
+     */
+    public class FlipActionVertically extends ImageAction {
+
+        /**
+         * <p>
+         * Create a new vertical flip action.
+         * </p>
+         *
+         * @param name The name of the action (ignored if null).
+         * @param icon An icon to use to represent the action (ignored if null).
+         * @param desc A brief description of the action (ignored if null).
+         * @param mnemonic A mnemonic key to use as a shortcut (ignored if
+         * null).
+         */
+        FlipActionVertically(String name, ImageIcon icon, String desc, Integer mnemonic) {
+            super(name, icon, desc, mnemonic);
+        }
+
+        /**
+         * <p>
+         * Callback for when the flip action is triggered.
+         * </p>
+         *
+         * <p>
+         * This method is called whenever the FlipAction is triggered. It flips image vertically as requested by user.
+         * </p>
+         *
+         * @param e The event triggering this callback.
+         */
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+
+            if (!target.getImage().hasImage()){
+                // Show Error Dialog if no image is loaded
+                JOptionPane.showMessageDialog(
+                    null,                        
+                    "No image loaded to flip!", // message
+                    "Error",                      // title
+                    JOptionPane.ERROR_MESSAGE     
+                );
+                return;
+            }
+
+            if (target.getImage().hasImage()){
+                target.getImage().apply(new ImageFlipVertically());
+                target.repaint();
+                target.getParent().revalidate();
+            } 
+        }
+    }
+
+    /**
+     * <p>
+     * Action to rotate an image 90 degrees clock wise {@link ImageOperation}.
+     * </p>
+     *
+     * @see ImageRotate90C#apply(java.awt.image.BufferedImage)
+     */
+    public class RotateAction90C extends ImageAction {
+
+        /**
+         * <p>
+         * Create a new horizontal flip action.
+         * </p>
+         *
+         * @param name The name of the action (ignored if null).
+         * @param icon An icon to use to represent the action (ignored if null).
+         * @param desc A brief description of the action (ignored if null).
+         * @param mnemonic A mnemonic key to use as a shortcut (ignored if
+         * null).
+         */
+        RotateAction90C(String name, ImageIcon icon, String desc, Integer mnemonic) {
+            super(name, icon, desc, mnemonic);
+        }
+
+        /**
+         * <p>
+         * Callback for when the flip action is triggered.
+         * </p>
+         *
+         * <p>
+         * This method is called whenever the FlipAction is triggered. It flips image horizontally  as requested by user.
+         * </p>
+         *
+         * @param e The event triggering this callback.
+         */
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+
+            if (!target.getImage().hasImage()){
+                // Show Error Dialog if no image is loaded
+                JOptionPane.showMessageDialog(
+                    null,                        
+                    "No image to rotate!", // message
+                    "Error",                      // title
+                    JOptionPane.ERROR_MESSAGE     
+                );
+                return;
+            }
+
+            if (target.getImage().hasImage()){
+                target.getImage().apply(new ImageRotate90C());
+                target.repaint();
+                target.getParent().revalidate();
+            } 
+        }
+    }
+
+    /**
+     * <p>
+     * Action to rotate an image 90 degrees counter clock wise {@link ImageOperation}.
+     * </p>
+     *
+     * @see ImageRotate90CC#apply(java.awt.image.BufferedImage)
+     */
+    public class RotateAction90CC extends ImageAction {
+
+        /**
+         * <p>
+         * Create a new horizontal flip action.
+         * </p>
+         *
+         * @param name The name of the action (ignored if null).
+         * @param icon An icon to use to represent the action (ignored if null).
+         * @param desc A brief description of the action (ignored if null).
+         * @param mnemonic A mnemonic key to use as a shortcut (ignored if
+         * null).
+         */
+        RotateAction90CC(String name, ImageIcon icon, String desc, Integer mnemonic) {
+            super(name, icon, desc, mnemonic);
+        }
+
+        /**
+         * <p>
+         * Callback for when the flip action is triggered.
+         * </p>
+         *
+         * <p>
+         * This method is called whenever the FlipAction is triggered. It flips image horizontally  as requested by user.
+         * </p>
+         *
+         * @param e The event triggering this callback.
+         */
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+
+            if (!target.getImage().hasImage()){
+                // Show Error Dialog if no image is loaded
+                JOptionPane.showMessageDialog(
+                    null,                        
+                    "No image to rotate!", // message
+                    "Error",                      // title
+                    JOptionPane.ERROR_MESSAGE     
+                );
+                return;
+            }
+
+            if (target.getImage().hasImage()){
+                target.getImage().apply(new ImageRotate90CC());
+                target.repaint();
+                target.getParent().revalidate();
+            } 
+        }
+    }
+
+    /**
+     * <p>
+     * Action to rotate an image 90 degrees clock wise {@link ImageOperation}.
+     * </p>
+     *
+     * @see ImageRotate180#apply(java.awt.image.BufferedImage)
+     */
+    public class RotateAction180 extends ImageAction {
+
+        /**
+         * <p>
+         * Create a new horizontal flip action.
+         * </p>
+         *
+         * @param name The name of the action (ignored if null).
+         * @param icon An icon to use to represent the action (ignored if null).
+         * @param desc A brief description of the action (ignored if null).
+         * @param mnemonic A mnemonic key to use as a shortcut (ignored if
+         * null).
+         */
+        RotateAction180(String name, ImageIcon icon, String desc, Integer mnemonic) {
+            super(name, icon, desc, mnemonic);
+        }
+
+        /**
+         * <p>
+         * Callback for when the flip action is triggered.
+         * </p>
+         *
+         * <p>
+         * This method is called whenever the FlipAction is triggered. It flips image horizontally  as requested by user.
+         * </p>
+         *
+         * @param e The event triggering this callback.
+         */
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+
+            if (!target.getImage().hasImage()){
+                // Show Error Dialog if no image is loaded
+                JOptionPane.showMessageDialog(
+                    null,                        
+                    "No image to rotate!", // message
+                    "Error",                      // title
+                    JOptionPane.ERROR_MESSAGE     
+                );
+                return;
+            }
+
+            if (target.getImage().hasImage()){
+                target.getImage().apply(new ImageRotate180());
+                target.repaint();
+                target.getParent().revalidate();
+            } 
+        }
+    }
+
+
+
+    
 
 }

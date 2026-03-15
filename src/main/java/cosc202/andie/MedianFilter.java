@@ -9,7 +9,9 @@ import java.util.*;
  * </p>
  *
  * <p>
- * todo: how it works
+ * A median filter works by taking the average of each colour channel
+ * in each pixel surrounding the current working pixel. It then sets the current
+ * pixel to be the median of each colour channel.
  * </p>
  *
  * <p>
@@ -31,7 +33,7 @@ public class MedianFilter implements ImageOperation, java.io.Serializable {
     private static final int ALPHA = 0;
     private static final int RED = 1;
     private static final int GREEN = 2;
-    private static final int BLUE = 3;
+    private static final int BLUE = 3; // For clarity
 
     /**
      * <p>
@@ -39,7 +41,7 @@ public class MedianFilter implements ImageOperation, java.io.Serializable {
      * </p>
      *
      * <p>
-     * todo: explanation
+     * By default, give it a radius of 1.
      * </p>
      *
      * @param radius The radius of the newly constructed MedianFilter
@@ -70,10 +72,11 @@ public class MedianFilter implements ImageOperation, java.io.Serializable {
      * </p>
      *
      * <p>
-     * todo: explanation
+     * This filter is implemented as a O(n^4) so be wary when using large n.
+     * This method is used to apply the filter to a given image.
      * </p>
      *
-     * @param input The image to apply the Median filter to.
+     * @param input The image to apply the Median filter to (recommended less than 10).
      * @return The resulting (blurred) image.
      */
     @Override
@@ -160,7 +163,7 @@ public class MedianFilter implements ImageOperation, java.io.Serializable {
                 int argb = (aAve << 24) | (rAve << 16) | (gAve << 8) | bAve; // Creates new argb value by assigning the new bits
                 // System.out.println(Integer.toBinaryString(argb));
                 
-                output.setRGB(cx, cy, argb);
+                output.setRGB(cx, cy, argb); // Manipulate the OUTPUT image to ensure it can be undone.
                 
             }
         }

@@ -276,7 +276,6 @@ public class FilterActions {
         public void actionPerformed(ActionEvent e) {
             // Determine the radius - ask the user.
             int radius = 1;
-            boolean error = false;
             do{
                 
                 // Pop-up dialog box to ask for the radius value.
@@ -292,6 +291,8 @@ public class FilterActions {
                     radius = radiusModel.getNumber().intValue();
                 }
             }while(radius > 10 || radius < 0); // Enforce a hard limit on a O(n^4) operation
+                                               // Should theoretically already be enforced by the JSpinner
+                                               // But just incase.
             // Create and apply the filter
             target.getImage().apply(new MedianFilter(radius));
             target.repaint();

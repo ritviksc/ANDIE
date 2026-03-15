@@ -276,19 +276,22 @@ public class FilterActions {
         public void actionPerformed(ActionEvent e) {
             // Determine the radius - ask the user.
             int radius = 1;
+            boolean error = false;
             do{
+                
                 // Pop-up dialog box to ask for the radius value.
                 SpinnerNumberModel radiusModel = new SpinnerNumberModel(1, 1, 10, 1);
                 JSpinner radiusSpinner = new JSpinner(radiusModel);
+                // if(radius > 10 || radius < 0) JOptionPane.showConfirmDialog(null, "Please enter a number between 1 and 10 (inclusive).");
                 int option = JOptionPane.showOptionDialog(null, radiusSpinner, "Enter filter radius. MAXIMUM OF 10", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
-
+                
                 // Check the return value from the dialog box.
                 if (option == JOptionPane.CANCEL_OPTION) {
                     return;
                 } else if (option == JOptionPane.OK_OPTION) {
                     radius = radiusModel.getNumber().intValue();
                 }
-            }while(radius >= 11 || radius <= 0); // Enforce a hard limit on a O(n^4) operation
+            }while(radius > 10 || radius < 0); // Enforce a hard limit on a O(n^4) operation
             // Create and apply the filter
             target.getImage().apply(new MedianFilter(radius));
             target.repaint();

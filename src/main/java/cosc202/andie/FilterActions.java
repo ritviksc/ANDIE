@@ -103,7 +103,12 @@ public class FilterActions {
          */
         @Override
         public void actionPerformed(ActionEvent e) {
-
+            
+            if(!target.getImage().hasImage()){
+                JOptionPane.showMessageDialog(null, "Please open an image first");
+                return;
+            }
+            
             // Determine the radius - ask the user.
             int radius = 1;
 
@@ -120,6 +125,7 @@ public class FilterActions {
             }
 
             // Create and apply the filter
+            
             target.getImage().apply(new MeanFilter(radius));
             target.repaint();
             target.getParent().revalidate();
@@ -166,6 +172,11 @@ public class FilterActions {
         @Override
         public void actionPerformed(ActionEvent e) {
 
+            if(!target.getImage().hasImage()){
+                JOptionPane.showMessageDialog(null, "Please open an image first");
+                return;
+            }
+            
             // Create and apply the filter
             target.getImage().apply(new SharpenFilter());
             target.repaint();
@@ -212,6 +223,12 @@ public class FilterActions {
          */
         @Override
         public void actionPerformed(ActionEvent e) {
+            
+            if(!target.getImage().hasImage()){
+                JOptionPane.showMessageDialog(null, "Please open an image first");
+                return;
+            }
+            
             // Determine the radius - ask the user.
             int radius = 1;
 
@@ -274,6 +291,12 @@ public class FilterActions {
          */
         @Override
         public void actionPerformed(ActionEvent e) {
+            
+            if(!target.getImage().hasImage()){
+                JOptionPane.showMessageDialog(null, "Please open an image first");
+                return;
+            }
+            
             // Determine the radius - ask the user.
             int radius = 1;
             do{

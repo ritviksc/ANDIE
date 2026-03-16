@@ -173,7 +173,7 @@ public class FilterActions {
         public void actionPerformed(ActionEvent e) {
 
             if(!target.getImage().hasImage()){
-                JOptionPane.showMessageDialog(null, "Please open an image first");
+                JOptionPane.showMessageDialog(null, "No image to filter!", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
             
@@ -225,7 +225,7 @@ public class FilterActions {
         public void actionPerformed(ActionEvent e) {
             
             if(!target.getImage().hasImage()){
-                JOptionPane.showMessageDialog(null, "Please open an image first");
+                JOptionPane.showMessageDialog(null, "No image to filter!", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
             
@@ -293,7 +293,7 @@ public class FilterActions {
         public void actionPerformed(ActionEvent e) {
             
             if(!target.getImage().hasImage()){
-                JOptionPane.showMessageDialog(null, "Please open an image first");
+                JOptionPane.showMessageDialog(null, "No image to filter!", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
             

@@ -38,14 +38,61 @@ public class EditActions {
      */
     public EditActions() {
         actions = new ArrayList<>();
-        actions.add(new UndoAction("Undo", null, "Undo", KeyEvent.VK_Z));
-        actions.add(new RedoAction("Redo", null, "Redo", KeyEvent.VK_Y));
-        actions.add(new ResizeAction("Resize", null, "Resize the image by scale factor", KeyEvent.VK_R));
-        actions.add(new RotateAction90C("Rotate 90° Clockwise", null, "Rotate the image by 90 degrees clockwise", KeyEvent.VK_F));
-        actions.add(new RotateAction90CC("Rotate 90° Counter ClockWise", null, "Rotate the image by 90 degrees counter clockwise", KeyEvent.VK_1));
-        actions.add(new RotateAction180("Rotate 180°", null, "Rotate the image by  180 degrees", KeyEvent.VK_2));
-        actions.add(new FlipActionHorizontal("Horizontal Flip", null, "Flip image horizontally ", KeyEvent.VK_3));
-        actions.add(new FlipActionVertically("Vertical Flip", null, "Flip image vertically ", KeyEvent.VK_V));
+        actions.add(new UndoAction(
+            I18nManager.get("Undo"),
+            null,
+            I18nManager.get("Undo_desc"),
+            KeyEvent.VK_Z
+        ));
+
+        actions.add(new RedoAction(
+            I18nManager.get("Redo"),
+            null,
+            I18nManager.get("Redo_desc"),
+            KeyEvent.VK_Y
+        ));
+
+        actions.add(new ResizeAction(
+            I18nManager.get("Resize"),
+            null,
+            I18nManager.get("Resize_desc"),
+            KeyEvent.VK_R
+        ));
+
+        actions.add(new RotateAction90C(
+            I18nManager.get("Rotate90C"),
+            null,
+            I18nManager.get("Rotate90C_desc"),
+            KeyEvent.VK_F
+        ));
+
+        actions.add(new RotateAction90CC(
+            I18nManager.get("Rotate90CC"),
+            null,
+            I18nManager.get("Rotate90CC_desc"),
+            KeyEvent.VK_1
+        ));
+
+        actions.add(new RotateAction180(
+            I18nManager.get("Rotate180"),
+            null,
+            I18nManager.get("Rotate180_desc"),
+            KeyEvent.VK_2
+        ));
+
+        actions.add(new FlipActionHorizontal(
+            I18nManager.get("FlipHorizontal"),
+            null,
+            I18nManager.get("FlipHorizontal_desc"),
+            KeyEvent.VK_3
+        ));
+
+        actions.add(new FlipActionVertically(
+            I18nManager.get("FlipVertical"),
+            null,
+            I18nManager.get("FlipVertical_desc"),
+            KeyEvent.VK_V
+        ));
     }
 
     /**
@@ -198,7 +245,7 @@ public class EditActions {
                 // Show Error Dialog if no image is loaded
                 JOptionPane.showMessageDialog(
                     null,                        
-                    "No image loaded to resize!", // message
+                    I18nManager.get("error_resize"), // message
                     "Error",                      // title
                     JOptionPane.ERROR_MESSAGE     
                 );
@@ -208,7 +255,7 @@ public class EditActions {
             // Pop-up dialog box to ask for the factor value.
             SpinnerNumberModel factorModel = new SpinnerNumberModel(100, 10, 200, 10);
             JSpinner factorSpinner = new JSpinner(factorModel);
-            int option = JOptionPane.showOptionDialog(null, factorSpinner, "Enter scale percentage", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+            int option = JOptionPane.showOptionDialog(null, factorSpinner, I18nManager.get("scale_percentage"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 
             // Check the return value from the dialog box.
             if (option == JOptionPane.CANCEL_OPTION) {
@@ -268,7 +315,7 @@ public class EditActions {
                 // Show Error Dialog if no image is loaded
                 JOptionPane.showMessageDialog(
                     null,                        
-                    "No image loaded to flip!", // message
+                    I18nManager.get("error_flip"), // message
                     "Error",                      // title
                     JOptionPane.ERROR_MESSAGE     
                 );
@@ -326,7 +373,7 @@ public class EditActions {
                 // Show Error Dialog if no image is loaded
                 JOptionPane.showMessageDialog(
                     null,                        
-                    "No image loaded to flip!", // message
+                    I18nManager.get("error_flip"), // message
                     "Error",                      // title
                     JOptionPane.ERROR_MESSAGE     
                 );
@@ -384,7 +431,7 @@ public class EditActions {
                 // Show Error Dialog if no image is loaded
                 JOptionPane.showMessageDialog(
                     null,                        
-                    "No image to rotate!", // message
+                    I18nManager.get("error_rotate"), // message
                     "Error",                      // title
                     JOptionPane.ERROR_MESSAGE     
                 );
@@ -442,7 +489,7 @@ public class EditActions {
                 // Show Error Dialog if no image is loaded
                 JOptionPane.showMessageDialog(
                     null,                        
-                    "No image to rotate!", // message
+                    I18nManager.get("error_rotate"), // message
                     "Error",                      // title
                     JOptionPane.ERROR_MESSAGE     
                 );
@@ -500,7 +547,7 @@ public class EditActions {
                 // Show Error Dialog if no image is loaded
                 JOptionPane.showMessageDialog(
                     null,                        
-                    "No image to rotate!", // message
+                    I18nManager.get("error_rotate"), // message
                     "Error",                      // title
                     JOptionPane.ERROR_MESSAGE     
                 );

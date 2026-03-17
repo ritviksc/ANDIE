@@ -7,6 +7,7 @@ import javax.swing.*;
 /**
  * <p>
  * Actions provided by the Colour menu.
+ *
  * @shari838
  * </p>
  *
@@ -39,6 +40,7 @@ public class ColourActions {
     public ColourActions() {
         actions = new ArrayList<>();
         actions.add(new ConvertToGreyAction("Greyscale", null, "Convert to greyscale", KeyEvent.VK_G));
+        actions.add(new ThresholdAction("Threshold", null, "Apply threshold", KeyEvent.VK_T));
     }
 
     /**
@@ -100,7 +102,33 @@ public class ColourActions {
             target.repaint();
             target.getParent().revalidate();
         }
-
     }
 
+    /**
+     * <p>
+     * Action to apply a threshold to an image.
+     * </p>
+     */
+    public class ThresholdAction extends ImageAction {
+
+        ThresholdAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+            super(name, icon, desc, mnemonic);
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            String input = JOptionPane.showInputDialog("Enter threshold (0-255)");
+
+            if (input == null) {
+                return;
+            }
+
+            int threshold = Integer.parseInt(input);
+
+            target.getImage().apply(new ImageThresholdingFilter(threshold));
+            target.repaint();
+            target.getParent().revalidate();
+        }
+    }
 }

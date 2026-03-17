@@ -311,5 +311,16 @@ class EditableImage {
             current = op.apply(current);
         }
     }
+    
+    //export function that takes the image file path and gets the format turns to lower case
+    public void export(String imageFilepath, String selectedFormat) throws IOException {
+        //checks the user has type and selected the same file type (file.png.png)         
+        if (!imageFilepath.toLowerCase().endsWith("." + selectedFormat)) {
+            imageFilepath += "." + selectedFormat;
+        }
+             
+        //imageIO.write deals with the tansparency for png and giff
+        ImageIO.write(current, selectedFormat, new File(imageFilepath));
+    }
 
 }

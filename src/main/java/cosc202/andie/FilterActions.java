@@ -41,10 +41,10 @@ public class FilterActions {
      */
     public FilterActions() {
         actions = new ArrayList<>();
-        actions.add(new MeanFilterAction("Mean filter", null, "Apply a mean filter", KeyEvent.VK_M));
-        actions.add(new SharpenFilterAction("Sharpen filter", null, "Apply a sharpen filter", KeyEvent.VK_S));
-        actions.add(new GaussianFilterAction("Gaussian filter", null, "Apply a Gaussian filter", KeyEvent.VK_G));
-        actions.add(new MedianFilterAction("Median filter", null, "Apply a Median filter", KeyEvent.VK_E));
+        actions.add(new MeanFilterAction(I18nManager.get("Mean"), null, I18nManager.get("Mean_desc"), KeyEvent.VK_M));
+        actions.add(new SharpenFilterAction(I18nManager.get("Sharpen"), null, I18nManager.get("Sharpen_desc"), KeyEvent.VK_S));
+        actions.add(new GaussianFilterAction(I18nManager.get("Gaussian"), null, I18nManager.get("Gaussian_desc"), KeyEvent.VK_G));
+        actions.add(new MedianFilterAction(I18nManager.get("Median"), null, I18nManager.get("Median_desc"), KeyEvent.VK_E));
     }
 
     /**
@@ -55,7 +55,7 @@ public class FilterActions {
      * @return The filter menu UI element.
      */
     public JMenu createMenu() {
-        JMenu fileMenu = new JMenu("Filter");
+        JMenu fileMenu = new JMenu(I18nManager.get("Filter_title"));
 
         for (Action action : actions) {
             fileMenu.add(new JMenuItem(action));
@@ -103,14 +103,19 @@ public class FilterActions {
          */
         @Override
         public void actionPerformed(ActionEvent e) {
-
+            
+            if(!target.getImage().hasImage()){
+                JOptionPane.showMessageDialog(null, I18nManager.get("Filter_no_image"), I18nManager.get("Filter_error_title"), JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
             // Determine the radius - ask the user.
             int radius = 1;
 
             // Pop-up dialog box to ask for the radius value.
             SpinnerNumberModel radiusModel = new SpinnerNumberModel(1, 1, 10, 1);
             JSpinner radiusSpinner = new JSpinner(radiusModel);
-            int option = JOptionPane.showOptionDialog(null, radiusSpinner, "Enter filter radius", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+            int option = JOptionPane.showOptionDialog(null, radiusSpinner, I18nManager.get("Filter_radius_msg"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 
             // Check the return value from the dialog box.
             if (option == JOptionPane.CANCEL_OPTION) {
@@ -120,6 +125,7 @@ public class FilterActions {
             }
 
             // Create and apply the filter
+            
             target.getImage().apply(new MeanFilter(radius));
             target.repaint();
             target.getParent().revalidate();
@@ -166,6 +172,11 @@ public class FilterActions {
         @Override
         public void actionPerformed(ActionEvent e) {
 
+            if(!target.getImage().hasImage()){
+                JOptionPane.showMessageDialog(null, I18nManager.get("Filter_no_image"), I18nManager.get("Filter_error_title"), JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
             // Create and apply the filter
             target.getImage().apply(new SharpenFilter());
             target.repaint();
@@ -212,13 +223,19 @@ public class FilterActions {
          */
         @Override
         public void actionPerformed(ActionEvent e) {
+            
+            if(!target.getImage().hasImage()){
+                JOptionPane.showMessageDialog(null, I18nManager.get("Filter_no_image"), I18nManager.get("Filter_error_title"), JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
             // Determine the radius - ask the user.
             int radius = 1;
 
             // Pop-up dialog box to ask for the radius value.
             SpinnerNumberModel radiusModel = new SpinnerNumberModel(1, 1, 10, 1);
             JSpinner radiusSpinner = new JSpinner(radiusModel);
-            int option = JOptionPane.showOptionDialog(null, radiusSpinner, "Enter filter radius", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+            int option = JOptionPane.showOptionDialog(null, radiusSpinner, I18nManager.get("Filter_radius_msg"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 
             // Check the return value from the dialog box.
             if (option == JOptionPane.CANCEL_OPTION) {
@@ -274,25 +291,27 @@ public class FilterActions {
          */
         @Override
         public void actionPerformed(ActionEvent e) {
+            
+            if(!target.getImage().hasImage()){
+                JOptionPane.showMessageDialog(null, I18nManager.get("Filter_no_image"), I18nManager.get("Filter_error_title"), JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
             // Determine the radius - ask the user.
             int radius = 1;
             do{
-                
                 // Pop-up dialog box to ask for the radius value.
                 SpinnerNumberModel radiusModel = new SpinnerNumberModel(1, 1, 10, 1);
                 JSpinner radiusSpinner = new JSpinner(radiusModel);
-                // if(radius > 10 || radius < 0) JOptionPane.showConfirmDialog(null, "Please enter a number between 1 and 10 (inclusive).");
-                int option = JOptionPane.showOptionDialog(null, radiusSpinner, "Enter filter radius. MAXIMUM OF 10", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
-                
+                int option = JOptionPane.showOptionDialog(null, radiusSpinner, I18nManager.get("Filter_radius_msg_median"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+
                 // Check the return value from the dialog box.
                 if (option == JOptionPane.CANCEL_OPTION) {
                     return;
                 } else if (option == JOptionPane.OK_OPTION) {
                     radius = radiusModel.getNumber().intValue();
                 }
-            }while(radius > 10 || radius < 0); // Enforce a hard limit on a O(n^4) operation
-                                               // Should theoretically already be enforced by the JSpinner
-                                               // But just incase.
+            }while(radius > 10 || radius <= 0); //Enforce a hard limit on a O(n^4) operation
             // Create and apply the filter
             target.getImage().apply(new MedianFilter(radius));
             target.repaint();

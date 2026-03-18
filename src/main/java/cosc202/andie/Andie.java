@@ -3,6 +3,7 @@ package cosc202.andie;
 import java.awt.*;
 import javax.swing.*;
 import javax.imageio.*;
+import java.util.Locale;
 
 /**
  * <p>
@@ -110,6 +111,7 @@ public class Andie {
      * @see #createAndShowGUI()
      */
     public static void main(String[] args) throws Exception {
+        I18nManager.init(null);
         javax.swing.SwingUtilities.invokeLater(() -> {
             try {
                 createAndShowGUI();

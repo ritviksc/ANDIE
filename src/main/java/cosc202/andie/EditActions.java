@@ -7,7 +7,6 @@ import javax.swing.*;
 /**
  * <p>
  * Actions provided by the Edit menu.
- * @taima325
  * </p>
  *
  * <p>
@@ -17,8 +16,7 @@ import javax.swing.*;
  * </p>
  *
  * <p>
- * <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA
- * 4.0</a>
+ * <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>
  * </p>
  *
  * @author Steven Mills
@@ -205,7 +203,7 @@ public class EditActions {
      * Action to resize an image {@link ImageOperation}.
      * </p>
      *
-     * @see ImageResize#apply()
+     * @see ImageResize
      */
     public class ResizeAction extends ImageAction {
 

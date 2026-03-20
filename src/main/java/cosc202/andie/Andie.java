@@ -8,10 +8,6 @@ import java.util.Locale;
 /**
  * <p>
  * Main class for A Non-Destructive Image Editor (ANDIE).
- * @shari838S
- * @hanro194
- * @taima325
- * @vanlo528
  * </p>
  *
  * <p>

@@ -1,4 +1,3 @@
-
 package cosc202.andie;
 
 import org.junit.jupiter.api.AfterEach;
@@ -11,16 +10,28 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Robert Hannaford
  */
 public class MedianFilterTest {
-    
+
     public MedianFilterTest() {
     }
-    
+
     @BeforeEach
     public void setUp() {
     }
-    
+
     @AfterEach
     public void tearDown() {
     }
-    
+
+    @Test
+    public void test() {
+        assertTrue(true);
+    }
+
+    @Test
+    public void testGetZoomAfterSetZoom() {
+        ImagePanel testPanel = new ImagePanel();
+        testPanel.setZoom(120.0);
+        assertEquals(testPanel.getZoom(), 120.0);
+    }
+
 }

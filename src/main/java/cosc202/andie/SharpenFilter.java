@@ -10,6 +10,15 @@ import java.awt.image.Kernel;
 import java.util.Arrays;
 
 /**
+ * <p>
+ * ImageOperation to apply a Sharpen (simple clearing) filter.
+ * </p>
+ *
+ * <p>
+ * A sharpen filter accentuates differences between pixels to 'sharpen'
+ * an image to produce a clearer picture than the original.
+ * This is implemented via a convolution operation.
+ * </p>
  *
  * @author Robert Hannaford
  */

@@ -2,7 +2,10 @@ package cosc202.andie;
 
 import java.util.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  * <p>
@@ -40,6 +43,7 @@ public class FileActions {
         actions.add(new FileOpenAction("Open", null, "Open a file", KeyEvent.VK_O));
         actions.add(new FileSaveAction("Save", null, "Save the file", KeyEvent.VK_S));
         actions.add(new FileSaveAsAction("Save As", null, "Save a copy", KeyEvent.VK_A));
+        actions.add(new FileExportAction("Export", null, "Export image", KeyEvent.VK_A));
         actions.add(new FileExitAction("Exit", null, "Exit the program", 0));
     }
 
@@ -214,6 +218,74 @@ public class FileActions {
             }
         }
 
+    }
+   
+        
+    public class FileExportAction extends ImageAction {
+
+        FileExportAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+            super(name, icon, desc, mnemonic);
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            
+            if(!target.getImage().hasImage()){
+                JOptionPane.showMessageDialog(target, "Please open an image first");
+                return;
+            }
+
+            JFileChooser fileChooser = new JFileChooser();
+            //set title to "export image"
+            fileChooser.setDialogTitle("Export Image");
+            
+            
+            //creates the possible file types
+            FileNameExtensionFilter jpegFormat = new FileNameExtensionFilter("JPEG Image (*.jpg)", "jpg");
+            FileNameExtensionFilter pngFormat = new FileNameExtensionFilter("PNG Image (*.png)", "png");
+            FileNameExtensionFilter giffFormat = new FileNameExtensionFilter("GIF Image (*.gif)", "gif");
+            //adds the file times as a choosable ooption
+            fileChooser.addChoosableFileFilter(pngFormat);
+            fileChooser.addChoosableFileFilter(jpegFormat);
+            fileChooser.addChoosableFileFilter(giffFormat);
+            
+            fileChooser.setAcceptAllFileFilterUsed(false);
+            fileChooser.setFileFilter(jpegFormat);
+            
+            
+
+            int result = fileChooser.showSaveDialog(target);
+            
+                
+            //if the users select to approve option (save)
+            if (result == JFileChooser.APPROVE_OPTION) {
+                try {
+                    
+                    //gets the full file path that the user has select to store in 
+                    String imageFilepath = fileChooser.getSelectedFile().getCanonicalPath();
+                    
+                    
+                    //gets the filter that the user selects (pngFormat)
+                    FileNameExtensionFilter filter = (FileNameExtensionFilter) fileChooser.getFileFilter(); 
+                    
+                    //gets the acutal format from filter
+                    String selectedFormat = filter.getExtensions()[0].toLowerCase();
+                    
+                    //if the file name is left as empty user has wnarnign message pop up
+                    if(fileChooser.getSelectedFile().getName().trim().isEmpty()){
+                        JOptionPane.showMessageDialog(fileChooser, "Name your files you fucking idiot", "idiot at work", JOptionPane.WARNING_MESSAGE);
+                        
+                    }
+
+                    
+                    //get the image object and calls export method with the filepath
+                    target.getImage().export(imageFilepath, selectedFormat);
+
+                } catch (IOException ex) {
+                    System.exit(1);
+                }
+            }
+        }
     }
 
     /**

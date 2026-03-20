@@ -108,15 +108,18 @@ public class SettingsActions {
 
             if (choice == null) return;
 
-            Locale newLocale;
+            Locale newLocale = null;
 
             switch (choice) {
                 case "Dutch":
                     newLocale = new Locale("nl");
                     props.setProperty("language", "nl");
                     break;
-                default: // Good for our options, if we add more languages we must change this switch block.
-                    return;
+                case "English":
+                    props.setProperty("language", "en");
+                    break;
+                default: 
+                    break;
             }
 
             try (FileOutputStream out = new FileOutputStream("src\\main\\resources\\config.properties")) {

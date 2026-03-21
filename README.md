@@ -18,12 +18,12 @@ Begin by opening an image using the open button under the file drop-down menu. Y
 
 ### Edit
 
-* Resize -
-* Rotate 90 Clockwise -
-* Rotate 90 Anti-Clockwise -
-* Rotate 180 degrees - 
-* Horizontal flip -
-* Vertical flip -
+* Resize - The image will be scaled up or down depending on the factor provided (a percentage). If it is less than 100% the image will be scaled down, else the image will be scaled up accordingly.
+* Rotate 90 Clockwise - Rotate a image by 90 degrees clockwise.
+* Rotate 90 Anti-Clockwise - rotate a image by 90 degrees anti-clockwise.
+* Rotate 180 degrees - rotate a image by 180 degrees (mirror image).
+* Horizontal flip - Flip image horizontally in place.
+* Vertical flip - Flip image vertically in place.
 
 ### View
 
@@ -41,30 +41,6 @@ Unchanged as of 20/03
 * Colour Channel Swapping -
 
 ## Testing
-
-### File
-
-* Export - 
-
-### Edit
-
-* Resize -
-* Rotate 90 Clockwise -
-* Rotate 90 Anti-Clockwise -
-* Rotate 180 degrees - 
-* Horizontal flip -
-* Vertical flip -
-
-### Filter
-
-* Sharpen - 
-* Gaussian - 
-* Median - 
-
-### Colour
-
-* Threshold -
-* Colour Channel Swapping -
 
 ## Known bugs
 

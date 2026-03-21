@@ -37,8 +37,9 @@ Unchanged as of 20/03
 
 ### Colour
 
-* Threshold -
-* Colour Channel Swapping -
+* Threshold - Converts a colour image to black and white based on a specified intensity threshold. Pixels with average brightness above the threshold become white, and those below become black. The original alpha (transparency) of each pixel is preserved. The threshold value is provided by the user, between 0 and 255.
+* Colour Channel Swapping - Reorders the red, green, and blue channels of the working image according to a user-specified permutation (e.g., RGB, GBR, BRG). The user inputs the desired channel order via a dialog box. Alpha (transparency) values are preserved. Invalid input will leave the image unchanged.
+* Image Inversion - Inverts all colours of the working image by subtracting each RGB channel from 255. For example, a pixel with (R=100, G=150, B=200) becomes (R=155, G=105, B=55). The alpha (transparency) channel is preserved. No user input is required.
 
 ## Testing
 

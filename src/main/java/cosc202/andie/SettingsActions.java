@@ -129,8 +129,6 @@ public class SettingsActions {
                 return;
             }
 
-            I18nManager.init(newLocale);
-
             JOptionPane.showMessageDialog(null, I18nManager.get("Lan_successful"));
 
             // Close all windows safely

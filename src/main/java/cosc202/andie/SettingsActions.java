@@ -28,7 +28,7 @@ public class SettingsActions {
      */
     public SettingsActions() {
         actions = new ArrayList<>();
-        actions.add(new LanguageAction("Language", null, "Set app language preference", KeyEvent.VK_L));
+        actions.add(new LanguageAction(I18nManager.get("Language_title"), null, I18nManager.get("Language_desc"), KeyEvent.VK_L));
     }
 
     /**
@@ -39,7 +39,7 @@ public class SettingsActions {
      * @return The File menu UI element.
      */
     public JMenu createMenu() {
-        JMenu fileMenu = new JMenu("Settings");
+        JMenu fileMenu = new JMenu(I18nManager.get("Setting_title"));
 
         for (Action action : actions) {
             fileMenu.add(new JMenuItem(action));
@@ -98,8 +98,8 @@ public class SettingsActions {
 
             String choice = (String) JOptionPane.showInputDialog(
                     null,
-                    "Choose your language:",
-                    "Language Selection",
+                    I18nManager.get("Choose_desc"),
+                    I18nManager.get("Lan_tooltip"),
                     JOptionPane.QUESTION_MESSAGE,
                     null,
                     options,
@@ -131,7 +131,7 @@ public class SettingsActions {
 
             I18nManager.init(newLocale);
 
-            JOptionPane.showMessageDialog(null, "Language set, restarting...");
+            JOptionPane.showMessageDialog(null, I18nManager.get("Lan_successful"));
 
             // Close all windows safely
             for (java.awt.Window window : java.awt.Window.getWindows()) {
@@ -149,7 +149,7 @@ public class SettingsActions {
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error changing language!");
+            JOptionPane.showMessageDialog(null,  I18nManager.get("Lan_error"));
         }
     }
 

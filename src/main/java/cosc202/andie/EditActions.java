@@ -101,7 +101,7 @@ public class EditActions {
      * @return The edit menu UI element.
      */
     public JMenu createMenu() {
-        JMenu editMenu = new JMenu("Edit");
+        JMenu editMenu = new JMenu(I18nManager.get("Edit_title"));
 
         for (Action action : actions) {
             editMenu.add(new JMenuItem(action));

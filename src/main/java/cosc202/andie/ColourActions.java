@@ -8,7 +8,6 @@ import javax.swing.*;
  * <p>
  * Actions provided by the Colour menu.
  *
- * @shari838
  * </p>
  *
  * <p>

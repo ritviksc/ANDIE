@@ -1,17 +1,16 @@
 package cosc202.andie;
 
 import java.awt.*;
+import java.io.FileInputStream;
+
 import javax.swing.*;
 import javax.imageio.*;
 import java.util.Locale;
+import java.util.Properties;
 
 /**
  * <p>
  * Main class for A Non-Destructive Image Editor (ANDIE).
- * @shari838S
- * @hanro194
- * @taima325
- * @vanlo528
  * </p>
  *
  * <p>
@@ -91,6 +90,10 @@ public class Andie {
         ColourActions colourActions = new ColourActions();
         menuBar.add(colourActions.createMenu());
 
+        // Language action controls language of the app
+        SettingsActions languageActions = new SettingsActions();
+        menuBar.add(languageActions.createMenu());
+
         frame.setJMenuBar(menuBar);
         frame.pack();
         frame.setVisible(true);
@@ -111,7 +114,19 @@ public class Andie {
      * @see #createAndShowGUI()
      */
     public static void main(String[] args) throws Exception {
-        I18nManager.init(null);
+        Properties props = new Properties();
+        FileInputStream in = new FileInputStream("src\\main\\resources\\config.properties");
+        props.load(in);
+        in.close();
+
+        String language = props.getProperty("language", "en");
+
+        if (language.equals("en")){
+            I18nManager.init(null);
+        } else {
+            Locale locale = new Locale(language);
+            I18nManager.init(locale);
+        }
         javax.swing.SwingUtilities.invokeLater(() -> {
             try {
                 createAndShowGUI();

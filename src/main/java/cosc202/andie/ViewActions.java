@@ -37,9 +37,9 @@ public class ViewActions {
      */
     public ViewActions() {
         actions = new ArrayList<>();
-        actions.add(new ZoomInAction("Zoom In", null, "Zoom In", KeyEvent.VK_PLUS));
-        actions.add(new ZoomOutAction("Zoom Out", null, "Zoom Out", KeyEvent.VK_MINUS));
-        actions.add(new ZoomFullAction("Zoom Full", null, "Zoom Full", KeyEvent.VK_1));
+        actions.add(new ZoomInAction(I18nManager.get("ZI"), null, I18nManager.get("ZI"), KeyEvent.VK_PLUS));
+        actions.add(new ZoomOutAction(I18nManager.get("ZO"), null, I18nManager.get("ZO"), KeyEvent.VK_MINUS));
+        actions.add(new ZoomFullAction(I18nManager.get("ZF"), null, I18nManager.get("ZF"), KeyEvent.VK_1));
     }
 
     /**
@@ -50,7 +50,7 @@ public class ViewActions {
      * @return The view menu UI element.
      */
     public JMenu createMenu() {
-        JMenu viewMenu = new JMenu("View");
+        JMenu viewMenu = new JMenu(I18nManager.get("View_title"));
 
         for (Action action : actions) {
             viewMenu.add(new JMenuItem(action));

@@ -7,14 +7,14 @@ import javax.swing.JOptionPane;
  * <p>
  * ImageOperation to swap the colour channels of an image (R, G, B).
  * </p>
- * 
+ *
  * <p>
- * This operation allows the user to specify a new ordering of the
- * red, green, and blue channels. For example, an input of "GBR"
- * will map Red → Green, Green → Blue, and Blue → Red.
- * The alpha (transparency) channel of each pixel is preserved.
+ * This operation allows the user to specify a new ordering of the red, green,
+ * and blue channels. For example, an input of "GBR" will map Red → Green, Green
+ * → Blue, and Blue → Red. The alpha (transparency) channel of each pixel is
+ * preserved.
  * </p>
- * 
+ *
  * @author Maleena Taia
  * @version 1.0
  */
@@ -24,25 +24,30 @@ public class ColourChannelSwapping implements ImageOperation, java.io.Serializab
      * <p>
      * Apply the colour channel swap operation to an input image.
      * </p>
-     * 
+     *
      * <p>
      * Prompts the user for a new channel order (permutation of R, G, B),
      * calculates the mapping of each channel, and applies it to every pixel.
      * </p>
-     * 
+     *
      * @param input The image to apply the channel swap to.
-     * @return A new BufferedImage with channels swapped according to user input.
+     * @return A new BufferedImage with channels swapped according to user
+     * input.
      */
     @Override
     public BufferedImage apply(BufferedImage input) {
 
         // Prompt the user to enter a new channel order
-        String order = JOptionPane.showInputDialog(
-                "Enter colour channel order (permutation of R, G, B, e.g., GBR):");
+        String order = JOptionPane.showInputDialog(I18nManager.get("channel_prompt"));
 
         // Validate input: must be 3 characters and only contain R, G, B
-        if (order == null || order.length() != 3 || !order.matches("[RGB]{3}")) {
-            JOptionPane.showMessageDialog(null, "Invalid input. Must be a permutation of R, G, B.");
+        if (order == null) {
+            return input; // user cancelled
+        }
+        order = order.toUpperCase().trim();
+        if (order.length() != 3 || !order.matches("[RGB]{3}")
+                || !(order.contains("R") && order.contains("G") && order.contains("B"))) {
+            JOptionPane.showMessageDialog(null, I18nManager.get("channel_invalid"), "Error", JOptionPane.WARNING_MESSAGE);
             return input; // return original image if input is invalid
         }
 

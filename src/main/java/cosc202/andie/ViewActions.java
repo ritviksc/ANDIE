@@ -50,7 +50,7 @@ public class ViewActions {
      * @return The view menu UI element.
      */
     public JMenu createMenu() {
-        JMenu viewMenu = new JMenu("View");
+        JMenu viewMenu = new JMenu(I18nManager.get("view_Title"));
 
         for (Action action : actions) {
             viewMenu.add(new JMenuItem(action));

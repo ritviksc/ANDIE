@@ -50,7 +50,7 @@ public class ColourActions {
      * @return The colour menu UI element.
      */
     public JMenu createMenu() {
-        JMenu fileMenu = new JMenu("Colour");
+        JMenu fileMenu = new JMenu(I18nManager.get("colour_Title"));
 
         for (Action action : actions) {
             fileMenu.add(new JMenuItem(action));

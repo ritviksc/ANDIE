@@ -290,6 +290,7 @@ class EditableImage {
     public BufferedImage getCurrentImage() {
         return current;
     }
+    
 
     /**
      * <p>
@@ -320,6 +321,10 @@ class EditableImage {
              
         //imageIO.write deals with the tansparency for png and giff
         ImageIO.write(current, selectedFormat, new File(imageFilepath));
+    }
+    //check for transparency
+    public boolean hasTransparency() {
+        return current.getColorModel().hasAlpha();
     }
 
 }

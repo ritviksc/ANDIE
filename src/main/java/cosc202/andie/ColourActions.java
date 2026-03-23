@@ -38,10 +38,10 @@ public class ColourActions {
      */
     public ColourActions() {
         actions = new ArrayList<>();
-        actions.add(new ConvertToGreyAction("Greyscale", null, "Convert to greyscale", KeyEvent.VK_G));
-        actions.add(new ThresholdAction("Threshold", null, "Apply threshold", KeyEvent.VK_T));
-        actions.add(new InversionAction("Invert", null, "Invert colours", KeyEvent.VK_I));
-        actions.add(new ChannelSwapAction("Channel Swap", null, "Swap RGB channels", KeyEvent.VK_C));
+        actions.add(new ConvertToGreyAction(I18nManager.get("greyscale"), null, I18nManager.get("greyscale_desc"), KeyEvent.VK_G));
+        actions.add(new ThresholdAction(I18nManager.get("threshold"), null, I18nManager.get("threshold_desc"), KeyEvent.VK_T));
+        actions.add(new InversionAction(I18nManager.get("invert"), null, I18nManager.get("invert_desc"), KeyEvent.VK_I));
+        actions.add(new ChannelSwapAction(I18nManager.get("channel_swap"), null, I18nManager.get("channel_swap_desc"), KeyEvent.VK_C));
     }
 
     /**
@@ -52,7 +52,7 @@ public class ColourActions {
      * @return The colour menu UI element.
      */
     public JMenu createMenu() {
-        JMenu fileMenu = new JMenu("Colour");
+        JMenu fileMenu = new JMenu(I18nManager.get("colour_title"));
 
         for (Action action : actions) {
             fileMenu.add(new JMenuItem(action));
@@ -119,13 +119,38 @@ public class ColourActions {
         @Override
         public void actionPerformed(ActionEvent e) {
 
-            String input = JOptionPane.showInputDialog("Enter threshold (0-255)");
+            String input = JOptionPane.showInputDialog(I18nManager.get("threshold_prompt"));
 
             if (input == null) {
                 return;
             }
 
-            int threshold = Integer.parseInt(input);
+            int threshold;
+
+            try {
+                threshold = Integer.parseInt(input);
+
+                // Validate range (error prevention)
+                if (threshold < 0 || threshold > 255) {
+                    JOptionPane.showMessageDialog(
+                        null,
+                        I18nManager.get("threshold_invalid"),
+                        I18nManager.get("error_title"),
+                        JOptionPane.WARNING_MESSAGE
+                    );
+                    return;
+                }
+
+            } catch (NumberFormatException ex) {
+                // Handle invalid number input
+                JOptionPane.showMessageDialog(
+                    null,
+                    I18nManager.get("threshold_invalid"),
+                    I18nManager.get("error_title"),
+                    JOptionPane.WARNING_MESSAGE
+                );
+                return;
+            }
 
             target.getImage().apply(new ImageThresholdingFilter(threshold));
             target.repaint();

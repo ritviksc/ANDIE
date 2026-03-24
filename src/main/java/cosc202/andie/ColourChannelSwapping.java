@@ -4,104 +4,76 @@ import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import javax.swing.JOptionPane;
 
-/**
- * <p>
- * ImageOperation to swap the colour channels of an image (R, G, B).
- * </p>
- *
- * <p>
- * This operation allows the user to specify a new ordering of the red, green,
- * and blue channels. For example, an input of "GBR" will map Red → Green, Green
- * → Blue, and Blue → Red. The alpha (transparency) channel of each pixel is
- * preserved.
- * </p>
- *
- * <p>
- * Includes exception handling and multilingual support via I18nManager. The
- * user prompt can be used via the no-argument constructor, or a predefined
- * order can be passed to the other constructor.
- * </p>
- *
- * @author Maleena Taia
- * @version 2.0
- */
 public class ColourChannelSwapping implements ImageOperation, java.io.Serializable {
 
-    private final String order; // the channel order, e.g., "GBR"
+    private final String order;
 
-    /**
-     * No-argument constructor: prompts user for channel order.
-     * Uses default "RGB" if user cancels.
-     */
     public ColourChannelSwapping() {
         // Prompt user for channel order
         String input = JOptionPane.showInputDialog(I18nManager.get("channel_prompt"));
         if (input == null) {
-            // User cancelled → use default order
-            this.order = "RGB";
+            this.order = "RGB"; // user cancelled → default
         } else {
-            this.order = input.toUpperCase().trim();
+            input = input.toUpperCase().trim();
+            // Validate input
+            if (input.length() != 3 || !input.matches("[RGB]{3}")
+                    || !(input.contains("R") && input.contains("G") && input.contains("B"))) {
+                JOptionPane.showMessageDialog(
+                        null,
+                        I18nManager.get("channel_invalid"),
+                        I18nManager.get("error_title"),
+                        JOptionPane.ERROR_MESSAGE
+                );
+                this.order = "RGB"; // fallback
+            } else {
+                this.order = input;
+            }
         }
     }
 
-    /**
-     * Constructor that accepts a predefined channel order.
-     *
-     * @param order The new channel order (e.g., "GBR")
-     */
+    // Constructor with predefined order
     public ColourChannelSwapping(String order) {
-        // If null, use default safe order
         if (order == null) {
-            this.order = "RGB";
+            this.order = "RGB"; // null → default
         } else {
-            this.order = order.toUpperCase().trim();
+            String temp = order.toUpperCase().trim();
+            // Validate input silently
+            if (temp.length() != 3 || !temp.matches("[RGB]{3}")
+                    || !(temp.contains("R") && temp.contains("G") && temp.contains("B"))) {
+                this.order = "RGB"; // fallback silently
+            } else {
+                this.order = temp;
+            }
         }
     }
 
-    /**
-     * Apply the colour channel swap operation to an input image.
-     *
-     * @param input The image to apply the channel swap to.
-     * @return A new BufferedImage with channels swapped according to the
-     *         specified order, or the original input if null or invalid.
-     */
     @Override
     public BufferedImage apply(BufferedImage input) {
 
         // Exception handling: null check
         if (input == null) {
             JOptionPane.showMessageDialog(
-                null,
-                I18nManager.get("channel_no_image"),
-                I18nManager.get("error_title"),
-                JOptionPane.ERROR_MESSAGE
+                    null,
+                    I18nManager.get("channel_no_image"),
+                    I18nManager.get("error_title"),
+                    JOptionPane.ERROR_MESSAGE
             );
-            return input;
+            return null; // exit if no image
         }
 
-        // Validate order
-        if (order.length() != 3 || !order.matches("[RGB]{3}") ||
-            !(order.contains("R") && order.contains("G") && order.contains("B"))) {
-
-            JOptionPane.showMessageDialog(
-                null,
-                I18nManager.get("channel_invalid"),
-                I18nManager.get("error_title"),
-                JOptionPane.WARNING_MESSAGE
-            );
-            return input;
+        // Safe order fallback
+        String safeOrder = order;
+        if (safeOrder == null || safeOrder.length() != 3
+                || !safeOrder.matches("[RGB]{3}")
+                || !(safeOrder.contains("R") && safeOrder.contains("G") && safeOrder.contains("B"))) {
+            safeOrder = "RGB"; // fallback silently
         }
 
-        // Original RGB indices for mapping
+        // Build channel mapping
         char[] original = {'R', 'G', 'B'};
         int[] map = new int[3]; // map[i] tells which original channel goes to position i
-
-        // Create output image copy
-        BufferedImage output = new BufferedImage(input.getColorModel(), input.copyData(null), input.isAlphaPremultiplied(), null);
-
-        // Build the mapping array based on the provided order
         for (int i = 0; i < 3; i++) {
-            char target = order.charAt(i);
+            char target = safeOrder.charAt(i);
             for (int j = 0; j < 3; j++) {
                 if (original[j] == target) {
                     map[i] = j;
@@ -116,6 +88,9 @@ public class ColourChannelSwapping implements ImageOperation, java.io.Serializab
         // Get image dimensions
         int width = input.getWidth();
         int height = input.getHeight();
+
+        // Create output image of the same size and type
+        BufferedImage output = new BufferedImage(width, height, input.getType());
 
         // Loop through each pixel in the image
         for (int y = 0; y < height; y++) {
@@ -144,6 +119,6 @@ public class ColourChannelSwapping implements ImageOperation, java.io.Serializab
             }
         }
 
-        return output;
+        return output; // return new swapped image
     }
 }

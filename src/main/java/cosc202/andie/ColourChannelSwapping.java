@@ -30,73 +30,73 @@ public class ColourChannelSwapping implements ImageOperation {
     private final String order; // the channel order, e.g., "GBR"
 
     /**
-     * <p>
-     * Constructor that prompts the user for the channel order.
-     * </p>
-     *
-     * <p>
-     * Throws IllegalArgumentException if the user cancels or enters an invalid
-     * order.
-     * </p>
+     * No-argument constructor: prompts user for channel order.
+     * Uses default "RGB" if user cancels.
      */
     public ColourChannelSwapping() {
+        // Prompt user for channel order
         String input = JOptionPane.showInputDialog(I18nManager.get("channel_prompt"));
         if (input == null) {
-            throw new IllegalArgumentException(I18nManager.get("channel_order_null"));
+            // User cancelled → use default order
+            this.order = "RGB";
+        } else {
+            this.order = input.toUpperCase().trim();
         }
-        // Delegate the rest of the validation to the main constructor
-        this(input);
     }
 
     /**
-     * <p>
      * Constructor that accepts a predefined channel order.
-     * </p>
-     *
-     * <p>
-     * Throws IllegalArgumentException if the order is invalid.
-     * </p>
      *
      * @param order The new channel order (e.g., "GBR")
      */
     public ColourChannelSwapping(String order) {
+        // If null, use default safe order
         if (order == null) {
-            throw new IllegalArgumentException(I18nManager.get("channel_order_null"));
+            this.order = "RGB";
+        } else {
+            this.order = order.toUpperCase().trim();
         }
-
-        order = order.toUpperCase().trim();
-
-        if (order.length() != 3) {
-            throw new IllegalArgumentException(I18nManager.get("channel_order_length"));
-        }
-
-        if (!order.matches("[RGB]{3}")) {
-            throw new IllegalArgumentException(I18nManager.get("channel_order_chars"));
-        }
-
-        if (!(order.contains("R") && order.contains("G") && order.contains("B"))) {
-            throw new IllegalArgumentException(I18nManager.get("channel_order_all"));
-        }
-
-        this.order = order;
     }
 
     /**
-     * <p>
      * Apply the colour channel swap operation to an input image.
-     * </p>
      *
      * @param input The image to apply the channel swap to.
      * @return A new BufferedImage with channels swapped according to the
-     * specified order.
+     *         specified order, or the original input if null or invalid.
      */
     @Override
     public BufferedImage apply(BufferedImage input) {
+
+        // Exception handling: null check
+        if (input == null) {
+            JOptionPane.showMessageDialog(
+                null,
+                I18nManager.get("channel_no_image"),
+                I18nManager.get("error_title"),
+                JOptionPane.WARNING_MESSAGE
+            );
+            return input;
+        }
+
+        // Validate order
+        if (order.length() != 3 || !order.matches("[RGB]{3}") ||
+            !(order.contains("R") && order.contains("G") && order.contains("B"))) {
+
+            JOptionPane.showMessageDialog(
+                null,
+                I18nManager.get("channel_invalid"),
+                I18nManager.get("error_title"),
+                JOptionPane.WARNING_MESSAGE
+            );
+            return input;
+        }
 
         // Original RGB indices for mapping
         char[] original = {'R', 'G', 'B'};
         int[] map = new int[3]; // map[i] tells which original channel goes to position i
 
+        // Create output image copy
         BufferedImage output = new BufferedImage(input.getColorModel(), input.copyData(null), input.isAlphaPremultiplied(), null);
 
         // Build the mapping array based on the provided order
@@ -109,10 +109,10 @@ public class ColourChannelSwapping implements ImageOperation {
                 }
             }
         }
-        
-        //Checks map output for testing
+
+        // Debug: check mapping output
         System.out.println(Arrays.toString(map));
-        
+
         // Get image dimensions
         int width = input.getWidth();
         int height = input.getHeight();
@@ -144,7 +144,6 @@ public class ColourChannelSwapping implements ImageOperation {
             }
         }
 
-        // Return the modified image
         return output;
     }
 }

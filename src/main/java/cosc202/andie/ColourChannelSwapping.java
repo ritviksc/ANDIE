@@ -1,6 +1,7 @@
 package cosc202.andie;
 
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 import javax.swing.JOptionPane;
 
 /**
@@ -16,9 +17,9 @@ import javax.swing.JOptionPane;
  * </p>
  *
  * <p>
- * Includes exception handling and multilingual support via I18nManager. 
- * The user prompt can be used via the no-argument constructor, 
- * or a predefined order can be passed to the other constructor.
+ * Includes exception handling and multilingual support via I18nManager. The
+ * user prompt can be used via the no-argument constructor, or a predefined
+ * order can be passed to the other constructor.
  * </p>
  *
  * @author Maleena Taia
@@ -34,31 +35,17 @@ public class ColourChannelSwapping implements ImageOperation {
      * </p>
      *
      * <p>
-     * Throws IllegalArgumentException if the user cancels or enters an invalid order.
+     * Throws IllegalArgumentException if the user cancels or enters an invalid
+     * order.
      * </p>
      */
     public ColourChannelSwapping() {
         String input = JOptionPane.showInputDialog(I18nManager.get("channel_prompt"));
-
         if (input == null) {
             throw new IllegalArgumentException(I18nManager.get("channel_order_null"));
         }
-
-        input = input.toUpperCase().trim();
-
-        if (input.length() != 3) {
-            throw new IllegalArgumentException(I18nManager.get("channel_order_length"));
-        }
-
-        if (!input.matches("[RGB]{3}")) {
-            throw new IllegalArgumentException(I18nManager.get("channel_order_chars"));
-        }
-
-        if (!(input.contains("R") && input.contains("G") && input.contains("B"))) {
-            throw new IllegalArgumentException(I18nManager.get("channel_order_all"));
-        }
-
-        this.order = input;
+        // Delegate the rest of the validation to the main constructor
+        this(input);
     }
 
     /**
@@ -100,7 +87,8 @@ public class ColourChannelSwapping implements ImageOperation {
      * </p>
      *
      * @param input The image to apply the channel swap to.
-     * @return A new BufferedImage with channels swapped according to the specified order.
+     * @return A new BufferedImage with channels swapped according to the
+     * specified order.
      */
     @Override
     public BufferedImage apply(BufferedImage input) {
@@ -108,6 +96,8 @@ public class ColourChannelSwapping implements ImageOperation {
         // Original RGB indices for mapping
         char[] original = {'R', 'G', 'B'};
         int[] map = new int[3]; // map[i] tells which original channel goes to position i
+
+        BufferedImage output = new BufferedImage(input.getColorModel(), input.copyData(null), input.isAlphaPremultiplied(), null);
 
         // Build the mapping array based on the provided order
         for (int i = 0; i < 3; i++) {
@@ -119,7 +109,10 @@ public class ColourChannelSwapping implements ImageOperation {
                 }
             }
         }
-
+        
+        //Checks map output for testing
+        System.out.println(Arrays.toString(map));
+        
         // Get image dimensions
         int width = input.getWidth();
         int height = input.getHeight();
@@ -147,11 +140,11 @@ public class ColourChannelSwapping implements ImageOperation {
                 int newPixel = (a << 24) | (newR << 16) | (newG << 8) | newB;
 
                 // Update the pixel in the image
-                input.setRGB(x, y, newPixel);
+                output.setRGB(x, y, newPixel);
             }
         }
 
         // Return the modified image
-        return input;
+        return output;
     }
 }

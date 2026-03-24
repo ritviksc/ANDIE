@@ -87,7 +87,7 @@ public class SettingsActions {
         public void actionPerformed(ActionEvent e) {
             try {
             Properties props = new Properties();
-            try (FileInputStream in = new FileInputStream("src\\main\\resources\\config.properties")) {
+            try (FileInputStream in = new FileInputStream("src/main/resources/config.properties")) {
                 props.load(in);
             } catch (Exception ex) {
                 System.out.println("Error reading config.properties!");
@@ -122,7 +122,7 @@ public class SettingsActions {
                     break;
             }
 
-            try (FileOutputStream out = new FileOutputStream("src\\main\\resources\\config.properties")) {
+            try (FileOutputStream out = new FileOutputStream("src/main/resources/config.properties")) {
                 props.store(out, "Updated language");
             } catch (Exception ex) {
                 System.out.println("Error writing to config.properties!");

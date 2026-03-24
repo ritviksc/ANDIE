@@ -45,10 +45,6 @@ Unchanged as of 20/03
 
 ## Known bugs
 
-### JPG transparency export error
-
-When exporting a JPG with transparency in the current working image, no error message is shown and the file is not exported.
-
 ### Edge detection on certain blur filters
 
 Edge detection hasn't been implemented for blur filters using Kernels and convolution.
@@ -57,4 +53,4 @@ Edge detection hasn't been implemented for blur filters using Kernels and convol
 
 ### Internationalisation
 
-ANDIE's provided ui has been internationalised.
+ANDIE's provided ui has been internationalised and an I18N manager has been added.

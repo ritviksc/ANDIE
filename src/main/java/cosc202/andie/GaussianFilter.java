@@ -131,8 +131,12 @@ public class GaussianFilter implements ImageOperation, java.io.Serializable {
     private static float getGaussianValue(int x, int y, float sigma){
         
         float firstHalf = 1f/(2*(float) Math.PI*(sigma*sigma));
-
-        float exponent = -((x * x + y * y) / (2f * sigma * sigma));
+        float exponent;
+        try{
+            exponent = -((x * x + y * y) / (2f * sigma * sigma));
+        } catch (ArithmeticException e) {
+            exponent = 0;
+        }
 
         float secondHalf = (float) Math.exp(exponent);
         

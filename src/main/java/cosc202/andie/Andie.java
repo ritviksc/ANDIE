@@ -115,7 +115,7 @@ public class Andie {
      */
     public static void main(String[] args) throws Exception {
         Properties props = new Properties();
-        FileInputStream in = new FileInputStream("src\\main\\resources\\config.properties");
+        FileInputStream in = new FileInputStream("src/main/resources/config.properties");
         props.load(in);
         in.close();
 

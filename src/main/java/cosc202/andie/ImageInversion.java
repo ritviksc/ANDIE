@@ -18,10 +18,18 @@ package cosc202.andie;
 import java.awt.image.BufferedImage;
 import java.awt.Color;
 
+import javax.swing.JOptionPane;
+
 public class ImageInversion implements ImageOperation {
 
     @Override
     public BufferedImage apply(BufferedImage input) {
+
+        if (input == null) {
+        // Return null or throw a warning dialog
+        JOptionPane.showMessageDialog(null, I18nManager.get("inversion_no_image"), I18nManager.get("error_title"), JOptionPane.WARNING_MESSAGE);
+        return input; 
+    }
         /**
          * <p>
          * Apply the color inversion filter to an input image.

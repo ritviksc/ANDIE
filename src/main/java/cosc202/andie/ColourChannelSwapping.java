@@ -15,47 +15,101 @@ import javax.swing.JOptionPane;
  * preserved.
  * </p>
  *
+ * <p>
+ * Includes exception handling and multilingual support via I18nManager. 
+ * The user prompt can be used via the no-argument constructor, 
+ * or a predefined order can be passed to the other constructor.
+ * </p>
+ *
  * @author Maleena Taia
- * @version 1.0
+ * @version 2.0
  */
-public class ColourChannelSwapping implements ImageOperation, java.io.Serializable {
+public class ColourChannelSwapping implements ImageOperation {
+
+    private final String order; // the channel order, e.g., "GBR"
+
+    /**
+     * <p>
+     * Constructor that prompts the user for the channel order.
+     * </p>
+     *
+     * <p>
+     * Throws IllegalArgumentException if the user cancels or enters an invalid order.
+     * </p>
+     */
+    public ColourChannelSwapping() {
+        String input = JOptionPane.showInputDialog(I18nManager.get("channel_prompt"));
+
+        if (input == null) {
+            throw new IllegalArgumentException(I18nManager.get("channel_order_null"));
+        }
+
+        input = input.toUpperCase().trim();
+
+        if (input.length() != 3) {
+            throw new IllegalArgumentException(I18nManager.get("channel_order_length"));
+        }
+
+        if (!input.matches("[RGB]{3}")) {
+            throw new IllegalArgumentException(I18nManager.get("channel_order_chars"));
+        }
+
+        if (!(input.contains("R") && input.contains("G") && input.contains("B"))) {
+            throw new IllegalArgumentException(I18nManager.get("channel_order_all"));
+        }
+
+        this.order = input;
+    }
+
+    /**
+     * <p>
+     * Constructor that accepts a predefined channel order.
+     * </p>
+     *
+     * <p>
+     * Throws IllegalArgumentException if the order is invalid.
+     * </p>
+     *
+     * @param order The new channel order (e.g., "GBR")
+     */
+    public ColourChannelSwapping(String order) {
+        if (order == null) {
+            throw new IllegalArgumentException(I18nManager.get("channel_order_null"));
+        }
+
+        order = order.toUpperCase().trim();
+
+        if (order.length() != 3) {
+            throw new IllegalArgumentException(I18nManager.get("channel_order_length"));
+        }
+
+        if (!order.matches("[RGB]{3}")) {
+            throw new IllegalArgumentException(I18nManager.get("channel_order_chars"));
+        }
+
+        if (!(order.contains("R") && order.contains("G") && order.contains("B"))) {
+            throw new IllegalArgumentException(I18nManager.get("channel_order_all"));
+        }
+
+        this.order = order;
+    }
 
     /**
      * <p>
      * Apply the colour channel swap operation to an input image.
      * </p>
      *
-     * <p>
-     * Prompts the user for a new channel order (permutation of R, G, B),
-     * calculates the mapping of each channel, and applies it to every pixel.
-     * </p>
-     *
      * @param input The image to apply the channel swap to.
-     * @return A new BufferedImage with channels swapped according to user
-     * input.
+     * @return A new BufferedImage with channels swapped according to the specified order.
      */
     @Override
     public BufferedImage apply(BufferedImage input) {
-
-        // Prompt the user to enter a new channel order
-        String order = JOptionPane.showInputDialog(I18nManager.get("channel_prompt"));
-
-        // Validate input: must be 3 characters and only contain R, G, B
-        if (order == null) {
-            return input; // user cancelled
-        }
-        order = order.toUpperCase().trim();
-        if (order.length() != 3 || !order.matches("[RGB]{3}")
-                || !(order.contains("R") && order.contains("G") && order.contains("B"))) {
-            JOptionPane.showMessageDialog(null, I18nManager.get("channel_invalid"), "Error", JOptionPane.WARNING_MESSAGE);
-            return input; // return original image if input is invalid
-        }
 
         // Original RGB indices for mapping
         char[] original = {'R', 'G', 'B'};
         int[] map = new int[3]; // map[i] tells which original channel goes to position i
 
-        // Build the mapping array based on user input
+        // Build the mapping array based on the provided order
         for (int i = 0; i < 3; i++) {
             char target = order.charAt(i);
             for (int j = 0; j < 3; j++) {

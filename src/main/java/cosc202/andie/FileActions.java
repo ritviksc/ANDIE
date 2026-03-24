@@ -43,7 +43,7 @@ public class FileActions {
         actions.add(new FileOpenAction(I18nManager.get("open"), null, I18nManager.get("open_Desc"), KeyEvent.VK_O));
         actions.add(new FileSaveAction(I18nManager.get("save"), null, I18nManager.get("save_Desc"), KeyEvent.VK_S));
         actions.add(new FileSaveAsAction(I18nManager.get("save_As"), null, I18nManager.get("save_As_Desc"), KeyEvent.VK_A));
-        actions.add(new FileExportAction(I18nManager.get("export"), null, I18nManager.get("export_Desc"), KeyEvent.VK_A));
+        actions.add(new FileExportAction(I18nManager.get("export"), null, I18nManager.get("export_Desc"), KeyEvent.VK_E));
         actions.add(new FileExitAction(I18nManager.get("exit"), null, I18nManager.get("exit_Desc"), 0));
     }
 
@@ -274,7 +274,12 @@ public class FileActions {
                     //if the file name is left as empty user has wnarnign message pop up
                     if(fileChooser.getSelectedFile().getName().trim().isEmpty()){
                         JOptionPane.showMessageDialog(fileChooser, I18nManager.get("no_File_Name"), I18nManager.get("nfn_Title"), JOptionPane.WARNING_MESSAGE);
-                        
+                        return;
+                    }
+                    //check for image to have transparency when saved as jpeg
+                    if(selectedFormat.equals("jpg") && target.getImage().hasTransparency()){
+                        JOptionPane.showMessageDialog(fileChooser,"Your image has a transparency, select another format", "Transparency warning", JOptionPane.WARNING_MESSAGE);
+                        return;
                     }
 
                     
@@ -282,7 +287,13 @@ public class FileActions {
                     target.getImage().export(imageFilepath, selectedFormat);
 
                 } catch (IOException ex) {
-                    System.exit(1);
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(
+        target,
+        "Error exporting image:\n" + ex.getMessage(),
+        "Export Error",
+        JOptionPane.ERROR_MESSAGE
+);
                 }
             }
         }

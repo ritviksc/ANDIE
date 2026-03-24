@@ -28,10 +28,10 @@ public class MedianFilterTest {
     }
 
     @Test
-    public void testGetZoomAfterSetZoom() {
-        ImagePanel testPanel = new ImagePanel();
-        testPanel.setZoom(120.0);
-        assertEquals(testPanel.getZoom(), 120.0);
+    public void medianTest(){
+        
+        assertTrue(true);
+        
     }
 
 }

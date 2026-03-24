@@ -40,6 +40,8 @@ public class ColourActions {
         actions = new ArrayList<>();
         actions.add(new ConvertToGreyAction("Greyscale", null, "Convert to greyscale", KeyEvent.VK_G));
         actions.add(new ThresholdAction("Threshold", null, "Apply threshold", KeyEvent.VK_T));
+        actions.add(new InversionAction("Invert", null, "Invert colours", KeyEvent.VK_I));
+        actions.add(new ChannelSwapAction("Channel Swap", null, "Swap RGB channels", KeyEvent.VK_C));
     }
 
     /**
@@ -126,6 +128,36 @@ public class ColourActions {
             int threshold = Integer.parseInt(input);
 
             target.getImage().apply(new ImageThresholdingFilter(threshold));
+            target.repaint();
+            target.getParent().revalidate();
+        }
+    }
+
+    public class InversionAction extends ImageAction {
+
+        InversionAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+            super(name, icon, desc, mnemonic);
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            target.getImage().apply(new ImageInversion());
+            target.repaint();
+            target.getParent().revalidate();
+        }
+    }
+
+    public class ChannelSwapAction extends ImageAction {
+
+        ChannelSwapAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+            super(name, icon, desc, mnemonic);
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Apply the ColourChannelSwap operation
+            target.getImage().apply(new ColourChannelSwapping());
             target.repaint();
             target.getParent().revalidate();
         }

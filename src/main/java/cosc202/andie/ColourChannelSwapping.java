@@ -25,7 +25,7 @@ import javax.swing.JOptionPane;
  * @author Maleena Taia
  * @version 2.0
  */
-public class ColourChannelSwapping implements ImageOperation {
+public class ColourChannelSwapping implements ImageOperation, java.io.Serializable {
 
     private final String order; // the channel order, e.g., "GBR"
 
@@ -74,7 +74,7 @@ public class ColourChannelSwapping implements ImageOperation {
                 null,
                 I18nManager.get("channel_no_image"),
                 I18nManager.get("error_title"),
-                JOptionPane.WARNING_MESSAGE
+                JOptionPane.ERROR_MESSAGE
             );
             return input;
         }

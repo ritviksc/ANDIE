@@ -57,7 +57,7 @@ public class ConvertToGrey implements ImageOperation, java.io.Serializable {
                     null,
                     I18nManager.get("greyscale_no_image"),
                     I18nManager.get("error_title"),
-                    JOptionPane.WARNING_MESSAGE
+                    JOptionPane.ERROR_MESSAGE
             );
             return input;
         }

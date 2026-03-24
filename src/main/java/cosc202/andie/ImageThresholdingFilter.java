@@ -18,7 +18,7 @@ import javax.swing.JOptionPane;
  * @author Maleena Taia
  * @version 1.0
  */
-public class ImageThresholdingFilter implements ImageOperation {
+public class ImageThresholdingFilter implements ImageOperation, java.io.Serializable {
 
     /**
      * <p>
@@ -69,7 +69,7 @@ public class ImageThresholdingFilter implements ImageOperation {
                     null,
                     I18nManager.get("threshold_no_image"),
                     I18nManager.get("error_title"),
-                    JOptionPane.WARNING_MESSAGE
+                    JOptionPane.ERROR_MESSAGE
             );
             return input;
         }

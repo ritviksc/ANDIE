@@ -137,9 +137,9 @@ public class ColourActions {
                 if (threshold < 0 || threshold > 255) {
                     JOptionPane.showMessageDialog(
                         null,
-                        I18nManager.get("threshold_invalid"),
+                        I18nManager.get("threshold_out_of_range"),
                         I18nManager.get("error_title"),
-                        JOptionPane.WARNING_MESSAGE
+                        JOptionPane.ERROR_MESSAGE
                     );
                     return;
                 }
@@ -148,9 +148,9 @@ public class ColourActions {
                 // Handle invalid number input
                 JOptionPane.showMessageDialog(
                     null,
-                    I18nManager.get("threshold_invalid"),
+                    I18nManager.get("threshold_not_number"),
                     I18nManager.get("error_title"),
-                    JOptionPane.WARNING_MESSAGE
+                    JOptionPane.ERROR_MESSAGE
                 );
                 return;
             }

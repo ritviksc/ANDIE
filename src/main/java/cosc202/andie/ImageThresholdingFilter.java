@@ -1,6 +1,8 @@
 package cosc202.andie;
 
 import java.awt.image.BufferedImage;
+import javax.swing.JOptionPane;
+
 
 /**
  * <p>
@@ -40,7 +42,12 @@ public class ImageThresholdingFilter implements ImageOperation {
     * for black-and-white conversion.
    */
     public ImageThresholdingFilter(int threshold) {
-        this.threshold = threshold;
+        // Validate threshold (error prevention)
+        if (threshold < 0 || threshold > 255) {
+            this.threshold = 128; // default safe value
+        } else {
+            this.threshold = threshold;
+        }
     }
 
    /**
@@ -61,6 +68,17 @@ public class ImageThresholdingFilter implements ImageOperation {
     @Override
     public BufferedImage apply(BufferedImage input) {
 
+        // Exception handling: null check
+        if (input == null) {
+            JOptionPane.showMessageDialog(
+                null,
+                I18nManager.get("threshold_no_image"),
+                I18nManager.get("error_title"),
+                JOptionPane.WARNING_MESSAGE
+            );
+            return input;
+        }
+        
         // Creates a new image with the same width, height, and type as input
         BufferedImage output = new BufferedImage(
                 input.getWidth(),

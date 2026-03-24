@@ -13,6 +13,7 @@ nbproject/
 .settings/
 .classpath
 .project
+.Rhistory
 
 # ignore gradle caches
 .gradle/

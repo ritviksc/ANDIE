@@ -57,4 +57,4 @@ Edge detection hasn't been implemented for blur filters using Kernels and convol
 
 ### Internationalisation
 
-ANDIE's provided ui has been internationalised.
+ANDIE's provided ui has been internationalised and an I18N manager has been added.

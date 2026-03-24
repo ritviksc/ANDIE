@@ -196,8 +196,5 @@ public class ColourActions {
             target.getParent().revalidate();
         }
     }
-<<<<<<< HEAD
+
 }
-=======
-}
->>>>>>> b04e159c7ab70f9d8cbd8a4482fdb2a9a40739f1

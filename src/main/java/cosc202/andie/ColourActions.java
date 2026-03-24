@@ -38,17 +38,11 @@ public class ColourActions {
      */
     public ColourActions() {
         actions = new ArrayList<>();
-<<<<<<< HEAD
-        actions.add(new ConvertToGreyAction("Greyscale", null, "Convert to greyscale", KeyEvent.VK_G));
-        actions.add(new ThresholdAction("Threshold", null, "Apply threshold", KeyEvent.VK_T));
-        actions.add(new InversionAction("Invert", null, "Invert colours", KeyEvent.VK_I));
-        actions.add(new ChannelSwapAction("Channel Swap", null, "Swap RGB channels", KeyEvent.VK_C));
-=======
         actions.add(new ConvertToGreyAction(I18nManager.get("greyscale"), null, I18nManager.get("greyscale_desc"), KeyEvent.VK_G));
         actions.add(new ThresholdAction(I18nManager.get("threshold"), null, I18nManager.get("threshold_desc"), KeyEvent.VK_T));
         actions.add(new InversionAction(I18nManager.get("invert"), null, I18nManager.get("invert_desc"), KeyEvent.VK_I));
         actions.add(new ChannelSwapAction(I18nManager.get("channel_swap"), null, I18nManager.get("channel_swap_desc"), KeyEvent.VK_C));
->>>>>>> b04e159c7ab70f9d8cbd8a4482fdb2a9a40739f1
+
     }
 
     /**

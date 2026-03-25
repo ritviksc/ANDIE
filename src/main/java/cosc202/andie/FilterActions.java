@@ -135,6 +135,7 @@ public class FilterActions {
                     // Check the return value from the dialog box.
                 
                 if (option == JOptionPane.CANCEL_OPTION) {
+                    radius = 0;
                     return;
                 } else if (option == JOptionPane.OK_OPTION) {
                     radius = radiusModel.getNumber().intValue();
@@ -274,6 +275,7 @@ public class FilterActions {
                     // Check the return value from the dialog box.
                 
                 if (option == JOptionPane.CANCEL_OPTION) {
+                    radius = 0;
                     return;
                 } else if (option == JOptionPane.OK_OPTION) {
                     radius = radiusModel.getNumber().intValue();
@@ -360,6 +362,7 @@ public class FilterActions {
                     // Check the return value from the dialog box.
                 
                 if (option == JOptionPane.CANCEL_OPTION) {
+                    radius = 0;
                     return;
                 } else if (option == JOptionPane.OK_OPTION) {
                     radius = radiusModel.getNumber().intValue();

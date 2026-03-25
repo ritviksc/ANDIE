@@ -1,5 +1,6 @@
 package cosc202.andie;
 
+import static cosc202.andie.ImageAction.target;
 import java.util.*;
 import java.awt.event.*;
 import java.io.File;
@@ -344,7 +345,19 @@ public class FileActions {
          */
         @Override
         public void actionPerformed(ActionEvent e) {
-            System.exit(0);
+            boolean readyToClose = true;
+
+                // Close all windows safely
+                for (java.awt.Window window : java.awt.Window.getWindows()) {
+                    if (window instanceof JFrame) {
+                        ((JFrame) window).dispatchEvent(new WindowEvent((JFrame) window, WindowEvent.WINDOW_CLOSING));
+                        if (!target.windowClosed) {
+                            readyToClose = false;
+                            break;
+                        }
+                    }
+                }
+
         }
 
     }

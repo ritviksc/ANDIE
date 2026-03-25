@@ -3,6 +3,7 @@ package cosc202.andie;
 import java.util.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.text.NumberFormatter;
 
 /**
  * <p>
@@ -254,6 +255,16 @@ public class EditActions {
             SpinnerNumberModel factorModel = new SpinnerNumberModel(100, 10, 200, 10);
             JSpinner factorSpinner = new JSpinner(factorModel);
             int option = JOptionPane.showOptionDialog(null, factorSpinner, I18nManager.get("scale_percentage"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+            JSpinner.NumberEditor editor = new JSpinner.NumberEditor(factorSpinner, "#");
+            JFormattedTextField radiusInput = editor.getTextField();
+            factorSpinner.setEditor(editor);
+                
+            NumberFormatter formatter = (NumberFormatter) radiusInput.getFormatter();
+                
+            formatter.setValueClass(Integer.class);
+
+            formatter.setAllowsInvalid(false);
+            formatter.setCommitsOnValidEdit(true);
 
             // Check the return value from the dialog box.
             if (option == JOptionPane.CANCEL_OPTION) {

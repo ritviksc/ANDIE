@@ -29,6 +29,7 @@ nbproject/
 tmp/
 
 tatus
+config.properties
 
 # Don't ignore gradle wrapper JAR
 !gradle-wrapper.jar

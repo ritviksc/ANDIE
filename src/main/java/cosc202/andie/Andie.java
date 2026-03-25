@@ -107,9 +107,11 @@ public class Andie {
             @Override
             public void windowClosing(WindowEvent e) {
 
+                target.windowClosed = true;
+                
                 if (target.getImage().isSaved()) {
                     e.getWindow().dispose();
-                } else {
+                } else if (target.getImage() != null && !target.getImage().isSaved()) {
 
                     Object[] saveOptions = {"Save", "Save As", "Exit Without Saving", "Cancel"};
 
@@ -125,6 +127,7 @@ public class Andie {
 
                             try {
                                 target.getImage().save();
+                                e.getWindow().dispose();
                             } catch (Exception ex) {
                                 System.exit(1);
                             }
@@ -139,25 +142,28 @@ public class Andie {
                                 try {
                                     String imageFilepath = fileChooser.getSelectedFile().getCanonicalPath();
                                     target.getImage().saveAs(imageFilepath);
+                                    e.getWindow().dispose();
                                 } catch (Exception ex) {
-                                    System.exit(1);
+                                    JOptionPane.showMessageDialog(null, "Invalid save location/type");
                                 }
+                            } else if (result == JFileChooser.CANCEL_OPTION) {
+                                target.windowClosed = false;
                             }
-                            
-                        case 2:
-                            
-                            e.getWindow().dispose();
-                            break;
-                            
-                        case 3:
 
                             break;
-                            
-                        default:
-                            
+
+                        case 2:
+
+                            e.getWindow().dispose();
+                            break;
+
+                        case 3:
+                            target.windowClosed = false;
                             break;
 
                     }
+                } else {
+                    e.getWindow().dispose();
                 }
             }
         });
@@ -192,9 +198,9 @@ public class Andie {
             // File already exists, no need to create it again.
         } catch (IOException e) {
             System.err.println("Error creating file: " + e.getMessage());
-            throw e; 
+            throw e;
         }
-        
+
         // Ensure parent directories exist
         if (Files.notExists(path.getParent())) {
             Files.createDirectories(path.getParent());

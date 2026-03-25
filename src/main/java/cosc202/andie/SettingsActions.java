@@ -2,6 +2,7 @@ package cosc202.andie;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
@@ -10,13 +11,15 @@ import java.util.Properties;
 
 import javax.swing.Action;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 public class SettingsActions {
-     /**
+
+    /**
      * A list of actions for the setting menu.
      */
     protected ArrayList<Action> actions;
@@ -78,7 +81,8 @@ public class SettingsActions {
          *
          * <p>
          * This method is called whenever the LanguageAction is triggered. It
-         * prompts the user for a language preference, then restarts application with chosen language.
+         * prompts the user for a language preference, then restarts application
+         * with chosen language.
          * </p>
          *
          * @param e The event triggering this callback.
@@ -86,73 +90,83 @@ public class SettingsActions {
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
-            Properties props = new Properties();
-            try (FileInputStream in = new FileInputStream("src/main/resources/config.properties")) {
-                props.load(in);
-            } catch (Exception ex) {
-                System.out.println("Error reading config.properties!");
-                return;
-            }
-
-            String[] options = {"English", "Dutch"};
-
-            String choice = (String) JOptionPane.showInputDialog(
-                    null,
-                    I18nManager.get("Choose_desc"),
-                    I18nManager.get("Lan_tooltip"),
-                    JOptionPane.QUESTION_MESSAGE,
-                    null,
-                    options,
-                    options[0]
-            );
-
-            if (choice == null) return;
-
-            Locale newLocale = null;
-
-            switch (choice) {
-                case "Dutch":
-                    newLocale = new Locale("nl");
-                    props.setProperty("language", "nl");
-                    break;
-                case "English":
-                    props.setProperty("language", "en");
-                    break;
-                default: 
-                    break;
-            }
-
-            try (FileOutputStream out = new FileOutputStream("src/main/resources/config.properties")) {
-                props.store(out, "Updated language");
-            } catch (Exception ex) {
-                System.out.println("Error writing to config.properties!");
-                return;
-            }
-
-            JOptionPane.showMessageDialog(null, I18nManager.get("Lan_successful"));
-
-            // Close all windows safely
-            for (java.awt.Window window : java.awt.Window.getWindows()) {
-                window.dispose();
-            }
-
-            // Restart app with new language preference.
-            SwingUtilities.invokeLater(() -> {
-                try {
-                    Andie.main(new String[]{});
-                } catch (Exception e1) {
-                    e1.printStackTrace();
+                Properties props = new Properties();
+                try (FileInputStream in = new FileInputStream("src/main/resources/config.properties")) {
+                    props.load(in);
+                } catch (Exception ex) {
+                    System.out.println("Error reading config.properties!");
+                    return;
                 }
-            });
 
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(null,  I18nManager.get("Lan_error"));
+                String[] options = {"English", "Dutch"};
+
+                String choice = (String) JOptionPane.showInputDialog(
+                        null,
+                        I18nManager.get("Choose_desc"),
+                        I18nManager.get("Lan_tooltip"),
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        options,
+                        options[0]
+                );
+
+                if (choice == null) {
+                    return;
+                }
+
+                Locale newLocale = null;
+
+                switch (choice) {
+                    case "Dutch":
+                        newLocale = new Locale("nl");
+                        props.setProperty("language", "nl");
+                        break;
+                    case "English":
+                        props.setProperty("language", "en");
+                        break;
+                    default:
+                        break;
+                }
+
+                try (FileOutputStream out = new FileOutputStream("src/main/resources/config.properties")) {
+                    props.store(out, "Updated language");
+                } catch (Exception ex) {
+                    System.out.println("Error writing to config.properties!");
+                    return;
+                }
+
+                JOptionPane.showMessageDialog(null, I18nManager.get("Lan_successful"));
+
+                boolean readyToClose = true;
+
+                // Close all windows safely
+                for (java.awt.Window window : java.awt.Window.getWindows()) {
+                    if (window instanceof JFrame) {
+                        ((JFrame) window).dispatchEvent(new WindowEvent((JFrame) window, WindowEvent.WINDOW_CLOSING));
+                        if (!target.windowClosed) {
+                            readyToClose = false;
+                            break;
+                        }
+                    }
+                }
+                if (!readyToClose) {
+                    return;
+                }
+                // Restart app with new language preference.
+                SwingUtilities.invokeLater(() -> {
+                    try {
+                        Andie.main(new String[]{});
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
+                    }
+                });
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, I18nManager.get("Lan_error"));
+            }
         }
+
     }
 
 }
-
-}
-
-

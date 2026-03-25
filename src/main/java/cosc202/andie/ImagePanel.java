@@ -27,7 +27,12 @@ public class ImagePanel extends JPanel {
      * The image to display in the ImagePanel.
      */
     private EditableImage image;
-
+    
+    /**
+     * A boolean to check if the window is ready to be closed
+     */
+    public static boolean windowClosed = true;
+    
     /**
      * <p>
      * The zoom-level of the current view. A scale of 1.0 represents actual

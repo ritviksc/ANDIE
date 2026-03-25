@@ -228,9 +228,7 @@ public class FilterActions {
             // Determine the radius - ask the user.
             int radius = 1;
 
-            // Pop-up dialog box to ask for the radius value.
-            SpinnerNumberModel radiusModel = new SpinnerNumberModel(1, 1, 10, 1);
-            JSpinner radiusSpinner = new JSpinner(radiusModel);
+            
             int option = JOptionPane.showOptionDialog(null, radiusSpinner, I18nManager.get("Filter_radius_msg"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 
             // Check the return value from the dialog box.
@@ -246,36 +244,6 @@ public class FilterActions {
             target.getParent().revalidate();
         }
 
-    }
-
-    /**
-     * <p>
-     * A method that clamps a spinner model to it's min and max value as per its
-     * constructor
-     * </p>
-     *
-     * @param spinner
-     * @param model
-     */
-    private void clamp(JSpinner spinner, SpinnerNumberModel model) {
-        try {
-
-            spinner.commitEdit();
-
-            int min = ((Number) model.getMinimum()).intValue(); 
-            int max = ((Number) model.getMaximum()).intValue();
-            int value = ((Number) spinner.getValue()).intValue();// Cant cast a comparable value so it needs to be manually
-                                                                 // cast to the Comparable Number class (I think?)
-
-            if (value < min) {
-                spinner.setValue(min);
-            }
-            if (value > max) {
-                spinner.setValue(max);
-            }
-
-        } catch (java.text.ParseException ignored) {
-        }
     }
 
     /**
@@ -345,20 +313,6 @@ public class FilterActions {
 
                 formatter.setAllowsInvalid(false);
                 formatter.setCommitsOnValidEdit(true);
-                
-                radiusInput.addActionListener(new java.awt.event.ActionListener() { // Whenever an action occurs in the input
-                    @Override
-                    public void actionPerformed(java.awt.event.ActionEvent e) { // Override the default behaviour of nothing
-                        clamp(radiusSpinner, radiusModel); // With new clamp method
-                    }
-                });
-
-                radiusInput.addFocusListener(new java.awt.event.FocusAdapter() { // Do a similar thing when no longer focusing
-                    @Override
-                    public void focusLost(java.awt.event.FocusEvent e) {
-                        clamp(radiusSpinner, radiusModel);
-                    }
-                });
                 
 
                 

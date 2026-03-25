@@ -112,7 +112,7 @@ public class FilterActions {
             do {
                 
 
-                int minRadius = 0;
+                int minRadius = 1;
                 int maxRadius = 10;
 
                 SpinnerNumberModel radiusModel = new SpinnerNumberModel(minRadius, minRadius, maxRadius, 1);
@@ -251,7 +251,7 @@ public class FilterActions {
             do {
                 
 
-                int minRadius = 0;
+                int minRadius = 1;
                 int maxRadius = 10;
 
                 SpinnerNumberModel radiusModel = new SpinnerNumberModel(minRadius, minRadius, maxRadius, 1);
@@ -337,7 +337,7 @@ public class FilterActions {
             do {
                 
 
-                int minRadius = 0;
+                int minRadius = 1;
                 int maxRadius = 10;
 
                 SpinnerNumberModel radiusModel = new SpinnerNumberModel(minRadius, minRadius, maxRadius, 1);

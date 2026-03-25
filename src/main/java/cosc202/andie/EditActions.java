@@ -3,6 +3,7 @@ package cosc202.andie;
 import java.util.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.text.NumberFormatter;
 
 /**
  * <p>
@@ -253,15 +254,29 @@ public class EditActions {
             // Pop-up dialog box to ask for the factor value.
             SpinnerNumberModel factorModel = new SpinnerNumberModel(100, 10, 200, 10);
             JSpinner factorSpinner = new JSpinner(factorModel);
-            int option = JOptionPane.showOptionDialog(null, factorSpinner, I18nManager.get("scale_percentage"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+            JSpinner.NumberEditor editor = new JSpinner.NumberEditor(factorSpinner, "#");
+            JFormattedTextField factorInput = editor.getTextField();
+            factorSpinner.setEditor(editor);
+                
+            NumberFormatter formatter = (NumberFormatter) factorInput.getFormatter();
+                
+            formatter.setValueClass(Integer.class);
 
+            formatter.setAllowsInvalid(false);
+            formatter.setCommitsOnValidEdit(true);
+
+            int option = JOptionPane.showOptionDialog(null, factorSpinner, I18nManager.get("scale_percentage"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
             // Check the return value from the dialog box.
             if (option == JOptionPane.CANCEL_OPTION) {
                 return;
             } else if (option == JOptionPane.OK_OPTION) {
                 factor = factorModel.getNumber().intValue();
             }
-
+            
+            // Ensure factor value doesn't exceed max value.
+            if (factor > 200){
+                factor = 200;
+            }
             if (target.getImage().hasImage()){
                 target.getImage().apply(new ImageResize((double)factor));
                 target.repaint();

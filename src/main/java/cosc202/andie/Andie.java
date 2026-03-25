@@ -2,6 +2,11 @@ package cosc202.andie;
 
 import java.awt.*;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import javax.swing.*;
 import javax.imageio.*;
@@ -115,9 +120,25 @@ public class Andie {
      */
     public static void main(String[] args) throws Exception {
         Properties props = new Properties();
-        FileInputStream in = new FileInputStream("src/main/resources/config.properties");
-        props.load(in);
-        in.close();
+        String myPath = "src/main/resources/config.properties";
+        Path path = Paths.get(myPath);
+        try {
+            // Attempt to create the file. If it already exists, it throws FileAlreadyExistsException.
+            Files.createFile(path);
+        } catch (FileAlreadyExistsException ignored) {
+            // File already exists, no need to create it again.
+        } catch (IOException e) {
+            System.err.println("Error creating file: " + e.getMessage());
+            throw e; 
+        }
+        
+        // Ensure parent directories exist
+        if (Files.notExists(path.getParent())) {
+            Files.createDirectories(path.getParent());
+        }
+        try (FileInputStream in = new FileInputStream(path.toFile())) {
+            props.load(in);
+        }
 
         String language = props.getProperty("language", "en");
 

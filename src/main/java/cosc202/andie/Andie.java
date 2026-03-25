@@ -53,7 +53,9 @@ public class Andie {
      *
      * @see ImagePanel
      * @see ImageAction
-     * @see ImageOperation
+
+
+    * @see ImageOperation
      * @see FileActions
      * @see EditActions
      * @see ViewActions

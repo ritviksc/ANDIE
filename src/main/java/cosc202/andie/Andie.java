@@ -113,10 +113,10 @@ public class Andie {
                     e.getWindow().dispose();
                 } else if (target.getImage() != null && !target.getImage().isSaved()) {
 
-                    Object[] saveOptions = {"Save", "Save As", "Exit Without Saving", "Cancel"};
+                    Object[] saveOptions = {I18nManager.get("save_menu_save"), I18nManager.get("save_menu_save_as"), I18nManager.get("save_menu_exit_without_saving"), I18nManager.get("save_menu_cancel")};
 
                     int saveOption = JOptionPane.showOptionDialog(null,
-                            "What would you like to do?", "Unsaved Work Detected",
+                            I18nManager.get("save_menu_message"), I18nManager.get("save_menu_title"),
                             JOptionPane.DEFAULT_OPTION,
                             JOptionPane.INFORMATION_MESSAGE, null,
                             saveOptions, saveOptions[0]);
@@ -144,7 +144,7 @@ public class Andie {
                                     target.getImage().saveAs(imageFilepath);
                                     e.getWindow().dispose();
                                 } catch (Exception ex) {
-                                    JOptionPane.showMessageDialog(null, "Invalid save location/type");
+                                    JOptionPane.showMessageDialog(null, I18nManager.get("save_menu_save_as_error"));
                                 }
                             } else if (result == JFileChooser.CANCEL_OPTION) {
                                 target.windowClosed = false;

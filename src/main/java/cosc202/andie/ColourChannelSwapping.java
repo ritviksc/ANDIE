@@ -1,56 +1,69 @@
 package cosc202.andie;
 
 import java.awt.image.BufferedImage;
-import java.util.Arrays;
 import javax.swing.JOptionPane;
 
+/**
+ * <p>
+ * ImageOperation to swap the colour channels of an image (R, G, B). Alpha
+ * (transparency) is preserved.
+ * </p>
+ *
+ * <p>
+ * The user can choose from six different channel permutations using a
+ * JComboBox, or leave the image unchanged. If no image is provided, an error
+ * dialog is shown and the operation returns null.
+ * </p>
+ *
+ * @author Leena Taia
+ * @version 1.0
+ */
 public class ColourChannelSwapping implements ImageOperation, java.io.Serializable {
 
-    private final String order;
+    /**
+     * <p>
+     * The selected swap option index: 0 = no change, 1–5 = specific RGB channel
+     * permutations.
+     * </p>
+     */
+    private final int selected;
 
-    public ColourChannelSwapping() {
-        // Prompt user for channel order
-        String input = JOptionPane.showInputDialog(I18nManager.get("channel_prompt"));
-        if (input == null) {
-            this.order = "RGB"; // user cancelled → default
+    /**
+     * <p>
+     * Construct a ColourChannelSwapping operation with the given swap option.
+     * </p>
+     *
+     * @param selected the swap option index (0–5). If an invalid index is
+     * provided, no change will be applied (index 0).
+     */
+    public ColourChannelSwapping(int selected) {
+        if (selected < 0 || selected > 5) {
+            this.selected = 0; // no change
         } else {
-            input = input.toUpperCase().trim();
-            // Validate input
-            if (input.length() != 3 || !input.matches("[RGB]{3}")
-                    || !(input.contains("R") && input.contains("G") && input.contains("B"))) {
-                JOptionPane.showMessageDialog(
-                        null,
-                        I18nManager.get("channel_invalid"),
-                        I18nManager.get("error_title"),
-                        JOptionPane.ERROR_MESSAGE
-                );
-                this.order = "RGB"; // fallback
-            } else {
-                this.order = input;
-            }
+            this.selected = selected;
         }
     }
 
-    // Constructor with predefined order
-    public ColourChannelSwapping(String order) {
-        if (order == null) {
-            this.order = "RGB"; // null → default
-        } else {
-            String temp = order.toUpperCase().trim();
-            // Validate input silently
-            if (temp.length() != 3 || !temp.matches("[RGB]{3}")
-                    || !(temp.contains("R") && temp.contains("G") && temp.contains("B"))) {
-                this.order = "RGB"; // fallback silently
-            } else {
-                this.order = temp;
-            }
-        }
-    }
-
+    /**
+     * <p>
+     * Apply the colour channel swap to an input image.
+     * </p>
+     *
+     * <p>
+     * Iterates through every pixel in the input image, swaps the red, green,
+     * and blue channels according to the selected permutation, and returns a
+     * new BufferedImage with the modified pixels. Alpha is preserved. If the
+     * input image is null, an error dialog is shown and null is returned.
+     * </p>
+     *
+     * @param input The BufferedImage to apply the channel swap to.
+     * @return A new BufferedImage with swapped colour channels, or null if the
+     * input image is null.
+     */
     @Override
     public BufferedImage apply(BufferedImage input) {
 
-        // Exception handling: null check
+        // Error handling: check if input is null
         if (input == null) {
             JOptionPane.showMessageDialog(
                     null,
@@ -58,67 +71,55 @@ public class ColourChannelSwapping implements ImageOperation, java.io.Serializab
                     I18nManager.get("error_title"),
                     JOptionPane.ERROR_MESSAGE
             );
-            return null; // exit if no image
+            return null; // return null to indicate operation failed
         }
 
-        // Safe order fallback
-        String safeOrder = order;
-        if (safeOrder == null || safeOrder.length() != 3
-                || !safeOrder.matches("[RGB]{3}")
-                || !(safeOrder.contains("R") && safeOrder.contains("G") && safeOrder.contains("B"))) {
-            safeOrder = "RGB"; // fallback silently
-        }
+        BufferedImage output = new BufferedImage(input.getWidth(), input.getHeight(), input.getType());
 
-        // Build channel mapping
-        char[] original = {'R', 'G', 'B'};
-        int[] map = new int[3]; // map[i] tells which original channel goes to position i
-        for (int i = 0; i < 3; i++) {
-            char target = safeOrder.charAt(i);
-            for (int j = 0; j < 3; j++) {
-                if (original[j] == target) {
-                    map[i] = j;
-                    break;
+        for (int y = 0; y < input.getHeight(); y++) {
+            for (int x = 0; x < input.getWidth(); x++) {
+                int argb = input.getRGB(x, y);
+
+                int a = (argb >> 24) & 0xFF;
+                int r = (argb >> 16) & 0xFF;
+                int g = (argb >> 8) & 0xFF;
+                int b = argb & 0xFF;
+
+                int newR = r, newG = g, newB = b;
+
+                // Map selection from JComboBox (0–5) to swaps
+                switch (selected) {
+                    case 0 -> {
+                        /* no change */ }
+                    case 1 -> {
+                        newG = b;
+                        newB = g;
+                    } // RBG
+                    case 2 -> {
+                        newR = g;
+                        newG = r;
+                    } // GRB
+                    case 3 -> {
+                        newR = b;
+                        newG = r;
+                        newB = g;
+                    } // BRG
+                    case 4 -> {
+                        newR = g;
+                        newG = b;
+                        newB = r;
+                    } // GBR
+                    case 5 -> {
+                        newR = b;
+                        newB = r;
+                    } // BGR
                 }
+
+                int newArgb = (a << 24) | (newR << 16) | (newG << 8) | newB;
+                output.setRGB(x, y, newArgb);
             }
         }
 
-        // Debug: check mapping output
-        System.out.println(Arrays.toString(map));
-
-        // Get image dimensions
-        int width = input.getWidth();
-        int height = input.getHeight();
-
-        // Create output image of the same size and type
-        BufferedImage output = new BufferedImage(width, height, input.getType());
-
-        // Loop through each pixel in the image
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-
-                int pixel = input.getRGB(x, y); // get ARGB value of pixel
-
-                // Extract alpha, red, green, and blue components
-                int a = (pixel & 0xFF000000) >>> 24; // alpha channel
-                int r = (pixel & 0x00FF0000) >> 16; // red channel
-                int g = (pixel & 0x0000FF00) >> 8;  // green channel
-                int b = (pixel & 0x000000FF);       // blue channel
-
-                int[] rgb = {r, g, b}; // store original RGB
-
-                // Apply channel mapping based on user input
-                int newR = rgb[map[0]];
-                int newG = rgb[map[1]];
-                int newB = rgb[map[2]];
-
-                // Reconstruct the pixel with the new RGB values and original alpha
-                int newPixel = (a << 24) | (newR << 16) | (newG << 8) | newB;
-
-                // Update the pixel in the image
-                output.setRGB(x, y, newPixel);
-            }
-        }
-
-        return output; // return new swapped image
+        return output;
     }
 }

@@ -56,7 +56,6 @@ public class ColourActions {
 
         JMenu fileMenu = new JMenu(I18nManager.get("colour_title"));
 
-
         for (Action action : actions) {
             fileMenu.add(new JMenuItem(action));
         }
@@ -136,10 +135,10 @@ public class ColourActions {
                 // Validate range (error prevention)
                 if (threshold < 0 || threshold > 255) {
                     JOptionPane.showMessageDialog(
-                        null,
-                        I18nManager.get("threshold_out_of_range"),
-                        I18nManager.get("error_title"),
-                        JOptionPane.ERROR_MESSAGE
+                            null,
+                            I18nManager.get("threshold_out_of_range"),
+                            I18nManager.get("error_title"),
+                            JOptionPane.ERROR_MESSAGE
                     );
                     return;
                 }
@@ -147,10 +146,10 @@ public class ColourActions {
             } catch (NumberFormatException ex) {
                 // Handle invalid number input
                 JOptionPane.showMessageDialog(
-                    null,
-                    I18nManager.get("threshold_not_number"),
-                    I18nManager.get("error_title"),
-                    JOptionPane.ERROR_MESSAGE
+                        null,
+                        I18nManager.get("threshold_not_number"),
+                        I18nManager.get("error_title"),
+                        JOptionPane.ERROR_MESSAGE
                 );
                 return;
             }
@@ -184,11 +183,38 @@ public class ColourActions {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            // Apply the ColourChannelSwap operation
-            target.getImage().apply(new ColourChannelSwapping());
+            if (!target.getImage().hasImage()) {
+                JOptionPane.showMessageDialog(
+                        null,
+                        I18nManager.get("channel_no_image"),
+                        I18nManager.get("error_title"),
+                        JOptionPane.ERROR_MESSAGE
+                );
+                return;
+            }
+
+            String[] colourOptions = {"RGB", "RBG", "GRB", "GBR", "BRG", "BGR"};
+            JComboBox<String> colourChannelCycle = new JComboBox<>(colourOptions);
+
+            int option = JOptionPane.showOptionDialog(
+                    null,
+                    colourChannelCycle,
+                    I18nManager.get("channel_prompt"),
+                    JOptionPane.OK_CANCEL_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    null,
+                    null
+            );
+
+            if (option != JOptionPane.OK_OPTION) {
+                return;
+            }
+
+            int selectedIndex = colourChannelCycle.getSelectedIndex(); // 0–5
+            target.getImage().apply(new ColourChannelSwapping(selectedIndex));
             target.repaint();
             target.getParent().revalidate();
         }
     }
-
 }

@@ -1,8 +1,7 @@
+
 package cosc202.andie;
 
 import java.awt.*;
-import java.net.URL;
-import javax.imageio.ImageIO;
 import javax.swing.*;
 
 /**
@@ -29,14 +28,7 @@ public class ImagePanel extends JPanel {
      * The image to display in the ImagePanel.
      */
     private EditableImage image;
-    
-    private Image backgroundImage;
-    
-    /**
-     * A boolean to check if the window is ready to be closed
-     */
-    public static boolean windowClosed = true;
-    
+
     /**
      * <p>
      * The zoom-level of the current view. A scale of 1.0 represents actual
@@ -50,6 +42,12 @@ public class ImagePanel extends JPanel {
      * </p>
      */
     private double scale;
+    
+    /**
+     * A boolean to check if the window is ready to be closed
+     */
+    public static boolean windowClosed = true;
+    
 
     /**
      * <p>
@@ -63,16 +61,6 @@ public class ImagePanel extends JPanel {
     public ImagePanel() {
         image = new EditableImage();
         scale = 1.0;
-        try {
-            URL imageUrl = getClass().getClassLoader().getResource("FunDude.jpg");
-            if (imageUrl != null) {
-                backgroundImage = ImageIO.read(imageUrl);
-            } else {
-                System.out.println("FunDude.jpg not found");
-            }
-        } catch (Exception e) {
-            System.out.println("Fun Dude is busy rn");
-        }
     }
 
     /**
@@ -163,15 +151,6 @@ public class ImagePanel extends JPanel {
             g2.scale(scale, scale);
             g2.drawImage(image.getCurrentImage(), null, 0, 0);
             g2.dispose();
-        } else{
-            if (backgroundImage != null) {
-                g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
-            } else {
-            // fallback (in case image fails)
-            g.setColor(new Color(255, 182, 193)); // baby pink fallback
-            g.fillRect(0, 0, getWidth(), getHeight());
-            }
-            
         }
     }
 }

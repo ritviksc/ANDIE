@@ -64,9 +64,9 @@ public class Andie {
      */
     private static void createAndShowGUI() throws Exception {
         // Set up the main GUI frame
-        JFrame frame = new JFrame("@ritviks.06");
+        JFrame frame = new JFrame("ANDIE");
 
-        Image image = ImageIO.read(Andie.class.getClassLoader().getResource("FunDude.jpg"));
+        Image image = ImageIO.read(Andie.class.getClassLoader().getResource("icon.png"));
         frame.setIconImage(image);
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 

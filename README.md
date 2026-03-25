@@ -41,16 +41,29 @@ Unchanged as of 20/03
 * Colour Channel Swapping - Reorders the red, green, and blue channels of the working image according to a user-specified permutation (e.g., RGB, GBR, BRG). The user inputs the desired channel order via a dialog box. Alpha (transparency) values are preserved. Invalid input will leave the image unchanged.
 * Image Inversion - Inverts all colours of the working image by subtracting each RGB channel from 255. For example, a pixel with (R=100, G=150, B=200) becomes (R=155, G=105, B=55). The alpha (transparency) channel is preserved. No user input is required.
 
+### Save when exiting
+
+* Prompts the user to save, save as, exit without saving or cancel whenever the program might exit
+* If the user cancels a save as operation it returns to the program and functions as if the user just clicked the cancel on the original save menu.
+* Note - does not work on System.exit()
+* Development of this system has revealed a more efficient way to implement errors when trying to apply things when no image has been opened by directly adding to the apply super class. This has currently not been implemented.
+
 ## Testing
+
+Newly developed functions were tested with undo and redo operations, saving, saving as and exporting. The save and exit was tested when switching language as well as using the exit button and exiting via the x. Not every combination of filter, edit, or colour manipualtion has been tested but they should all _theoretically_ work. Trying to apply operations without an image will result in an error occuring. As well as trying to open a new image with an image open already. Trying to export an image to jpeg that has transparency will result in an error message. Invalid inputs physcially cannot be entered into number boxes so there is not much testing required. 
 
 ## Known bugs
 
 ### Edge detection on certain blur filters
 
-Edge detection hasn't been implemented for blur filters using Kernels and convolution.
+Edge detection hasn't been implemented for blur filters using Kernels and convolution. This will be fixed in phase 2.
 
 ## Refactoring
 
 ### Internationalisation
 
 ANDIE's provided ui has been internationalised and an I18N manager has been added.
+
+### Save on exit fucntionality
+
+The EditableImage class has been altered to include an isSaved boolean to check for if the latest changes to the image have been saved before the program exits. As a result, the default close operation has been changed to be _DO_NOTHING_ON_CLOSE_. Thus anything that would usually exit the program must be modifided to send a Window_Closing flag so the windowListener registers the close.

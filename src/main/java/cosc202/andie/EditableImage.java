@@ -65,6 +65,12 @@ class EditableImage {
      * The file where the operation sequence is stored.
      */
     private String opsFilename;
+    
+    /**
+     * The state of it the file is saved or not.
+     */
+    
+    private boolean isSaved;
 
     /**
      * <p>
@@ -83,6 +89,7 @@ class EditableImage {
         redoOps = new Stack<>();
         imageFilename = null;
         opsFilename = null;
+        isSaved = true;
     }
 
     /**
@@ -219,6 +226,7 @@ class EditableImage {
             ObjectOutputStream objOut = new ObjectOutputStream(fileOut);
             ) {
             objOut.writeObject(this.ops);
+            isSaved = true;
         }
     }
 
@@ -241,6 +249,7 @@ class EditableImage {
         this.imageFilename = imageFilename;
         this.opsFilename = imageFilename + ".ops";
         save();
+        
     }
 
     /**
@@ -251,6 +260,7 @@ class EditableImage {
      * @param op The operation to apply.
      */
     public void apply(ImageOperation op) {
+        isSaved = false;
         current = op.apply(current);
         ops.add(op);
     }
@@ -264,6 +274,7 @@ class EditableImage {
         if (!ops.isEmpty()){
             redoOps.push(ops.pop());
             refresh();
+            isSaved = false;
         }
     }
 
@@ -276,6 +287,7 @@ class EditableImage {
     public void redo() {
         if (!redoOps.isEmpty()){
             apply(redoOps.pop());
+            isSaved = false;
         }
     }
 
@@ -325,6 +337,10 @@ class EditableImage {
     //check for transparency
     public boolean hasTransparency() {
         return current.getColorModel().hasAlpha();
+    }
+    
+    public boolean isSaved(){
+        return isSaved;
     }
 
 }

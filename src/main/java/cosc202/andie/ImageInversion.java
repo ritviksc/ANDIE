@@ -20,14 +20,14 @@ import java.awt.Color;
 
 import javax.swing.JOptionPane;
 
-public class ImageInversion implements ImageOperation {
+public class ImageInversion implements ImageOperation, java.io.Serializable {
 
     @Override
     public BufferedImage apply(BufferedImage input) {
 
         if (input == null) {
         // Return null or throw a warning dialog
-        JOptionPane.showMessageDialog(null, I18nManager.get("inversion_no_image"), I18nManager.get("error_title"), JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog(null, I18nManager.get("inversion_no_image"), I18nManager.get("error_title"), JOptionPane.ERROR_MESSAGE);
         return input; 
     }
         /**

@@ -28,5 +28,7 @@ nbproject/
 *.orig
 tmp/
 
+tatus
+
 # Don't ignore gradle wrapper JAR
 !gradle-wrapper.jar

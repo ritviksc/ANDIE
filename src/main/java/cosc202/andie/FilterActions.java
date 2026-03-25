@@ -110,8 +110,7 @@ public class FilterActions {
             int radius = 1;
 
             do {
-                // Pop-up dialog box to ask for the radius value.
-                // Source - https://stackoverflow.com/a/3007030
+                
 
                 int minRadius = 0;
                 int maxRadius = 10;
@@ -250,8 +249,7 @@ public class FilterActions {
             int radius = 1;
 
             do {
-                // Pop-up dialog box to ask for the radius value.
-                // Source - https://stackoverflow.com/a/3007030
+                
 
                 int minRadius = 0;
                 int maxRadius = 10;
@@ -337,8 +335,7 @@ public class FilterActions {
             // Determine the radius - ask the user.
             int radius = 0;
             do {
-                // Pop-up dialog box to ask for the radius value.
-                // Source - https://stackoverflow.com/a/3007030
+                
 
                 int minRadius = 0;
                 int maxRadius = 10;

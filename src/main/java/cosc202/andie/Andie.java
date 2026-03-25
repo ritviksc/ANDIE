@@ -1,6 +1,9 @@
 package cosc202.andie;
 
+import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.FileInputStream;
 
 import javax.swing.*;
@@ -94,6 +97,20 @@ public class Andie {
         SettingsActions languageActions = new SettingsActions();
         menuBar.add(languageActions.createMenu());
 
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+
+                if (ImageAction.getTarget().getImage().isSaved()) {
+                    System.out.println("Exited while saved");
+                    e.getWindow().dispose();
+                } else {
+                    System.out.println("Promt save here");
+                    e.getWindow().dispose();
+                }
+            }
+        });
+        
         frame.setJMenuBar(menuBar);
         frame.pack();
         frame.setVisible(true);
@@ -121,7 +138,7 @@ public class Andie {
 
         String language = props.getProperty("language", "en");
 
-        if (language.equals("en")){
+        if (language.equals("en")) {
             I18nManager.init(null);
         } else {
             Locale locale = new Locale(language);
@@ -130,10 +147,12 @@ public class Andie {
         javax.swing.SwingUtilities.invokeLater(() -> {
             try {
                 createAndShowGUI();
+
             } catch (Exception ex) {
                 ex.printStackTrace();
                 System.exit(1);
             }
         });
+
     }
 }

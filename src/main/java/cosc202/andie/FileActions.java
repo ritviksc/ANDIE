@@ -104,8 +104,15 @@ public class FileActions {
         public void actionPerformed(ActionEvent e) {
             JFileChooser fileChooser = new JFileChooser();
             int result = fileChooser.showOpenDialog(target);
+            
+            
 
             if (result == JFileChooser.APPROVE_OPTION) {
+                
+                if(target.getImage().hasImage()){
+                        JOptionPane.showMessageDialog(fileChooser, I18nManager.get("image_already_open"), I18nManager.get("iao_title"), JOptionPane.WARNING_MESSAGE);
+                        return;
+                }
                 try {
                     String imageFilepath = fileChooser.getSelectedFile().getCanonicalPath();
                     target.getImage().open(imageFilepath);

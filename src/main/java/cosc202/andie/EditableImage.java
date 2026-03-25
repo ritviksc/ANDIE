@@ -274,6 +274,7 @@ class EditableImage {
         if (!ops.isEmpty()){
             redoOps.push(ops.pop());
             refresh();
+            isSaved = false;
         }
     }
 
@@ -286,6 +287,7 @@ class EditableImage {
     public void redo() {
         if (!redoOps.isEmpty()){
             apply(redoOps.pop());
+            isSaved = false;
         }
     }
 

@@ -26,7 +26,7 @@ public class ConvertToGrey implements ImageOperation, java.io.Serializable {
 
     /**
      * <p>
-     * Create a new CovertToGrey operation.
+     * Create a new ConvertToGrey operation.
      * </p>
      */
     ConvertToGrey() {

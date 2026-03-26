@@ -68,7 +68,6 @@ public class ColourActions {
      * Action to convert an image to greyscale.
      * </p>
      *
-     * @see ConvertToGrey
      */
     public class ConvertToGreyAction extends ImageAction {
 
@@ -111,6 +110,11 @@ public class ColourActions {
      * <p>
      * Action to apply a threshold to an image.
      * </p>
+     *
+     * <p>
+     * Prompts the user to enter a threshold value between 0 and 255. Pixels
+     * above the threshold are set to white, and those below are set to black.
+     * </p>
      */
     public class ThresholdAction extends ImageAction {
 
@@ -118,8 +122,30 @@ public class ColourActions {
             super(name, icon, desc, mnemonic);
         }
 
+        /**
+         * <p>
+         * Callback for when the threshold action is triggered.
+         * </p>
+         *
+         * <p>
+         * Validates user input and applies thresholding if valid. Displays
+         * error dialogs for invalid input or missing image.
+         * </p>
+         *
+         * @param e The event triggering this callback.
+         */
         @Override
         public void actionPerformed(ActionEvent e) {
+            // No image loaded error message
+            if (target.getImage() == null || target.getImage().getCurrentImage() == null) {
+                JOptionPane.showMessageDialog(
+                        null,
+                        I18nManager.get("threshold_no_image"),
+                        I18nManager.get("error_title"),
+                        JOptionPane.ERROR_MESSAGE
+                );
+                return;
+            }
 
             String input = JOptionPane.showInputDialog(I18nManager.get("threshold_prompt"));
 
@@ -160,12 +186,33 @@ public class ColourActions {
         }
     }
 
+    /**
+     * <p>
+     * Action to invert the colours of an image.
+     * </p>
+     *
+     * <p>
+     * Each pixel's RGB values are inverted (e.g., 255 - value), producing a
+     * negative image effect.
+     * </p>
+     */
     public class InversionAction extends ImageAction {
 
         InversionAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
         }
 
+        /**
+         * <p>
+         * Callback for when the inversion action is triggered.
+         * </p>
+         *
+         * <p>
+         * Applies a colour inversion operation to the image.
+         * </p>
+         *
+         * @param e The event triggering this callback.
+         */
         @Override
         public void actionPerformed(ActionEvent e) {
 
@@ -175,14 +222,37 @@ public class ColourActions {
         }
     }
 
+    /**
+     * <p>
+     * Action to swap the colour channels of an image.
+     * </p>
+     *
+     * <p>
+     * Allows the user to select a permutation of RGB channels (e.g., GBR, BGR)
+     * which rearranges how colours are displayed.
+     * </p>
+     */
     public class ChannelSwapAction extends ImageAction {
 
         ChannelSwapAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
         }
 
+        /**
+         * <p>
+         * Callback for when the channel swap action is triggered.
+         * </p>
+         *
+         * <p>
+         * Prompts the user to select a channel order and applies the
+         * corresponding transformation.
+         * </p>
+         *
+         * @param e The event triggering this callback.
+         */
         @Override
         public void actionPerformed(ActionEvent e) {
+            //No image loaded error
             if (!target.getImage().hasImage()) {
                 JOptionPane.showMessageDialog(
                         null,

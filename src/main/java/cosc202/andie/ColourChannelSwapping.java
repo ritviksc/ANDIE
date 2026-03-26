@@ -5,14 +5,13 @@ import javax.swing.JOptionPane;
 
 /**
  * <p>
- * ImageOperation to swap the colour channels of an image (R, G, B). Alpha
- * (transparency) is preserved.
+ * ImageOperation to swap the colour channels of an image (R, G, B).
+ * Alpha (transparency) is preserved.
  * </p>
  *
  * <p>
- * The user can choose from six different channel permutations using a
- * JComboBox, or leave the image unchanged. If no image is provided, an error
- * dialog is shown and the operation returns null.
+ * Applies one of six predefined RGB channel permutations based on a
+ * selected index.
  * </p>
  *
  * @author Leena Taia
@@ -63,15 +62,9 @@ public class ColourChannelSwapping implements ImageOperation, java.io.Serializab
     @Override
     public BufferedImage apply(BufferedImage input) {
 
-        // Error handling: check if input is null
+        // Check if input is null
         if (input == null) {
-            JOptionPane.showMessageDialog(
-                    null,
-                    I18nManager.get("channel_no_image"),
-                    I18nManager.get("error_title"),
-                    JOptionPane.ERROR_MESSAGE
-            );
-            return null; // return null to indicate operation failed
+            return null;
         }
 
         BufferedImage output = new BufferedImage(input.getWidth(), input.getHeight(), input.getType());
@@ -87,7 +80,7 @@ public class ColourChannelSwapping implements ImageOperation, java.io.Serializab
 
                 int newR = r, newG = g, newB = b;
 
-                // Map selection from JComboBox (0–5) to swaps
+                // Map selected index (0–5) to RGB channel permutations
                 switch (selected) {
                     case 0 -> {
                         /* no change */ }

@@ -88,10 +88,10 @@ public class ImageThresholdingFilter implements ImageOperation, java.io.Serializ
                 int rgb = input.getRGB(x, y);
 
                 // Extract ARGB components, all masked with 0xFF
-                int a = (rgb >> 24) & 0xFF; // shift 24 bits to right
-                int r = (rgb >> 16) & 0xFF; // shift 16 bits to right
-                int g = (rgb >> 8) & 0xFF; // shift 8 bits to right
-                int b = rgb & 0xFF; // masks last 8 bits
+                int a = (rgb >> 24) & 0xFF; 
+                int r = (rgb >> 16) & 0xFF; 
+                int g = (rgb >> 8) & 0xFF; 
+                int b = rgb & 0xFF; 
 
                 // Compute average brightness of pixels
                 int intensity = (r + g + b) / 3;
@@ -100,11 +100,11 @@ public class ImageThresholdingFilter implements ImageOperation, java.io.Serializ
                 if (intensity > threshold) {
                     // Set pixel to white RGB = 255
                     int white = (a << 24) | (255 << 16) | (255 << 8) | 255;
-                    output.setRGB(x, y, white); // sets pixels in output image white
+                    output.setRGB(x, y, white);
                 } else {
                     // Set pixel to black RGB = 0
                     int black = (a << 24);
-                    output.setRGB(x, y, black); // sets pixels in output image black
+                    output.setRGB(x, y, black);
                 }
             }
         }

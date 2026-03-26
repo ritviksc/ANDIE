@@ -14,7 +14,7 @@ Begin by opening an image using the open button under the file drop-down menu. Y
 
 ### File
 
-* Export - 
+* Export - prompts the users to enter a file name, and select from the possible formats, a decided on the file placement. if the user cancels the export operation its returns to the program. if the users approves to save then image is export as current into the select file directory, if the user tries to export a file that does not support its specific format type its notifies the user with an error message   
 
 ### Edit
 
@@ -48,10 +48,7 @@ Unchanged as of 20/03
 * Note - does not work on System.exit()
 * Development of this system has revealed a more efficient way to implement errors when trying to apply things when no image has been opened by directly adding to the apply super class. This has currently not been implemented.
 
-### Export
-* prompts the users to enter a file name, and select from the possible formats, a decided on the file placement
-* if the user cancels the export operation its returns to the program
-* if the users approves to save then image is export as current into the select file directory, if the user tries to export a file that does not support its specific format type its notifies the user with an error message  
+
 ## Testing
 
 Newly developed functions were tested with undo and redo operations, saving, saving as and exporting. The save and exit was tested when switching language as well as using the exit button and exiting via the x. Not every combination of filter, edit, or colour manipualtion has been tested but they should all _theoretically_ work. Trying to apply operations without an image will result in an error occuring. As well as trying to open a new image with an image open already. Trying to export an image to jpeg that has transparency will result in an error message. Invalid inputs physcially cannot be entered into number boxes so there is not much testing required. 

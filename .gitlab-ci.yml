@@ -28,14 +28,18 @@ build-job:       # This job runs in the build stage, which runs first.
     - echo "Compile complete."
 
 
-
-
-lint-test-job:   # This job also runs in the test stage.
-  stage: test    # It can run at the same time as unit-test-job (in parallel).
+unit-test-job:   # This job runs in the test stage.
+  stage: test
+  tags:
+    - docker
+  image:
+    name: gradle:9-jdk25-alpine
+    pull_policy: if-not-present
   script:
-    - echo "Linting code... This will take about 10 seconds."
-    - sleep 10
-    - echo "No lint issues found."
+    - echo "Attempting to run unit tests..."
+    - gradle test
+
+
 
 deploy-job:      # This job runs in the deploy stage.
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.

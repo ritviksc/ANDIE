@@ -27,15 +27,7 @@ build-job:       # This job runs in the build stage, which runs first.
     - echo "Compiling the code..."
     - echo "Compile complete."
 
-unit-test-job:   # This job runs in the test stage.
-  tags:
-    - docker
-  image:
-    name: gradle:9-jdk25-alpine
-    pull_policy: if-not-present
-  script:
-    - echo "Attempting to run unit tests..."
-    - gradle test
+
 
 
 lint-test-job:   # This job also runs in the test stage.

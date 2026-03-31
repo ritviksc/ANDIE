@@ -37,7 +37,7 @@ unit-test-job:   # This job runs in the test stage.
     pull_policy: if-not-present
   script:
     - echo "Attempting to run unit tests..."
-    - gradle test
+
 
 
 

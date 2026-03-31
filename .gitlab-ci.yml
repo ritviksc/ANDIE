@@ -47,3 +47,24 @@ deploy-job:      # This job runs in the deploy stage.
   script:
     - echo "Deploying application..."
     - echo "Application successfully deployed."
+
+
+pages: # publish Javadoc website
+  tags:
+    - docker
+  image:
+    name: gradle:9-jdk25-alpine
+    pull_policy: if-not-present
+  stage: build
+  script:
+    - set +o pipefail # stop pipes from failing entire pipeline
+    - gradle javadoc
+    - mkdir public
+    - mv build/docs/javadoc/ public/
+    - ls -R public | head
+    - echo 'first ten public/ files listed'
+  artifacts:
+    paths:
+    - public
+  only:
+    - main

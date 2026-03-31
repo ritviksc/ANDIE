@@ -12,6 +12,7 @@ Ritvik
 Mouse selection
 Crop to selection
 Drawing functions - rectangle, ellipse, line
+CI
 
 Loek
 Toolbar

@@ -1,5 +1,6 @@
 package cosc202.andie;
 
+import static cosc202.andie.ImageAction.target;
 import java.util.*;
 import java.awt.event.*;
 import java.io.File;
@@ -40,11 +41,11 @@ public class FileActions {
      */
     public FileActions() {
         actions = new ArrayList<>();
-        actions.add(new FileOpenAction("Open", null, "Open a file", KeyEvent.VK_O));
-        actions.add(new FileSaveAction("Save", null, "Save the file", KeyEvent.VK_S));
-        actions.add(new FileSaveAsAction("Save As", null, "Save a copy", KeyEvent.VK_A));
-        actions.add(new FileExportAction("Export", null, "Export image", KeyEvent.VK_A));
-        actions.add(new FileExitAction("Exit", null, "Exit the program", 0));
+        actions.add(new FileOpenAction(I18nManager.get("open"), null, I18nManager.get("open_Desc"), KeyEvent.VK_O));
+        actions.add(new FileSaveAction(I18nManager.get("save"), null, I18nManager.get("save_Desc"), KeyEvent.VK_S));
+        actions.add(new FileSaveAsAction(I18nManager.get("save_As"), null, I18nManager.get("save_As_Desc"), KeyEvent.VK_A));
+        actions.add(new FileExportAction(I18nManager.get("export"), null, I18nManager.get("export_Desc"), KeyEvent.VK_E));
+        actions.add(new FileExitAction(I18nManager.get("exit"), null, I18nManager.get("exit_Desc"), 0));
     }
 
     /**
@@ -55,7 +56,7 @@ public class FileActions {
      * @return The File menu UI element.
      */
     public JMenu createMenu() {
-        JMenu fileMenu = new JMenu("File");
+        JMenu fileMenu = new JMenu(I18nManager.get("file_Title"));
 
         for (Action action : actions) {
             fileMenu.add(new JMenuItem(action));
@@ -104,8 +105,15 @@ public class FileActions {
         public void actionPerformed(ActionEvent e) {
             JFileChooser fileChooser = new JFileChooser();
             int result = fileChooser.showOpenDialog(target);
+            
+            
 
             if (result == JFileChooser.APPROVE_OPTION) {
+                
+                if(target.getImage().hasImage()){
+                        JOptionPane.showMessageDialog(fileChooser, I18nManager.get("image_already_open"), I18nManager.get("iao_title"), JOptionPane.WARNING_MESSAGE);
+                        return;
+                }
                 try {
                     String imageFilepath = fileChooser.getSelectedFile().getCanonicalPath();
                     target.getImage().open(imageFilepath);
@@ -231,13 +239,13 @@ public class FileActions {
         public void actionPerformed(ActionEvent e) {
             
             if(!target.getImage().hasImage()){
-                JOptionPane.showMessageDialog(target, "Please open an image first");
+                JOptionPane.showMessageDialog(target, I18nManager.get("no_Image"));
                 return;
             }
 
             JFileChooser fileChooser = new JFileChooser();
             //set title to "export image"
-            fileChooser.setDialogTitle("Export Image");
+            fileChooser.setDialogTitle(I18nManager.get("export_Title"));
             
             
             //creates the possible file types
@@ -273,8 +281,13 @@ public class FileActions {
                     
                     //if the file name is left as empty user has wnarnign message pop up
                     if(fileChooser.getSelectedFile().getName().trim().isEmpty()){
-                        JOptionPane.showMessageDialog(fileChooser, "Name your files you fucking idiot", "idiot at work", JOptionPane.WARNING_MESSAGE);
-                        
+                        JOptionPane.showMessageDialog(fileChooser, I18nManager.get("no_File_Name"), I18nManager.get("nfn_Title"), JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
+                    //check for image to have transparency when saved as jpeg
+                    if(selectedFormat.equals("jpg") && target.getImage().hasTransparency()){
+                        JOptionPane.showMessageDialog(fileChooser,"Your image has a transparency, select another format", "Transparency warning", JOptionPane.WARNING_MESSAGE);
+                        return;
                     }
 
                     
@@ -282,7 +295,13 @@ public class FileActions {
                     target.getImage().export(imageFilepath, selectedFormat);
 
                 } catch (IOException ex) {
-                    System.exit(1);
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(
+        target,
+        "Error exporting image:\n" + ex.getMessage(),
+        "Export Error",
+        JOptionPane.ERROR_MESSAGE
+);
                 }
             }
         }
@@ -326,7 +345,19 @@ public class FileActions {
          */
         @Override
         public void actionPerformed(ActionEvent e) {
-            System.exit(0);
+            boolean readyToClose = true;
+
+                // Close all windows safely
+                for (java.awt.Window window : java.awt.Window.getWindows()) {
+                    if (window instanceof JFrame) {
+                        ((JFrame) window).dispatchEvent(new WindowEvent((JFrame) window, WindowEvent.WINDOW_CLOSING));
+                        if (!target.windowClosed) {
+                            readyToClose = false;
+                            break;
+                        }
+                    }
+                }
+
         }
 
     }

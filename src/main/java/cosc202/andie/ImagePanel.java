@@ -1,3 +1,4 @@
+
 package cosc202.andie;
 
 import java.awt.*;
@@ -41,6 +42,12 @@ public class ImagePanel extends JPanel {
      * </p>
      */
     private double scale;
+    
+    /**
+     * A boolean to check if the window is ready to be closed
+     */
+    public static boolean windowClosed = true;
+    
 
     /**
      * <p>

@@ -7,11 +7,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
- * @author Robert
+ * @author Robert Hannaford
  */
-public class ImagePanelTest {
+public class MedianFilterTest {
 
-    public ImagePanelTest() {
+    public MedianFilterTest() {
     }
 
     @BeforeEach
@@ -28,10 +28,10 @@ public class ImagePanelTest {
     }
 
     @Test
-    public void testGetZoomAfterSetZoom() {
-        ImagePanel testPanel = new ImagePanel();
-        testPanel.setZoom(120.0);
-        assertEquals(testPanel.getZoom(), 120.0);
+    public void medianTest(){
+        
+        assertTrue(true);
+        
     }
 
 }

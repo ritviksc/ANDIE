@@ -1,17 +1,24 @@
 package cosc202.andie;
 
+import static cosc202.andie.ImageAction.target;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import javax.swing.*;
 import javax.imageio.*;
 import java.util.Locale;
+import java.util.Properties;
 
 /**
  * <p>
  * Main class for A Non-Destructive Image Editor (ANDIE).
- * @shari838S
- * @hanro194
- * @taima325
- * @vanlo528
  * </p>
  *
  * <p>
@@ -60,7 +67,7 @@ public class Andie {
 
         Image image = ImageIO.read(Andie.class.getClassLoader().getResource("icon.png"));
         frame.setIconImage(image);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
         // The main content area is an ImagePanel
         ImagePanel imagePanel = new ImagePanel();
@@ -91,6 +98,75 @@ public class Andie {
         ColourActions colourActions = new ColourActions();
         menuBar.add(colourActions.createMenu());
 
+        // Language action controls language of the app
+        SettingsActions languageActions = new SettingsActions();
+        menuBar.add(languageActions.createMenu());
+
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+
+                target.windowClosed = true;
+                
+                if (target.getImage().isSaved()) {
+                    e.getWindow().dispose();
+                } else if (target.getImage() != null && !target.getImage().isSaved()) {
+
+                    Object[] saveOptions = {I18nManager.get("save_menu_save"), I18nManager.get("save_menu_save_as"), I18nManager.get("save_menu_exit_without_saving"), I18nManager.get("save_menu_cancel")};
+
+                    int saveOption = JOptionPane.showOptionDialog(null,
+                            I18nManager.get("save_menu_message"), I18nManager.get("save_menu_title"),
+                            JOptionPane.DEFAULT_OPTION,
+                            JOptionPane.INFORMATION_MESSAGE, null,
+                            saveOptions, saveOptions[0]);
+
+                    switch (saveOption) {
+
+                        case 0:
+
+                            try {
+                                target.getImage().save();
+                                e.getWindow().dispose();
+                            } catch (Exception ex) {
+                                System.exit(1);
+                            }
+                            break;
+
+                        case 1:
+
+                            JFileChooser fileChooser = new JFileChooser();
+                            int result = fileChooser.showSaveDialog(target);
+
+                            if (result == JFileChooser.APPROVE_OPTION) {
+                                try {
+                                    String imageFilepath = fileChooser.getSelectedFile().getCanonicalPath();
+                                    target.getImage().saveAs(imageFilepath);
+                                    e.getWindow().dispose();
+                                } catch (Exception ex) {
+                                    JOptionPane.showMessageDialog(null, I18nManager.get("save_menu_save_as_error"));
+                                }
+                            } else if (result == JFileChooser.CANCEL_OPTION) {
+                                target.windowClosed = false;
+                            }
+
+                            break;
+
+                        case 2:
+
+                            e.getWindow().dispose();
+                            break;
+
+                        case 3:
+                            target.windowClosed = false;
+                            break;
+
+                    }
+                } else {
+                    e.getWindow().dispose();
+                }
+            }
+        });
+
         frame.setJMenuBar(menuBar);
         frame.pack();
         frame.setVisible(true);
@@ -111,14 +187,44 @@ public class Andie {
      * @see #createAndShowGUI()
      */
     public static void main(String[] args) throws Exception {
-        I18nManager.init(null);
+        Properties props = new Properties();
+        String myPath = "src/main/resources/config.properties";
+        Path path = Paths.get(myPath);
+        try {
+            // Attempt to create the file. If it already exists, it throws FileAlreadyExistsException.
+            Files.createFile(path);
+        } catch (FileAlreadyExistsException ignored) {
+            // File already exists, no need to create it again.
+        } catch (IOException e) {
+            System.err.println("Error creating file: " + e.getMessage());
+            throw e;
+        }
+
+        // Ensure parent directories exist
+        if (Files.notExists(path.getParent())) {
+            Files.createDirectories(path.getParent());
+        }
+        try (FileInputStream in = new FileInputStream(path.toFile())) {
+            props.load(in);
+        }
+
+        String language = props.getProperty("language", "en");
+
+        if (language.equals("en")) {
+            I18nManager.init(null);
+        } else {
+            Locale locale = new Locale(language);
+            I18nManager.init(locale);
+        }
         javax.swing.SwingUtilities.invokeLater(() -> {
             try {
                 createAndShowGUI();
+
             } catch (Exception ex) {
                 ex.printStackTrace();
                 System.exit(1);
             }
         });
+
     }
 }

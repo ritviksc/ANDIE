@@ -1,11 +1,11 @@
 package cosc202.andie;
 
 import java.awt.image.*;
+import javax.swing.JOptionPane;
 
 /**
  * <p>
  * ImageOperation to convert an image from colour to greyscale.
- * @hanro194
  * </p>
  *
  * <p>
@@ -26,7 +26,7 @@ public class ConvertToGrey implements ImageOperation, java.io.Serializable {
 
     /**
      * <p>
-     * Create a new CovertToGrey operation.
+     * Create a new ConvertToGrey operation.
      * </p>
      */
     ConvertToGrey() {
@@ -51,6 +51,22 @@ public class ConvertToGrey implements ImageOperation, java.io.Serializable {
     @Override
     public BufferedImage apply(BufferedImage input) {
 
+        //Error Prevention for greyscale
+        if (input == null) {
+            JOptionPane.showMessageDialog(
+                    null,
+                    I18nManager.get("greyscale_no_image"),
+                    I18nManager.get("error_title"),
+                    JOptionPane.ERROR_MESSAGE
+            );
+            return input;
+        }
+
+        int width = input.getWidth();
+        int height = input.getHeight();
+
+        BufferedImage output = new BufferedImage(width, height, input.getType());
+
         for (int y = 0; y < input.getHeight(); ++y) {
             for (int x = 0; x < input.getWidth(); ++x) {
                 int argb = input.getRGB(x, y);
@@ -64,12 +80,12 @@ public class ConvertToGrey implements ImageOperation, java.io.Serializable {
 
                 int grey = (int) Math.round(0.3 * r + 0.6 * g + 0.1 * b);
 
-                argb = (a << 24) | (grey << 16) | (grey << 8) | grey;
-                input.setRGB(x, y, argb);
+                int newArgb = (a << 24) | (grey << 16) | (grey << 8) | grey;
+                output.setRGB(x, y, newArgb);
             }
         }
 
-        return input;
+        return output;
     }
 
 }

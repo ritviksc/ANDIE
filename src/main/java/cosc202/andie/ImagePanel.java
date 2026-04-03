@@ -2,7 +2,15 @@
 package cosc202.andie;
 
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseMotionListener;
+import java.awt.image.BufferedImage;
+
 import javax.swing.*;
+
 
 /**
  * <p>
@@ -22,12 +30,15 @@ import javax.swing.*;
  * @author Steven Mills
  * @version 1.0
  */
-public class ImagePanel extends JPanel {
+public class ImagePanel extends JPanel implements MouseListener, MouseMotionListener{
 
     /**
      * The image to display in the ImagePanel.
      */
     private EditableImage image;
+    private Point startPoint;
+    private Point endPoint;
+    private Rectangle selection;
 
     /**
      * <p>
@@ -51,7 +62,7 @@ public class ImagePanel extends JPanel {
 
     /**
      * <p>
-     * Create a new ImagePanel.
+     * Create a new ImagePanel and register mouse actions.
      * </p>
      *
      * <p>
@@ -61,7 +72,47 @@ public class ImagePanel extends JPanel {
     public ImagePanel() {
         image = new EditableImage();
         scale = 1.0;
-    }
+        addMouseListener(new MouseAdapter() {
+        public void mousePressed(MouseEvent e) {
+            if (!image.hasImage()) return;
+            startPoint = e.getPoint();
+            endPoint = startPoint;
+            selection = null;
+        }
+
+        public void mouseReleased(MouseEvent e) {
+            if (!image.hasImage()) return;
+            endPoint = e.getPoint();
+            updateSelection();
+            repaint();
+
+            if (selection != null) {
+                int result = JOptionPane.showConfirmDialog(
+                        ImagePanel.this,
+                        "Crop selected region as new image?",
+                        "Crop",
+                        JOptionPane.YES_NO_OPTION
+                );
+
+                if (result == JOptionPane.YES_OPTION) {
+                    cropImage();
+                } else {
+                    selection = null;
+                    repaint();
+                }
+            }
+        }
+    });
+
+    addMouseMotionListener(new MouseMotionAdapter() {
+        public void mouseDragged(MouseEvent e) {
+            if (!image.hasImage()) return;
+            endPoint = e.getPoint();
+            updateSelection();
+            repaint();
+        }
+    });
+}
 
     /**
      * <p>
@@ -114,6 +165,24 @@ public class ImagePanel extends JPanel {
         scale = zoomPercent / 100;
     }
 
+    private void cropImage() {
+        if (selection.width <= 0 || selection.height <= 0) return;
+
+        BufferedImage cropped = image.getCurrentImage().getSubimage(
+                selection.x,
+                selection.y,
+                selection.width,
+                selection.height
+        );
+
+        image.setCurrentImage(cropped);
+        // refresh variables
+        startPoint = null;
+        endPoint = null;
+        selection = null;
+        repaint();
+    }
+
     /**
      * <p>
      * Gets the preferred size of this component for UI layout.
@@ -136,6 +205,21 @@ public class ImagePanel extends JPanel {
         }
     }
 
+    private void updateSelection() {
+        int x1 = (int)(startPoint.x / scale);
+        int y1 = (int)(startPoint.y / scale);
+        int x2 = (int)(endPoint.x / scale);
+        int y2 = (int)(endPoint.y / scale);
+
+        int x = Math.min(x1, x2);
+        int y = Math.min(y1, y2);
+        int width = Math.abs(x1 - x2);
+        int height = Math.abs(y1 - y2);
+
+        selection = new Rectangle(x, y, width, height);
+    }
+    
+
     /**
      * <p>
      * (Re)draw the component in the GUI.
@@ -150,7 +234,32 @@ public class ImagePanel extends JPanel {
             Graphics2D g2 = (Graphics2D) g.create();
             g2.scale(scale, scale);
             g2.drawImage(image.getCurrentImage(), null, 0, 0);
+
+            if (selection != null) {
+                int x = (int)(selection.x * scale);
+                int y = (int)(selection.y * scale);
+                int w = (int)(selection.width * scale);
+                int h = (int)(selection.height * scale);
+
+                g2.setColor(new Color(0, 0, 255, 50)); // transparent blue
+                g2.fillRect(x, y, w, h);
+
+                g2.setColor(Color.BLUE); // solid border
+                g2.drawRect(x, y, w, h);
+            }
             g2.dispose();
         }
+
+        
     }
+
+    // Unused functions
+    public void mouseClicked(MouseEvent e) {}
+    public void mouseEntered(MouseEvent e) {}
+    public void mouseExited(MouseEvent e) {}
+    public void mouseMoved(MouseEvent e) {}
+    public void mouseDragged(MouseEvent e) {}
+    public void mousePressed(MouseEvent e) {}
+    public void mouseReleased(MouseEvent e) {}
+
 }

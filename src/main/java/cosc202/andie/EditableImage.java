@@ -302,6 +302,10 @@ class EditableImage {
     public BufferedImage getCurrentImage() {
         return current;
     }
+
+    public void setCurrentImage(BufferedImage i){
+        current = i;
+    }
     
 
     /**

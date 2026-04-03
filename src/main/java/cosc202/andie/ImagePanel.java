@@ -109,20 +109,20 @@ public class ImagePanel extends JPanel implements MouseListener, MouseMotionList
                     case 0: // Crop as rectangle
                         Rectangle normalized = getSelectionRectangle(startPoint, endPoint);
                         ImageOperation op = new CropOperation(normalized);
-                        image.apply(op);   // or whatever your method is
+                        image.apply(op);   
                         selection = null;
                         repaint(); 
                         break;
                     case 1: // Crop as ellipse
                         Rectangle normalizedE = getSelectionRectangle(startPoint, endPoint);
                         ImageOperation opEllipse = new CropEllipse(normalizedE);
-                        image.apply(opEllipse);   // or whatever your method is
+                        image.apply(opEllipse);   
                         selection = null;
                         repaint();
                         break;
                     case 2: // Draw line
                         ImageOperation opLine = new DrawLineOperation(startPoint,endPoint);
-                        image.apply(opLine);   // or whatever your method is
+                        image.apply(opLine);   
                         selection = null;
                         repaint();
                         break;
@@ -194,25 +194,6 @@ public class ImagePanel extends JPanel implements MouseListener, MouseMotionList
             zoomPercent = 200;
         }
         scale = zoomPercent / 100;
-    }
-
-    private void cropImage() {
-        if (selection.width <= 0 || selection.height <= 0) return;
-
-        BufferedImage cropped = image.getCurrentImage().getSubimage(
-                selection.x,
-                selection.y,
-                selection.width,
-                selection.height
-        );
-
-        image.setCurrentImage(cropped);
-        image.setOriginal(cropped);
-        // refresh variables
-        startPoint = null;
-        endPoint = null;
-        selection = null;
-        repaint();
     }
 
 

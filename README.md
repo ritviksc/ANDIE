@@ -79,3 +79,4 @@ The EditableImage class has been altered to include an isSaved boolean to check 
 
 ## TODO
 * Updated Documentation for ImagePanel and EditableImage and new ImageOperations added for drawing objects on a image
+* Add some more drawing functionality

@@ -307,7 +307,10 @@ class EditableImage {
         current = i;
     }
     
-
+    public void setOriginal(BufferedImage i){
+        original = i;
+    }
+    
     /**
      * <p>
      * Reapply the current list of operations to the original.

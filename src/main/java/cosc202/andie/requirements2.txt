@@ -1,0 +1,28 @@
+Robert
+Extended filter
+Filters with negative results
+Emboss and edge detection filters
+
+Maleena
+Brightness adjustment
+Contrast adjustment/mask
+Random scattering
+
+Ritvik
+Mouse selection
+Crop to selection
+Drawing functions - rectangle, ellipse, line
+CI
+
+Loek
+Toolbar
+Keyboard shortcuts
+Macros for record and replay operations
+
+Exception handling
+Multilingual support
+
+Other error avoidance/prevention
+User experience
+README documentation
+

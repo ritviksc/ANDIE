@@ -200,3 +200,9 @@ tasks.register("generateWrapper", Wrapper) {
 		println "Generated wrapper for Gradle ${gradleVersion}";
 	}
 }
+
+javadoc {
+	options {
+		failOnError = false
+	}
+}

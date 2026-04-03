@@ -14,7 +14,7 @@ Begin by opening an image using the open button under the file drop-down menu. Y
 
 ### File
 
-* Export - 
+* Export - prompts the users to enter a file name, and select from the possible formats, a decided on the file placement. if the user cancels the export operation its returns to the program. if the users approves to save then image is export as current into the select file directory, if the user tries to export a file that does not support its specific format type its notifies the user with an error message   
 
 ### Edit
 
@@ -47,6 +47,7 @@ Unchanged as of 20/03
 * If the user cancels a save as operation it returns to the program and functions as if the user just clicked the cancel on the original save menu.
 * Note - does not work on System.exit()
 * Development of this system has revealed a more efficient way to implement errors when trying to apply things when no image has been opened by directly adding to the apply super class. This has currently not been implemented.
+
 
 ## Testing
 

@@ -64,7 +64,7 @@ public class ImageInversion implements ImageOperation, java.io.Serializable {
                 int r = color.getRed();
                 int g = color.getGreen();
                 int b = color.getBlue();
-                int a = color.getAlpha(); // preserve transparency
+                int a = color.getAlpha();
 
                 // Compute inverted RGB values
                 int newR = 255 - r;

@@ -87,18 +87,49 @@ public class ImagePanel extends JPanel implements MouseListener, MouseMotionList
             repaint();
 
             if (selection != null) {
-                int result = JOptionPane.showConfirmDialog(
-                        ImagePanel.this,
-                        "Crop selected region as new image?",
-                        "Crop",
-                        JOptionPane.YES_NO_OPTION
+                String[] options = {
+                    "Crop as Rectangle",
+                    "Crop as Ellipse",
+                    "Draw Line Between Corners",
+                    "Cancel"
+                };
+
+                int choice = JOptionPane.showOptionDialog(
+                    ImagePanel.this,
+                    "Choose action for the selected region:",
+                    "Selection Options",
+                    JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.PLAIN_MESSAGE,
+                    null,
+                    options,
+                    options[0]
                 );
 
-                if (result == JOptionPane.YES_OPTION) {
-                    cropImage();
-                } else {
-                    selection = null;
-                    repaint();
+                switch (choice) {
+                    case 0: // Crop as rectangle
+                        Rectangle normalized = getSelectionRectangle(startPoint, endPoint);
+                        ImageOperation op = new CropOperation(normalized);
+                        image.apply(op);   // or whatever your method is
+                        selection = null;
+                        repaint(); 
+                        break;
+                    case 1: // Crop as ellipse
+                        Rectangle normalizedE = getSelectionRectangle(startPoint, endPoint);
+                        ImageOperation opEllipse = new CropEllipse(normalizedE);
+                        image.apply(opEllipse);   // or whatever your method is
+                        selection = null;
+                        repaint();
+                        break;
+                    case 2: // Draw line
+                        ImageOperation opLine = new DrawLineOperation(startPoint,endPoint);
+                        image.apply(opLine);   // or whatever your method is
+                        selection = null;
+                        repaint();
+                        break;
+                    default:
+                        selection = null;
+                        repaint();
+                        break;
                 }
             }
         }
@@ -184,6 +215,7 @@ public class ImagePanel extends JPanel implements MouseListener, MouseMotionList
         repaint();
     }
 
+
     /**
      * <p>
      * Gets the preferred size of this component for UI layout.
@@ -262,6 +294,14 @@ public class ImagePanel extends JPanel implements MouseListener, MouseMotionList
         
     }
 
+    private Rectangle getSelectionRectangle(Point start, Point end) {
+    int x = Math.min(start.x, end.x);
+    int y = Math.min(start.y, end.y);
+    int w = Math.abs(end.x - start.x);
+    int h = Math.abs(end.y - start.y);
+    return new Rectangle(x, y, w, h);
+    }
+    
     // Unused functions
     public void mouseClicked(MouseEvent e) {}
     public void mouseEntered(MouseEvent e) {}

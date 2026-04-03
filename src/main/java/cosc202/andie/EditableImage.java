@@ -72,6 +72,8 @@ class EditableImage {
     
     private boolean isSaved;
 
+    private boolean isCropped;
+
     /**
      * <p>
      * Create a new EditableImage.

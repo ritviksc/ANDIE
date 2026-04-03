@@ -59,6 +59,10 @@ Newly developed functions were tested with undo and redo operations, saving, sav
 
 Edge detection hasn't been implemented for blur filters using Kernels and convolution. This will be fixed in phase 2.
 
+### Image Cropping can go out of bounds
+
+Currently you can attempt to crop out of bounds - crop goes outside of image dimension. App doesnt crash, but can be better handled.
+
 ## Refactoring
 
 ### Internationalisation
@@ -68,3 +72,6 @@ ANDIE's provided ui has been internationalised and an I18N manager has been adde
 ### Save on exit fucntionality
 
 The EditableImage class has been altered to include an isSaved boolean to check for if the latest changes to the image have been saved before the program exits. As a result, the default close operation has been changed to be _DO_NOTHING_ON_CLOSE_. Thus anything that would usually exit the program must be modifided to send a Window_Closing flag so the windowListener registers the close.
+
+## TODO
+* Updated Documentation for ImagePanel and EditableImage

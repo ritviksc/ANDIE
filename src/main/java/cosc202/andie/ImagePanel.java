@@ -176,6 +176,7 @@ public class ImagePanel extends JPanel implements MouseListener, MouseMotionList
         );
 
         image.setCurrentImage(cropped);
+        image.setOriginal(cropped);
         // refresh variables
         startPoint = null;
         endPoint = null;
@@ -210,6 +211,14 @@ public class ImagePanel extends JPanel implements MouseListener, MouseMotionList
         int y1 = (int)(startPoint.y / scale);
         int x2 = (int)(endPoint.x / scale);
         int y2 = (int)(endPoint.y / scale);
+
+        if (image.getCurrentImage().getWidth() - startPoint.x < 0 || image.getCurrentImage().getHeight() - startPoint.y < 0 ){
+            return;
+        } 
+
+        if (image.getCurrentImage().getWidth() - endPoint.x < 0 || image.getCurrentImage().getHeight() - endPoint.y < 0 ){
+            return;
+        } 
 
         int x = Math.min(x1, x2);
         int y = Math.min(y1, y2);

@@ -78,4 +78,4 @@ ANDIE's provided ui has been internationalised and an I18N manager has been adde
 The EditableImage class has been altered to include an isSaved boolean to check for if the latest changes to the image have been saved before the program exits. As a result, the default close operation has been changed to be _DO_NOTHING_ON_CLOSE_. Thus anything that would usually exit the program must be modifided to send a Window_Closing flag so the windowListener registers the close.
 
 ## TODO
-* Updated Documentation for ImagePanel and EditableImage
+* Updated Documentation for ImagePanel and EditableImage and new ImageOperations added for drawing objects on a image

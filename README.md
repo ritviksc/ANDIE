@@ -61,7 +61,11 @@ Edge detection hasn't been implemented for blur filters using Kernels and convol
 
 ### Image Cropping can go out of bounds
 
-Currently you can attempt to crop out of bounds - crop goes outside of image dimension. App doesnt crash, but can be better handled.
+Currently you can attempt to crop out of bounds - crop goes outside of image dimension. App doesnt crash, but can be better handled. - Fixed
+
+### Some filters dont work with new cropped image
+
+Some filters throw a Raster error when image is cropped and then we apply them.
 
 ## Refactoring
 

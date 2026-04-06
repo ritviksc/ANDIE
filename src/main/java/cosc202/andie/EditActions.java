@@ -1,9 +1,12 @@
 package cosc202.andie;
 
+import java.awt.Color;
+import java.awt.Insets;
 import java.util.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.text.NumberFormatter;
+import java.awt.event.ActionListener;
 
 /**
  * <p>
@@ -39,56 +42,56 @@ public class EditActions {
         actions = new ArrayList<>();
         actions.add(new UndoAction(
             I18nManager.get("Undo"),
-            null,
+            new ImageIcon(Andie.class.getClassLoader().getResource("Toolbar Icons/Undo.png")),
             I18nManager.get("Undo_desc"),
             KeyEvent.VK_Z
         ));
 
         actions.add(new RedoAction(
             I18nManager.get("Redo"),
-            null,
+            new ImageIcon(Andie.class.getClassLoader().getResource("Toolbar Icons/Redo.png")),
             I18nManager.get("Redo_desc"),
             KeyEvent.VK_Y
         ));
 
         actions.add(new ResizeAction(
             I18nManager.get("Resize"),
-            null,
+            new ImageIcon(Andie.class.getClassLoader().getResource("Toolbar Icons/resize.png")),
             I18nManager.get("Resize_desc"),
             KeyEvent.VK_R
         ));
 
         actions.add(new RotateAction90C(
             I18nManager.get("Rotate90C"),
-            null,
+            new ImageIcon(Andie.class.getClassLoader().getResource("Toolbar Icons/rotateclockwise90.png")),
             I18nManager.get("Rotate90C_desc"),
             KeyEvent.VK_F
         ));
 
         actions.add(new RotateAction90CC(
             I18nManager.get("Rotate90CC"),
-            null,
+            new ImageIcon(Andie.class.getClassLoader().getResource("Toolbar Icons/rotateanticlockwise90.png")),
             I18nManager.get("Rotate90CC_desc"),
             KeyEvent.VK_1
         ));
 
         actions.add(new RotateAction180(
             I18nManager.get("Rotate180"),
-            null,
+            new ImageIcon(Andie.class.getClassLoader().getResource("Toolbar Icons/rotate180.png")),
             I18nManager.get("Rotate180_desc"),
             KeyEvent.VK_2
         ));
 
         actions.add(new FlipActionHorizontal(
             I18nManager.get("FlipHorizontal"),
-            null,
+            new ImageIcon(Andie.class.getClassLoader().getResource("Toolbar Icons/fliphorizontal.png")),
             I18nManager.get("FlipHorizontal_desc"),
             KeyEvent.VK_3
         ));
 
         actions.add(new FlipActionVertically(
             I18nManager.get("FlipVertical"),
-            null,
+            new ImageIcon(Andie.class.getClassLoader().getResource("Toolbar Icons/flipvertical.png")),
             I18nManager.get("FlipVertical_desc"),
             KeyEvent.VK_V
         ));
@@ -109,6 +112,49 @@ public class EditActions {
         }
 
         return editMenu;
+    }
+    
+    public JToolBar createToolBar() {
+        JToolBar toolBar = new JToolBar();
+        toolBar.setFloatable(false);
+        
+        toolBar.setBackground(Color.WHITE);
+        toolBar.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        
+
+        for (Action action : actions) {
+            JButton button = new JButton(action);
+            button.setFocusPainted(false);
+            button.setBorderPainted(false);
+            button.setContentAreaFilled(false);
+            button.setOpaque(true);
+            button.setText("");
+            button.setToolTipText((String) action.getValue(Action.SHORT_DESCRIPTION));
+
+            button.setMargin(new Insets(5, 10, 5, 10));
+            button.setBackground(Color.WHITE);
+
+            button.setToolTipText((String) action.getValue(Action.SHORT_DESCRIPTION));
+
+            // hover effect
+            Color normal = Color.WHITE;
+            Color hover = new Color(240, 240, 240);
+
+            button.addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseEntered(java.awt.event.MouseEvent e) {
+                    button.setBackground(hover);
+                }
+
+                public void mouseExited(java.awt.event.MouseEvent e) {
+                    button.setBackground(normal);
+                }
+            });
+            //button.setFocusable(false);
+            button.setToolTipText((String) action.getValue(Action.SHORT_DESCRIPTION));
+            toolBar.add(button);
+        }
+
+        return toolBar;
     }
 
     /**

@@ -24,8 +24,7 @@ import javax.swing.text.NumberFormatter;
  * @author Steven Mills, Robert Hannaford
  * @version 1.1
  */
-public class FilterActions {
-
+public class FilterActions{
     /**
      * A list of actions for the Filter menu.
      */

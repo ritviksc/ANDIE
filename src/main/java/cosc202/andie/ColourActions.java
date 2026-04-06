@@ -24,13 +24,7 @@ import javax.swing.*;
  * @author Steven Mills
  * @version 1.0
  */
-public class ColourActions {
-
-    /**
-     * A list of actions for the Colour menu.
-     */
-    protected ArrayList<Action> actions;
-
+public class ColourActions extends ToolbarActions{
     /**
      * <p>
      * Create a set of Colour menu actions.
@@ -38,10 +32,22 @@ public class ColourActions {
      */
     public ColourActions() {
         actions = new ArrayList<>();
-        actions.add(new ConvertToGreyAction(I18nManager.get("greyscale"), null, I18nManager.get("greyscale_desc"), KeyEvent.VK_G));
-        actions.add(new ThresholdAction(I18nManager.get("threshold"), null, I18nManager.get("threshold_desc"), KeyEvent.VK_T));
-        actions.add(new InversionAction(I18nManager.get("invert"), null, I18nManager.get("invert_desc"), KeyEvent.VK_I));
-        actions.add(new ChannelSwapAction(I18nManager.get("channel_swap"), null, I18nManager.get("channel_swap_desc"), KeyEvent.VK_C));
+        actions.add(new ConvertToGreyAction(I18nManager.get("greyscale"), 
+                new ImageIcon(Andie.class.getClassLoader().getResource("Toolbar Icons/Colour/greyscale.png")), 
+                I18nManager.get("greyscale_desc"), 
+                KeyEvent.VK_G));
+        actions.add(new ThresholdAction(I18nManager.get("threshold"), 
+                new ImageIcon(Andie.class.getClassLoader().getResource("Toolbar Icons/Colour/dark.png")), 
+                I18nManager.get("threshold_desc"), 
+                KeyEvent.VK_T));
+        actions.add(new InversionAction(I18nManager.get("invert"),
+                new ImageIcon(Andie.class.getClassLoader().getResource("Toolbar Icons/Colour/invert.png")), 
+                I18nManager.get("invert_desc"), 
+                KeyEvent.VK_I));
+        actions.add(new ChannelSwapAction(I18nManager.get("channel_swap"),
+                new ImageIcon(Andie.class.getClassLoader().getResource("Toolbar Icons/Colour/rgb.png")), 
+                I18nManager.get("channel_swap_desc"),
+                KeyEvent.VK_C));
 
     }
 

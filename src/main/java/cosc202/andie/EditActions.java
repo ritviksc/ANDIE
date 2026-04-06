@@ -26,13 +26,7 @@ import java.awt.event.ActionListener;
  * @author Steven Mills
  * @version 1.0
  */
-public class EditActions {
-
-    /**
-     * A list of actions for the Edit menu.
-     */
-    protected ArrayList<Action> actions;
-
+public class EditActions extends ToolbarActions{
     /**
      * <p>
      * Create a set of Edit menu actions.
@@ -42,56 +36,56 @@ public class EditActions {
         actions = new ArrayList<>();
         actions.add(new UndoAction(
             I18nManager.get("Undo"),
-            new ImageIcon(Andie.class.getClassLoader().getResource("Toolbar Icons/Undo.png")),
+            new ImageIcon(Andie.class.getClassLoader().getResource("Toolbar Icons/Edit/Undo.png")),
             I18nManager.get("Undo_desc"),
             KeyEvent.VK_Z
         ));
 
         actions.add(new RedoAction(
             I18nManager.get("Redo"),
-            new ImageIcon(Andie.class.getClassLoader().getResource("Toolbar Icons/Redo.png")),
+            new ImageIcon(Andie.class.getClassLoader().getResource("Toolbar Icons/Edit/Redo.png")),
             I18nManager.get("Redo_desc"),
             KeyEvent.VK_Y
         ));
 
         actions.add(new ResizeAction(
             I18nManager.get("Resize"),
-            new ImageIcon(Andie.class.getClassLoader().getResource("Toolbar Icons/resize.png")),
+            new ImageIcon(Andie.class.getClassLoader().getResource("Toolbar Icons/Edit/resize.png")),
             I18nManager.get("Resize_desc"),
             KeyEvent.VK_R
         ));
 
         actions.add(new RotateAction90C(
             I18nManager.get("Rotate90C"),
-            new ImageIcon(Andie.class.getClassLoader().getResource("Toolbar Icons/rotateclockwise90.png")),
+            new ImageIcon(Andie.class.getClassLoader().getResource("Toolbar Icons/Edit/rotateclockwise90.png")),
             I18nManager.get("Rotate90C_desc"),
             KeyEvent.VK_F
         ));
 
         actions.add(new RotateAction90CC(
             I18nManager.get("Rotate90CC"),
-            new ImageIcon(Andie.class.getClassLoader().getResource("Toolbar Icons/rotateanticlockwise90.png")),
+            new ImageIcon(Andie.class.getClassLoader().getResource("Toolbar Icons/Edit/rotateanticlockwise90.png")),
             I18nManager.get("Rotate90CC_desc"),
             KeyEvent.VK_1
         ));
 
         actions.add(new RotateAction180(
             I18nManager.get("Rotate180"),
-            new ImageIcon(Andie.class.getClassLoader().getResource("Toolbar Icons/rotate180.png")),
+            new ImageIcon(Andie.class.getClassLoader().getResource("Toolbar Icons/Edit/rotate180.png")),
             I18nManager.get("Rotate180_desc"),
             KeyEvent.VK_2
         ));
 
         actions.add(new FlipActionHorizontal(
             I18nManager.get("FlipHorizontal"),
-            new ImageIcon(Andie.class.getClassLoader().getResource("Toolbar Icons/fliphorizontal.png")),
+            new ImageIcon(Andie.class.getClassLoader().getResource("Toolbar Icons/Edit/fliphorizontal.png")),
             I18nManager.get("FlipHorizontal_desc"),
             KeyEvent.VK_3
         ));
 
         actions.add(new FlipActionVertically(
             I18nManager.get("FlipVertical"),
-            new ImageIcon(Andie.class.getClassLoader().getResource("Toolbar Icons/flipvertical.png")),
+            new ImageIcon(Andie.class.getClassLoader().getResource("Toolbar Icons/Edit/flipvertical.png")),
             I18nManager.get("FlipVertical_desc"),
             KeyEvent.VK_V
         ));
@@ -112,49 +106,6 @@ public class EditActions {
         }
 
         return editMenu;
-    }
-    
-    public JToolBar createToolBar() {
-        JToolBar toolBar = new JToolBar();
-        toolBar.setFloatable(false);
-        
-        toolBar.setBackground(Color.WHITE);
-        toolBar.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-        
-
-        for (Action action : actions) {
-            JButton button = new JButton(action);
-            button.setFocusPainted(false);
-            button.setBorderPainted(false);
-            button.setContentAreaFilled(false);
-            button.setOpaque(true);
-            button.setText("");
-            button.setToolTipText((String) action.getValue(Action.SHORT_DESCRIPTION));
-
-            button.setMargin(new Insets(5, 10, 5, 10));
-            button.setBackground(Color.WHITE);
-
-            button.setToolTipText((String) action.getValue(Action.SHORT_DESCRIPTION));
-
-            // hover effect
-            Color normal = Color.WHITE;
-            Color hover = new Color(240, 240, 240);
-
-            button.addMouseListener(new java.awt.event.MouseAdapter() {
-                public void mouseEntered(java.awt.event.MouseEvent e) {
-                    button.setBackground(hover);
-                }
-
-                public void mouseExited(java.awt.event.MouseEvent e) {
-                    button.setBackground(normal);
-                }
-            });
-            //button.setFocusable(false);
-            button.setToolTipText((String) action.getValue(Action.SHORT_DESCRIPTION));
-            toolBar.add(button);
-        }
-
-        return toolBar;
     }
 
     /**

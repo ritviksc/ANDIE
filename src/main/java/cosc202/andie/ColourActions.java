@@ -33,19 +33,19 @@ public class ColourActions extends ToolbarActions{
     public ColourActions() {
         actions = new ArrayList<>();
         actions.add(new ConvertToGreyAction(I18nManager.get("greyscale"), 
-                new ImageIcon(Andie.class.getClassLoader().getResource("Toolbar Icons/Colour/greyscale.png")), 
+                new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Colour/greyscale.png")), 
                 I18nManager.get("greyscale_desc"), 
                 KeyEvent.VK_G));
         actions.add(new ThresholdAction(I18nManager.get("threshold"), 
-                new ImageIcon(Andie.class.getClassLoader().getResource("Toolbar Icons/Colour/dark.png")), 
+                new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Colour/dark.png")), 
                 I18nManager.get("threshold_desc"), 
                 KeyEvent.VK_T));
         actions.add(new InversionAction(I18nManager.get("invert"),
-                new ImageIcon(Andie.class.getClassLoader().getResource("Toolbar Icons/Colour/invert.png")), 
+                new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Colour/invert.png")), 
                 I18nManager.get("invert_desc"), 
                 KeyEvent.VK_I));
         actions.add(new ChannelSwapAction(I18nManager.get("channel_swap"),
-                new ImageIcon(Andie.class.getClassLoader().getResource("Toolbar Icons/Colour/rgb.png")), 
+                new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Colour/rgb.png")), 
                 I18nManager.get("channel_swap_desc"),
                 KeyEvent.VK_C));
 

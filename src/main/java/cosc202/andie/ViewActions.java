@@ -32,9 +32,9 @@ public class ViewActions extends ToolbarActions {
      */
     public ViewActions() {
         actions = new ArrayList<>();
-        actions.add(new ZoomInAction(I18nManager.get("ZI"), new ImageIcon(Andie.class.getClassLoader().getResource("Toolbar Icons/View/zoomin.png")), I18nManager.get("ZI"), KeyEvent.VK_PLUS));
-        actions.add(new ZoomOutAction(I18nManager.get("ZO"), new ImageIcon(Andie.class.getClassLoader().getResource("Toolbar Icons/View/zoomout.png")), I18nManager.get("ZO"), KeyEvent.VK_MINUS));
-        actions.add(new ZoomFullAction(I18nManager.get("ZF"), new ImageIcon(Andie.class.getClassLoader().getResource("Toolbar Icons/View/zoomfull.png")), I18nManager.get("ZF"), KeyEvent.VK_1));
+        actions.add(new ZoomInAction(I18nManager.get("ZI"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/View/zoomin.png")), I18nManager.get("ZI"), KeyEvent.VK_PLUS));
+        actions.add(new ZoomOutAction(I18nManager.get("ZO"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/View/zoomout.png")), I18nManager.get("ZO"), KeyEvent.VK_MINUS));
+        actions.add(new ZoomFullAction(I18nManager.get("ZF"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/View/zoomfull.png")), I18nManager.get("ZF"), KeyEvent.VK_1));
     }
 
     /**

@@ -36,56 +36,56 @@ public class EditActions extends ToolbarActions{
         actions = new ArrayList<>();
         actions.add(new UndoAction(
             I18nManager.get("Undo"),
-            new ImageIcon(Andie.class.getClassLoader().getResource("Toolbar Icons/Edit/Undo.png")),
+            new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Edit/Undo.png")),
             I18nManager.get("Undo_desc"),
             KeyEvent.VK_Z
         ));
 
         actions.add(new RedoAction(
             I18nManager.get("Redo"),
-            new ImageIcon(Andie.class.getClassLoader().getResource("Toolbar Icons/Edit/Redo.png")),
+            new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Edit/Redo.png")),
             I18nManager.get("Redo_desc"),
             KeyEvent.VK_Y
         ));
 
         actions.add(new ResizeAction(
             I18nManager.get("Resize"),
-            new ImageIcon(Andie.class.getClassLoader().getResource("Toolbar Icons/Edit/resize.png")),
+            new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Edit/resize.png")),
             I18nManager.get("Resize_desc"),
             KeyEvent.VK_R
         ));
 
         actions.add(new RotateAction90C(
             I18nManager.get("Rotate90C"),
-            new ImageIcon(Andie.class.getClassLoader().getResource("Toolbar Icons/Edit/rotateclockwise90.png")),
+            new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Edit/rotateclockwise90.png")),
             I18nManager.get("Rotate90C_desc"),
             KeyEvent.VK_F
         ));
 
         actions.add(new RotateAction90CC(
             I18nManager.get("Rotate90CC"),
-            new ImageIcon(Andie.class.getClassLoader().getResource("Toolbar Icons/Edit/rotateanticlockwise90.png")),
+            new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Edit/rotateanticlockwise90.png")),
             I18nManager.get("Rotate90CC_desc"),
             KeyEvent.VK_1
         ));
 
         actions.add(new RotateAction180(
             I18nManager.get("Rotate180"),
-            new ImageIcon(Andie.class.getClassLoader().getResource("Toolbar Icons/Edit/rotate180.png")),
+            new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Edit/rotate180.png")),
             I18nManager.get("Rotate180_desc"),
             KeyEvent.VK_2
         ));
 
         actions.add(new FlipActionHorizontal(
             I18nManager.get("FlipHorizontal"),
-            new ImageIcon(Andie.class.getClassLoader().getResource("Toolbar Icons/Edit/fliphorizontal.png")),
+            new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Edit/fliphorizontal.png")),
             I18nManager.get("FlipHorizontal_desc"),
             KeyEvent.VK_3
         ));
 
         actions.add(new FlipActionVertically(
             I18nManager.get("FlipVertical"),
-            new ImageIcon(Andie.class.getClassLoader().getResource("Toolbar Icons/Edit/flipvertical.png")),
+            new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Edit/flipvertical.png")),
             I18nManager.get("FlipVertical_desc"),
             KeyEvent.VK_V
         ));

@@ -3,6 +3,7 @@ package cosc202.andie;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
+/* Class for cropping a rectangle, which is considerd the default operation when a user selects a area to manipulate given a image */
 public class CropOperation implements ImageOperation {
 
     private Rectangle selection;
@@ -13,11 +14,20 @@ public class CropOperation implements ImageOperation {
 
     @Override
     public BufferedImage apply(BufferedImage input) {
+        int x = Math.max(0, selection.x);
+        int y = Math.max(0, selection.y);
+
+        // Make sure selected rectangle doesn't go out of bounds to prevent raster error.
+        int w = Math.min(selection.width, input.getWidth() - x);
+        int h = Math.min(selection.height, input.getHeight() - y);
+
+        if (w <= 0 || h <= 0) {
+            return input; // invalid selection!
+        }
         return input.getSubimage(
-            selection.x,
-            selection.y,
-            selection.width,
-            selection.height
-        );
+            x,
+            y,
+            w,
+            h );
     }
 }

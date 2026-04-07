@@ -6,6 +6,7 @@ import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.awt.AlphaComposite;
 
+/* Crop ellipse out of selected area in the image loaded */
 public class CropEllipse implements ImageOperation {
 
     private Rectangle selection;
@@ -16,10 +17,21 @@ public class CropEllipse implements ImageOperation {
 
     @Override
     public BufferedImage apply(BufferedImage input) {
+        int x = Math.max(0, selection.x);
+        int y = Math.max(0, selection.y);
+
+        // Make sure selected rectangle doesn't go out of bounds to prevent raster error.
+        int w = Math.min(selection.width, input.getWidth() - x);
+        int h = Math.min(selection.height, input.getHeight() - y);
+
+        if (w <= 0 || h <= 0) {
+            return input; // invalid selection, do nothing
+        }
+
         // Create a new image with alpha (transparent background)
         BufferedImage newImage = new BufferedImage(
-            selection.width,
-            selection.height,
+            w,
+            h,
             BufferedImage.TYPE_INT_ARGB
         );
 
@@ -27,12 +39,12 @@ public class CropEllipse implements ImageOperation {
 
         // Clear with transparent
         g2.setComposite(AlphaComposite.Clear);
-        g2.fillRect(0, 0, selection.width, selection.height);
+        g2.fillRect(0, 0, w, h);
 
         // Draw the original image only inside the ellipse
         g2.setComposite(AlphaComposite.SrcOver);
-        g2.setClip(new Ellipse2D.Float(0, 0, selection.width, selection.height));
-        g2.drawImage(input, -selection.x, -selection.y, null);
+        g2.setClip(new Ellipse2D.Float(0, 0, w, h));
+        g2.drawImage(input, -x, -y, null);
 
         g2.dispose();
         return newImage;

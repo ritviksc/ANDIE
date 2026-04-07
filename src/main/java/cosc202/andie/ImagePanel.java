@@ -36,9 +36,9 @@ public class ImagePanel extends JPanel implements MouseListener, MouseMotionList
      * The image to display in the ImagePanel.
      */
     private EditableImage image;
-    private Point startPoint;
-    private Point endPoint;
-    private Rectangle selection;
+    private Point startPoint; // Where the user clicks first
+    private Point endPoint; // Where user releases mouse after dragging it
+    private Rectangle selection; // Rectangle formed between starPoint and endPoint
 
     /**
      * <p>
@@ -63,6 +63,7 @@ public class ImagePanel extends JPanel implements MouseListener, MouseMotionList
     /**
      * <p>
      * Create a new ImagePanel and register mouse actions.
+     * Using those mouse actions, deterimine what Image Operation is to be carried out, if it is the case.
      * </p>
      *
      * <p>
@@ -91,6 +92,8 @@ public class ImagePanel extends JPanel implements MouseListener, MouseMotionList
                     "Crop as Rectangle",
                     "Crop as Ellipse",
                     "Draw Line Between Corners",
+                    "Draw Rectangle",
+                    "Draw Ellipse",
                     "Cancel"
                 };
 
@@ -121,8 +124,30 @@ public class ImagePanel extends JPanel implements MouseListener, MouseMotionList
                         repaint();
                         break;
                     case 2: // Draw line
-                        ImageOperation opLine = new DrawLineOperation(startPoint,endPoint);
-                        image.apply(opLine);   
+                        ShapeOptions lineOptions = getShapeOptions();
+                        if (lineOptions != null){
+                            ImageOperation opLine = new DrawLineOperation(lineOptions.color,startPoint,endPoint);
+                            image.apply(opLine); 
+                        }  
+                        selection = null;
+                        repaint();
+                        break;
+                    case 3: // Rectangle
+                        ShapeOptions rectOptions = getShapeOptions();
+                        if (rectOptions != null) {
+                            ImageOperation opR = new DrawRectangle(selection, rectOptions.color, rectOptions.filled);
+                            image.apply(opR);
+                        }
+                        selection = null;
+                        repaint();
+                        break;
+
+                    case 4: // Ellipse
+                        ShapeOptions ellipseOptions = getShapeOptions();
+                        if (ellipseOptions != null) {
+                            ImageOperation opE = new DrawEllipse(selection, ellipseOptions.color, ellipseOptions.filled);
+                            image.apply(opE);
+                        }
                         selection = null;
                         repaint();
                         break;
@@ -219,6 +244,7 @@ public class ImagePanel extends JPanel implements MouseListener, MouseMotionList
         }
     }
 
+    // Update rectangular area the user is highlighting as the mouse is dragged
     private void updateSelection() {
         int x1 = (int)(startPoint.x / scale);
         int y1 = (int)(startPoint.y / scale);
@@ -258,15 +284,16 @@ public class ImagePanel extends JPanel implements MouseListener, MouseMotionList
             g2.drawImage(image.getCurrentImage(), null, 0, 0);
 
             if (selection != null) {
-                int x = (int)(selection.x * scale);
+                // get proper coordinates w.r.t to scale
+                int x = (int)(selection.x * scale); 
                 int y = (int)(selection.y * scale);
                 int w = (int)(selection.width * scale);
                 int h = (int)(selection.height * scale);
 
-                g2.setColor(new Color(0, 0, 255, 50)); // transparent blue
+                g2.setColor(new Color(0, 0, 255, 50)); // transparent blue (convention)
                 g2.fillRect(x, y, w, h);
 
-                g2.setColor(Color.BLUE); // solid border
+                g2.setColor(Color.BLUE); // solid border for asthetic purpose
                 g2.drawRect(x, y, w, h);
             }
             g2.dispose();
@@ -275,15 +302,56 @@ public class ImagePanel extends JPanel implements MouseListener, MouseMotionList
         
     }
 
+    // Get rectangle area that user is highlighting with proper coordinates
     private Rectangle getSelectionRectangle(Point start, Point end) {
-    int x = Math.min(start.x, end.x);
-    int y = Math.min(start.y, end.y);
-    int w = Math.abs(end.x - start.x);
-    int h = Math.abs(end.y - start.y);
-    return new Rectangle(x, y, w, h);
+        int x = Math.min(start.x, end.x);
+        int y = Math.min(start.y, end.y);
+        int w = Math.abs(end.x - start.x);
+        int h = Math.abs(end.y - start.y);
+        return new Rectangle(x, y, w, h);
     }
+
+    /**
+     * <p>
+     * Gets the preferred options for the object to be drawn
+     * </p>
+     *
+     * <p>
+     * A panel is launched so the user can select the color, and 'solidness' of the object to be drawn.
+     * 
+     * </p>
+     *
+     * @return Instance of the ShapeOptions class that collects users preferences and uses those for 
+     * operation to be carried out 
+     */
+    private ShapeOptions getShapeOptions() {
+        JColorChooser colorChooser = new JColorChooser();
+        String[] styles = {"Outline", "Solid"};
+        JComboBox<String> styleBox = new JComboBox<>(styles);
+
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.add(styleBox, BorderLayout.NORTH);
+        panel.add(colorChooser, BorderLayout.CENTER);
+
+        int result = JOptionPane.showConfirmDialog(
+            this, // better than null
+            panel,
+            "Shape Options",
+            JOptionPane.OK_CANCEL_OPTION,
+            JOptionPane.PLAIN_MESSAGE
+        );
+
+        if (result == JOptionPane.OK_OPTION) {
+            Color chosenColor = colorChooser.getColor();
+            boolean isFilled = styleBox.getSelectedItem().equals("Solid");
+            return new ShapeOptions(chosenColor, isFilled);
+        }
+
+        return null; // cancelled
+    }
+
     
-    // Unused functions
+    // Unused functions required for interface(s)
     public void mouseClicked(MouseEvent e) {}
     public void mouseEntered(MouseEvent e) {}
     public void mouseExited(MouseEvent e) {}

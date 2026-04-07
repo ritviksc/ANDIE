@@ -1,5 +1,6 @@
 package cosc202.andie;
 
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
@@ -24,10 +25,18 @@ public class CropOperation implements ImageOperation {
         if (w <= 0 || h <= 0) {
             return input; // invalid selection!
         }
-        return input.getSubimage(
-            x,
-            y,
-            w,
-            h );
+
+        BufferedImage sub = input.getSubimage(x, y, w, h);
+        BufferedImage copy = new BufferedImage(
+            sub.getWidth(),
+            sub.getHeight(),
+            BufferedImage.TYPE_INT_ARGB
+        );
+
+        Graphics2D g2 = copy.createGraphics();
+        g2.drawImage(sub, 0, 0, null);
+        g2.dispose();
+
+        return copy; 
     }
 }

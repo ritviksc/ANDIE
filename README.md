@@ -48,6 +48,14 @@ Unchanged as of 20/03
 * Note - does not work on System.exit()
 * Development of this system has revealed a more efficient way to implement errors when trying to apply things when no image has been opened by directly adding to the apply super class. This has currently not been implemented.
 
+### Image Cropping and Drawing
+
+* User can now selected a portion of the loaded image to crop and select as the new image to edit. If they dont want to crop, they can select to draw a few different shapes in the selected area with customisation options.
+* Summary:
+    * User can crop a rectangle or ellipse out of selected region
+    * User can draw a rectangle or ellipse on the selected region (fill or outlined)
+    * User can draw line between two selected points
+    * User decides color of each object from the color palette
 
 ## Testing
 
@@ -59,24 +67,12 @@ Newly developed functions were tested with undo and redo operations, saving, sav
 
 Edge detection hasn't been implemented for blur filters using Kernels and convolution. This will be fixed in phase 2.
 
-### Image Cropping can go out of bounds
-
-Currently you can attempt to crop out of bounds - crop goes outside of image dimension. App doesnt crash, but can be better handled. - Fixed
-
-### Some filters dont work with new cropped image
-
-Some filters throw a Raster error when image is cropped and then we apply them.
-
 ## Refactoring
 
 ### Internationalisation
 
 ANDIE's provided ui has been internationalised and an I18N manager has been added.
 
-### Save on exit fucntionality
+### Save on exit functionality
 
 The EditableImage class has been altered to include an isSaved boolean to check for if the latest changes to the image have been saved before the program exits. As a result, the default close operation has been changed to be _DO_NOTHING_ON_CLOSE_. Thus anything that would usually exit the program must be modifided to send a Window_Closing flag so the windowListener registers the close.
-
-## TODO
-* Updated Documentation for ImagePanel and EditableImage and new ImageOperations added for drawing objects on a image
-* Add some more drawing functionality

@@ -106,8 +106,10 @@ public class MeanFilter implements ImageOperation, java.io.Serializable {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
 
-                int[] sums = new int[colourChannels]; // get running sum
-
+                float[] sums = new float[colourChannels]; // get running sum
+                
+                int newA = (input.getRGB(x, y) >>> 24) & 0xff;
+                
                 for (int ky = -radius; ky <= radius; ky++) { // iterate over kernel area
 
                     for (int kx = -radius; kx <= radius; kx++) {
@@ -126,18 +128,17 @@ public class MeanFilter implements ImageOperation, java.io.Serializable {
 
                         float filterWeight = kernel[(ky + radius) * kWdith + (kx + radius)]; // get the value at the specified kernel co-ordinate
                         
-                        sums[ALPHA] += (a * filterWeight);
+                        
                         sums[RED] += (r * filterWeight);
                         sums[GREEN] += (g * filterWeight);
                         sums[BLUE] += (b * filterWeight);
                         
                     }
                 }
-                
-                int newA = Math.min(255, Math.max(0, sums[ALPHA]));
-                int newR = Math.min(255, Math.max(0, sums[RED]));
-                int newG = Math.min(255, Math.max(0, sums[GREEN]));
-                int newB = Math.min(255, Math.max(0, sums[BLUE]));
+                 
+                int newR = (int) Math.min(255, Math.max(0, sums[RED]));
+                int newG = (int) Math.min(255, Math.max(0, sums[GREEN]));
+                int newB = (int) Math.min(255, Math.max(0, sums[BLUE]));
                 
                 int argb = (newA << 24) | (newR << 16) | (newG << 8) | newB;
                 

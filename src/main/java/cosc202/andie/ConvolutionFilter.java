@@ -71,7 +71,6 @@ public class ConvolutionFilter {
 
                 float[] sums = new float[colourChannels]; // get running sum
                 float sumWeight = 0;
-                int newA = (input.getRGB(x, y) >>> 24) & 0xff;
 
                 for (int ky = -radius; ky <= radius; ky++) { // iterate over kernel area
 
@@ -91,90 +90,42 @@ public class ConvolutionFilter {
 
                         float filterWeight = kernel[(ky + radius) * kWdith + (kx + radius)]; // get the value at the specified kernel co-ordinate
                         sums[ALPHA] += a * filterWeight;
-                        
+
                         if (useAlphaWeighting) {
-                            
+
                             sums[RED] += (r * a * filterWeight);
                             sums[GREEN] += (g * a * filterWeight);
                             sums[BLUE] += (b * a * filterWeight);
                             sumWeight += a * filterWeight;
-                            
+
                         } else {
-                            
+
                             sums[RED] += (r * filterWeight);
                             sums[GREEN] += (g * filterWeight);
                             sums[BLUE] += (b * filterWeight);
-                            
+
                         }
                     }
                 }
 
-                int outA = sumWeight == 0 ? 0 : (int) Math.min(255, Math.max(0, Math.round(sums[ALPHA])));
-                int newR = sumWeight == 0 ? 0 : (int) Math.min(255, (int) Math.max(0, Math.round(sums[RED]) / sumWeight));
-                int newG = sumWeight == 0 ? 0 : (int) Math.min(255, (int) Math.max(0, Math.round(sums[GREEN]) / sumWeight));
-                int newB = sumWeight == 0 ? 0 : (int) Math.min(255, (int) Math.max(0, Math.round(sums[BLUE]) / sumWeight));
-
-                int argb = (outA << 24) | (newR << 16) | (newG << 8) | newB;
-
-                output.setRGB(x, y, argb);
-
-            }
-        }
-        return output;
-    }
-
-    public BufferedImage applyConvolutionEmbossed(BufferedImage input, float[] kernel) {
-
-        int radius = (int) Math.sqrt(kernel.length) / 2;
-
-        int size = (2 * radius + 1) * (2 * radius + 1);
-        int kWdith = (2 * radius + 1);
-        int height = input.getHeight();
-        int width = input.getWidth();
-
-        BufferedImage output = new BufferedImage(input.getColorModel(), input.copyData(null), input.isAlphaPremultiplied(), null);
-
-        int colourChannels = 4;
-
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-
-                float[] sums = new float[colourChannels]; // get running sum
-                float sumWeight = 0;
-                int newA = (input.getRGB(x, y) >>> 24) & 0xff;
-
-                for (int ky = -radius; ky <= radius; ky++) { // iterate over kernel area
-
-                    for (int kx = -radius; kx <= radius; kx++) {
-                        int yInitial = y + ky;
-                        int xInitial = x + kx;
-
-                        int yCorrected = Math.max(0, Math.min(yInitial, height - 1));
-                        int xCorrected = Math.max(0, Math.min(xInitial, width - 1));
-
-                        int argb = input.getRGB(xCorrected, yCorrected);
-
-                        int a = (argb >>> 24) & 0xFF;
-                        int r = (argb >>> 16) & 0xFF;
-                        int g = (argb >>> 8) & 0xFF;
-                        int b = argb & 0xFF;
-
-                        float filterWeight = kernel[(ky + radius) * kWdith + (kx + radius)]; // get the value at the specified kernel co-ordinate
-
-                        
-                        // sumWeight += a * filterWeight;
-                    }
+                int newR, newG, newB;
+                if (useAlphaWeighting) {
+                    newR = sumWeight == 0 ? 0 : (int) (sums[BLUE] / sumWeight);
+                    newG = sumWeight == 0 ? 0 : (int) (sums[GREEN] / sumWeight);
+                    newB = sumWeight == 0 ? 0 : (int) (sums[RED] / sumWeight);
+                } else {
+                    newR = (int) sums[RED];
+                    newG = (int) sums[GREEN];
+                    newB = (int) sums[BLUE];
                 }
 
-                // int outA = sumWeight == 0 ? 0 : (int) Math.min(255, Math.max(0, Math.round(sums[ALPHA])));
-                int newR = sumWeight == 0 ? 0 : (int) (sums[BLUE] / sumWeight);
-                int newG = sumWeight == 0 ? 0 : (int) (sums[BLUE] / sumWeight);
-                int newB = sumWeight == 0 ? 0 : (int) (sums[BLUE] / sumWeight);
-
-                newR += 128;
-                newG += 128;
-                newB += 128;
-
+                if (applyBias) {
+                    newR += 128;
+                    newG += 128;
+                    newB += 128;
+                }
+                
+                int newA = (input.getRGB(x, y) >>> 24) & 0xff;
                 newR = Math.min(255, Math.max(0, newR));
                 newG = Math.min(255, Math.max(0, newG));
                 newB = Math.min(255, Math.max(0, newB));
@@ -187,4 +138,5 @@ public class ConvolutionFilter {
         }
         return output;
     }
+    
 }

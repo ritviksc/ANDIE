@@ -1,5 +1,6 @@
 package cosc202.andie;
 
+import static cosc202.andie.ConvolutionFilter.Mode.BLUR;
 import java.awt.image.*;
 import java.util.*;
 
@@ -86,9 +87,9 @@ public class MeanFilter implements ImageOperation, java.io.Serializable {
     public BufferedImage apply(BufferedImage input) {
         int size = (2 * radius + 1) * (2 * radius + 1);
         float[] kernel = new float[size];
-        Arrays.fill(kernel, 1.0f / size);
+        Arrays.fill(kernel, 1.0f);
         ConvolutionFilter convOp = new ConvolutionFilter();
-        BufferedImage output = convOp.applyConvolution(input, kernel, false);
+        BufferedImage output = convOp.applyConvolution(input, kernel, BLUR);
         return output;
     }
 

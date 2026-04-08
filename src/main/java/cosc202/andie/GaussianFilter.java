@@ -1,5 +1,6 @@
 package cosc202.andie;
 
+import static cosc202.andie.ConvolutionFilter.Mode.BLUR;
 import java.awt.image.*;
 
 /**
@@ -8,10 +9,10 @@ import java.awt.image.*;
  * </p>
  *
  * <p>
- * A Gaussian filter blurs an image by using a Gaussian bell curve
- * and can be implemented by a convolution.
+ * A Gaussian filter blurs an image by using a Gaussian bell curve and can be
+ * implemented by a convolution.
  * </p>
- * 
+ *
  * @author Robert Hannaford
  * @version 1.0
  */
@@ -62,9 +63,10 @@ public class GaussianFilter implements ImageOperation, java.io.Serializable {
      * </p>
      *
      * <p>
-     * As with many filters, the Gaussian filter is implemented via convolution. The
-     * size of the convolution kernel is specified by the {@link radius}. Larger
-
+     * As with many filters, the Gaussian filter is implemented via convolution.
+     * The size of the convolution kernel is specified by the {@link radius}.
+     * Larger
+     *
      * radii lead to stronger blurring with smaller values being much weaker.
      * </p>
      *
@@ -73,25 +75,23 @@ public class GaussianFilter implements ImageOperation, java.io.Serializable {
      */
     @Override
     public BufferedImage apply(BufferedImage input) {
-        
+
         int size = (2 * radius + 1) * (2 * radius + 1);
 
         float[] array = new float[size];
-        float sigma = (float) (1/3.0*radius); // Used in calculating Gaussian
-        int pos = 0; // For tracking where we are in the array
-        for(int y = -radius; y <= radius; y++){
-            
-            for(int x = -radius; x <= radius; x++){
-                
+        float sigma = (float) (1 / 3.0 * radius); // Used in calculating Gaussian
+        for (int y = -radius; y <= radius; y++) {
+
+            for (int x = -radius; x <= radius; x++) {
+
                 array[(y + radius) * (2 * radius + 1) + (x + radius)] = getGaussianValue(x, y, sigma); // Set the value at each co-ordinate
-                pos++; // Go to next spot in array
-                
+
             }
-            
+
         }
 
         ConvolutionFilter convOp = new ConvolutionFilter();
-        BufferedImage output = convOp.applyConvolution(input, array, true);
+        BufferedImage output = convOp.applyConvolution(input, array, BLUR);
 
         return output;
     }
@@ -100,25 +100,26 @@ public class GaussianFilter implements ImageOperation, java.io.Serializable {
      * <p>
      * A function that returns the Gaussian value at a given point
      * </p>
+     *
      * @param x the x co-ordinate
      * @param y the y co-ordinate
      * @param sigma the sigma value
      * @return The value of the Gaussian function at the point
      */
-    private static float getGaussianValue(int x, int y, float sigma){
-        
-        float firstHalf = 1f/(2*(float) Math.PI*(sigma*sigma));
+    private static float getGaussianValue(int x, int y, float sigma) {
+
+        float firstHalf = 1f / (2 * (float) Math.PI * (sigma * sigma));
         float exponent;
-        try{
+        try {
             exponent = -((x * x + y * y) / (2f * sigma * sigma));
         } catch (ArithmeticException e) {
             exponent = 0;
         }
 
         float secondHalf = (float) Math.exp(exponent);
-        
-        float value = firstHalf*secondHalf;
-        
+
+        float value = firstHalf * secondHalf;
+
         return value;
     }
 

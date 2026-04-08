@@ -1,13 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cosc202.andie;
 
+import static cosc202.andie.ConvolutionFilter.Mode.BLUR;
 import java.awt.image.BufferedImage;
-import java.awt.image.ConvolveOp;
-import java.awt.image.Kernel;
-import java.util.Arrays;
 
 /**
  * <p>
@@ -57,7 +51,7 @@ public class SharpenFilter implements ImageOperation, java.io.Serializable {
                         0, -1/2.0f, 0
         };
         ConvolutionFilter convOp = new ConvolutionFilter();
-        BufferedImage output = convOp.applyConvolution(input, array, true);
+        BufferedImage output = convOp.applyConvolution(input, array, BLUR);
 
         return output;
     }

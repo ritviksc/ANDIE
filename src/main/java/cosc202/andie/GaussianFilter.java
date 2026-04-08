@@ -78,38 +78,20 @@ public class GaussianFilter implements ImageOperation, java.io.Serializable {
 
         float[] array = new float[size];
         float sigma = (float) (1/3.0*radius); // Used in calculating Gaussian
-        float sum = 0f; // Running total for normalisation
         int pos = 0; // For tracking where we are in the array
         for(int y = -radius; y <= radius; y++){
             
             for(int x = -radius; x <= radius; x++){
                 
-                array[pos] = getGaussianValue(x, y, sigma); // Set the value at each co-ordinate
-                sum += array[pos]; // Add to total
+                array[(y + radius) * (2 * radius + 1) + (x + radius)] = getGaussianValue(x, y, sigma); // Set the value at each co-ordinate
                 pos++; // Go to next spot in array
                 
             }
             
         }
-        
-        pos = 0; // Go back to the start of the list
-        
-        for(int y = -radius; y <= radius; y++){
-            
-            for(int x = -radius; x <= radius; x++){
 
-                array[pos] /= sum;  // Normalise each value
-
-                pos++; // Go to next array slot
-                
-            }
-            
-        }
-
-        Kernel kernel = new Kernel(2 * radius + 1, 2 * radius + 1, array);
-        ConvolveOp convOp = new ConvolveOp(kernel);
-        BufferedImage output = new BufferedImage(input.getColorModel(), input.copyData(null), input.isAlphaPremultiplied(), null);
-        convOp.filter(input, output);
+        ConvolutionFilter convOp = new ConvolutionFilter();
+        BufferedImage output = convOp.applyConvolution(input, array, true);
 
         return output;
     }

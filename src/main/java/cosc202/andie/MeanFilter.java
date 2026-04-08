@@ -30,6 +30,10 @@ public class MeanFilter implements ImageOperation, java.io.Serializable {
      * a 5x5 filter, and so forth.
      */
     private int radius;
+    private static final int ALPHA = 0;
+    private static final int RED = 1;
+    private static final int GREEN = 2;
+    private static final int BLUE = 3; // For clarity
 
     /**
      * <p>
@@ -81,14 +85,66 @@ public class MeanFilter implements ImageOperation, java.io.Serializable {
     @Override
     public BufferedImage apply(BufferedImage input) {
         int size = (2 * radius + 1) * (2 * radius + 1);
-        float[] array = new float[size];
-        Arrays.fill(array, 1.0f / size);
+        float[] kernel = new float[size];
+        int kWdith = (2 * radius + 1);
+        int height = input.getHeight();
+        int width = input.getWidth();
 
-        Kernel kernel = new Kernel(2 * radius + 1, 2 * radius + 1, array);
-        ConvolveOp convOp = new ConvolveOp(kernel);
+        Arrays.fill(kernel, 1.0f / size);
         BufferedImage output = new BufferedImage(input.getColorModel(), input.copyData(null), input.isAlphaPremultiplied(), null);
-        convOp.filter(input, output);
+        
+        int kernelSum = 0;
+        
+        for(float value: kernel){
+            kernelSum += value;
+        }
+        
+        if(kernelSum == 0) kernelSum = 1; // Prevent divide by zero errors
+        
+        int colourChannels = 4;
 
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+
+                int[] sums = new int[colourChannels]; // get running sum
+
+                for (int ky = -radius; ky <= radius; ky++) { // iterate over kernel area
+
+                    for (int kx = -radius; kx <= radius; kx++) {
+                        int yInitial = y + ky;
+                        int xInitial = x + kx;
+
+                        int yCorrected = Math.max(0, Math.min(yInitial, height - 1));
+                        int xCorrected = Math.max(0, Math.min(xInitial, width - 1));
+
+                        int argb = input.getRGB(xCorrected, yCorrected);
+
+                        int a = (argb >>> 24) & 0xFF;
+                        int r = (argb >>> 16) & 0xFF;
+                        int g = (argb >>> 8) & 0xFF;
+                        int b = argb & 0xFF;
+
+                        float filterWeight = kernel[(ky + radius) * kWdith + (kx + radius)]; // get the value at the specified kernel co-ordinate
+                        
+                        sums[ALPHA] += (a * filterWeight);
+                        sums[RED] += (r * filterWeight);
+                        sums[GREEN] += (g * filterWeight);
+                        sums[BLUE] += (b * filterWeight);
+                        
+                    }
+                }
+                
+                int newA = Math.min(255, Math.max(0, sums[ALPHA]));
+                int newR = Math.min(255, Math.max(0, sums[RED]));
+                int newG = Math.min(255, Math.max(0, sums[GREEN]));
+                int newB = Math.min(255, Math.max(0, sums[BLUE]));
+                
+                int argb = (newA << 24) | (newR << 16) | (newG << 8) | newB;
+                
+                output.setRGB(x, y, argb);
+                
+            }
+        }
         return output;
     }
 

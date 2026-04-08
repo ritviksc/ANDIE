@@ -89,18 +89,18 @@ public class ImagePanel extends JPanel implements MouseListener, MouseMotionList
 
             if (selection != null) {
                 String[] options = {
-                    "Crop as Rectangle",
-                    "Crop as Ellipse",
-                    "Draw Line Between Corners",
-                    "Draw Rectangle",
-                    "Draw Ellipse",
-                    "Cancel"
+                    I18nManager.get("crop_rectangle"),
+                    I18nManager.get("crop_ellipse"),
+                    I18nManager.get("draw_line"),
+                    I18nManager.get("draw_rectangle"),
+                    I18nManager.get("draw_ellipse"),
+                    I18nManager.get("cancel_crop")
                 };
 
                 int choice = JOptionPane.showOptionDialog(
                     ImagePanel.this,
-                    "Choose action for the selected region:",
-                    "Selection Options",
+                    I18nManager.get("crop_action"),
+                    I18nManager.get("crop_selection"),
                     JOptionPane.DEFAULT_OPTION,
                     JOptionPane.PLAIN_MESSAGE,
                     null,
@@ -326,7 +326,7 @@ public class ImagePanel extends JPanel implements MouseListener, MouseMotionList
      */
     private ShapeOptions getShapeOptions() {
         JColorChooser colorChooser = new JColorChooser();
-        String[] styles = {"Outline", "Solid"};
+        String[] styles = {I18nManager.get("outline"), I18nManager.get("solid")};
         JComboBox<String> styleBox = new JComboBox<>(styles);
 
         JPanel panel = new JPanel(new BorderLayout());
@@ -334,9 +334,9 @@ public class ImagePanel extends JPanel implements MouseListener, MouseMotionList
         panel.add(colorChooser, BorderLayout.CENTER);
 
         int result = JOptionPane.showConfirmDialog(
-            this, // better than null
+            this, // child of Image Panel
             panel,
-            "Shape Options",
+            I18nManager.get("shape_options"),
             JOptionPane.OK_CANCEL_OPTION,
             JOptionPane.PLAIN_MESSAGE
         );

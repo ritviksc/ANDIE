@@ -84,7 +84,6 @@ public class GaussianFilter implements ImageOperation, java.io.Serializable {
             
             for(int x = -radius; x <= radius; x++){
                 
-//                System.out.println(x + " " + y);
                 array[pos] = getGaussianValue(x, y, sigma); // Set the value at each co-ordinate
                 sum += array[pos]; // Add to total
                 pos++; // Go to next spot in array
@@ -101,13 +100,9 @@ public class GaussianFilter implements ImageOperation, java.io.Serializable {
 
                 array[pos] /= sum;  // Normalise each value
 
-//                System.out.print(array[pos] + "   "); // Print out the array
                 pos++; // Go to next array slot
                 
             }
-            
-//            System.out.println();
-
             
         }
 

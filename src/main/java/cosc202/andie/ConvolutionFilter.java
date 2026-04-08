@@ -110,9 +110,9 @@ public class ConvolutionFilter {
 
                 int newR, newG, newB;
                 if (useAlphaWeighting) {
-                    newR = sumWeight == 0 ? 0 : (int) (sums[BLUE] / sumWeight);
+                    newR = sumWeight == 0 ? 0 : (int) (sums[RED] / sumWeight);
                     newG = sumWeight == 0 ? 0 : (int) (sums[GREEN] / sumWeight);
-                    newB = sumWeight == 0 ? 0 : (int) (sums[RED] / sumWeight);
+                    newB = sumWeight == 0 ? 0 : (int) (sums[BLUE] / sumWeight);
                 } else {
                     newR = (int) sums[RED];
                     newG = (int) sums[GREEN];

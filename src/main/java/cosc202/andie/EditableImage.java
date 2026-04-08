@@ -263,6 +263,7 @@ class EditableImage {
      */
     public void apply(ImageOperation op) {
         isSaved = false;
+        redoOps.clear(); // clear redo operations to prevent bugs
         current = op.apply(current);
         ops.add(op);
     }

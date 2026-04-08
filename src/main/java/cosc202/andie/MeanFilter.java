@@ -141,7 +141,7 @@ public class MeanFilter implements ImageOperation, java.io.Serializable {
                 int newG = (int) Math.min(255, (int) Math.max(0, Math.round(sums[GREEN])/sumWeight));
                 int newB = (int) Math.min(255, (int) Math.max(0, Math.round(sums[BLUE])/sumWeight));
                 
-                int argb = (newA << 24) | (newR << 16) | (newG << 8) | newB;
+                int argb = (outA << 24) | (newR << 16) | (newG << 8) | newB;
                 
                 output.setRGB(x, y, argb);
                 

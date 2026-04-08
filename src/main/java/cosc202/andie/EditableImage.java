@@ -72,7 +72,6 @@ class EditableImage {
     
     private boolean isSaved;
 
-    private boolean isCropped;
 
     /**
      * <p>
@@ -264,8 +263,8 @@ class EditableImage {
     public void apply(ImageOperation op) {
         isSaved = false;
         redoOps.clear(); // clear redo operations to prevent bugs
-        current = op.apply(current);
         ops.add(op);
+        refresh();
     }
 
     /**
@@ -289,7 +288,8 @@ class EditableImage {
      */
     public void redo() {
         if (!redoOps.isEmpty()){
-            apply(redoOps.pop());
+            ops.push(redoOps.pop());
+            refresh();
             isSaved = false;
         }
     }
@@ -313,6 +313,7 @@ class EditableImage {
     public void setOriginal(BufferedImage i){
         original = i;
     }
+
     
     /**
      * <p>

@@ -107,7 +107,7 @@ public class MeanFilter implements ImageOperation, java.io.Serializable {
             for (int x = 0; x < width; x++) {
 
                 float[] sums = new float[colourChannels]; // get running sum
-                
+                float sumWeight = 0;
                 int newA = (input.getRGB(x, y) >>> 24) & 0xff;
                 
                 for (int ky = -radius; ky <= radius; ky++) { // iterate over kernel area
@@ -128,17 +128,18 @@ public class MeanFilter implements ImageOperation, java.io.Serializable {
 
                         float filterWeight = kernel[(ky + radius) * kWdith + (kx + radius)]; // get the value at the specified kernel co-ordinate
                         
-                        
-                        sums[RED] += (r * filterWeight);
-                        sums[GREEN] += (g * filterWeight);
-                        sums[BLUE] += (b * filterWeight);
-                        
+                        sums[ALPHA] += a * filterWeight;
+                        sums[RED] += (r * a * filterWeight);
+                        sums[GREEN] += (g * a * filterWeight);
+                        sums[BLUE] += (b * a * filterWeight);
+                        sumWeight += a * filterWeight;
                     }
                 }
-                 
-                int newR = (int) Math.min(255, Math.max(0, sums[RED]));
-                int newG = (int) Math.min(255, Math.max(0, sums[GREEN]));
-                int newB = (int) Math.min(255, Math.max(0, sums[BLUE]));
+                
+                int outA = (int) Math.min(255, Math.max(0, Math.round(sums[ALPHA])));
+                int newR = (int) Math.min(255, (int) Math.max(0, Math.round(sums[RED])/sumWeight));
+                int newG = (int) Math.min(255, (int) Math.max(0, Math.round(sums[GREEN])/sumWeight));
+                int newB = (int) Math.min(255, (int) Math.max(0, Math.round(sums[BLUE])/sumWeight));
                 
                 int argb = (newA << 24) | (newR << 16) | (newG << 8) | newB;
                 

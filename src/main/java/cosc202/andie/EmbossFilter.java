@@ -1,8 +1,7 @@
 package cosc202.andie;
 
-import static cosc202.andie.ConvolutionFilter.Mode.BLUR;
+import static cosc202.andie.ConvolutionFilter.Mode.EMBOSS;
 import java.awt.image.*;
-import java.util.*;
 
 /**
  * <p>
@@ -139,7 +138,7 @@ public class EmbossFilter implements ImageOperation, java.io.Serializable {
         }
         
         ConvolutionFilter convOp = new ConvolutionFilter();
-        BufferedImage output = convOp.applyConvolution(input, kernel, BLUR);
+        BufferedImage output = convOp.applyConvolution(input, kernel, EMBOSS);
         return output;
     }
 

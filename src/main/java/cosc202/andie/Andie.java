@@ -128,6 +128,7 @@ public class Andie {
         toolbarPanel.add(editActions.createToolBar(), "EDIT");
         toolbarPanel.add(viewActions.createToolBar(), "VIEW");
         toolbarPanel.add(colourActions.createToolBar(), "COLOUR");
+        toolbarPanel.add(filterActions.createToolBar(), "FILTER");
              
         CardLayout cardLayout = (CardLayout) toolbarPanel.getLayout();
         
@@ -149,6 +150,12 @@ public class Andie {
             toolbarPanel.setVisible(true);
         });
         
+        filterButton.addActionListener((ActionEvent e) -> {
+            cardLayout.show(toolbarPanel, "FILTER");
+            setActiveButton(colourButton);
+            toolbarPanel.setVisible(true);
+        });
+        
         //drop down menu for file
         JMenu fileMenu = fileActions.createMenu();
         JPopupMenu filePopup = fileMenu.getPopupMenu();
@@ -156,13 +163,13 @@ public class Andie {
         fileButton.addActionListener(e -> {
             filePopup.show(fileButton, 0, fileButton.getHeight());
         });
-        //drop down menu for filter
-        JMenu filterMenu = filterActions.createMenu();
-        JPopupMenu filterPopup = filterMenu.getPopupMenu();
-        
-        filterButton.addActionListener( e -> {
-                filterPopup.show(filterButton, 0, filterButton.getHeight());
-        });
+//        //drop down menu for filter
+//        JMenu filterMenu = filterActions.createMenu();
+//        JPopupMenu filterPopup = filterMenu.getPopupMenu();
+//        
+//        filterButton.addActionListener( e -> {
+//                filterPopup.show(filterButton, 0, filterButton.getHeight());
+//        });
         //drop down menu for settings
         JMenu settingsMenu = languageActions.createMenu();
         JPopupMenu settingsPopup = settingsMenu.getPopupMenu();

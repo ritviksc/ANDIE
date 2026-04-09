@@ -24,12 +24,7 @@ import javax.swing.text.NumberFormatter;
  * @author Steven Mills, Robert Hannaford
  * @version 1.1
  */
-public class FilterActions {
-
-    /**
-     * A list of actions for the Filter menu.
-     */
-    protected ArrayList<Action> actions;
+public class FilterActions extends ToolbarActions{
 
     /**
      * <p>
@@ -38,11 +33,11 @@ public class FilterActions {
      */
     public FilterActions() {
         actions = new ArrayList<>();
-        actions.add(new MeanFilterAction(I18nManager.get("Mean"), null, I18nManager.get("Mean_desc"), KeyEvent.VK_M));
-        actions.add(new SharpenFilterAction(I18nManager.get("Sharpen"), null, I18nManager.get("Sharpen_desc"), KeyEvent.VK_S));
-        actions.add(new GaussianFilterAction(I18nManager.get("Gaussian"), null, I18nManager.get("Gaussian_desc"), KeyEvent.VK_G));
-        actions.add(new MedianFilterAction(I18nManager.get("Median"), null, I18nManager.get("Median_desc"), KeyEvent.VK_D));
-        actions.add(new EmbossFilterAction("Emboss", null, "Apply an emboss filter", KeyEvent.VK_E));
+        actions.add(new MeanFilterAction(I18nManager.get("Mean"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Colour/greyscale.png")), I18nManager.get("Mean_desc"), KeyEvent.VK_M));
+        actions.add(new SharpenFilterAction(I18nManager.get("Sharpen"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Colour/greyscale.png")), I18nManager.get("Sharpen_desc"), KeyEvent.VK_S));
+        actions.add(new GaussianFilterAction(I18nManager.get("Gaussian"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Colour/greyscale.png")), I18nManager.get("Gaussian_desc"), KeyEvent.VK_G));
+        actions.add(new MedianFilterAction(I18nManager.get("Median"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Colour/greyscale.png")), I18nManager.get("Median_desc"), KeyEvent.VK_D));
+        actions.add(new EmbossFilterAction("Emboss", new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Colour/greyscale.png")), "Apply an emboss filter", KeyEvent.VK_E));
     }
 
     /**
@@ -415,37 +410,20 @@ public class FilterActions {
                 return;
             }
 
-            // Determine the radius - ask the user.
-            int radius = 0;
-            int minRadius = 0;
-            int maxRadius = 8;
+            String[] options = {"Right", "Down-right", "Down", "Down-left", "Left", "Up-left", "Up", "Up-right"};
+            JComboBox<String> directionCombo = new JComboBox<>(options);
 
-            SpinnerNumberModel radiusModel = new SpinnerNumberModel(minRadius, minRadius, maxRadius, 1);
-
-            JSpinner radiusSpinner = new JSpinner(radiusModel);
-
-            JSpinner.NumberEditor editor = new JSpinner.NumberEditor(radiusSpinner, "#");
-            JFormattedTextField radiusInput = editor.getTextField();
-            radiusSpinner.setEditor(editor);
-
-            NumberFormatter formatter = (NumberFormatter) radiusInput.getFormatter();
-
-            formatter.setValueClass(Integer.class);
-
-            formatter.setAllowsInvalid(false);
-            formatter.setCommitsOnValidEdit(true);
-
-            int option = JOptionPane.showOptionDialog(null, radiusSpinner, I18nManager.get("Filter_radius_msg_median"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
-
-            // Check the return value from the dialog box.
-            if (option == JOptionPane.CANCEL_OPTION) {
-                radius = 0;
-                return;
-            } else if (option == JOptionPane.OK_OPTION) {
-                radius = radiusModel.getNumber().intValue();
-            }
+            int option = JOptionPane.showOptionDialog(null, directionCombo,
+                    "Select Emboss Direction",
+                    JOptionPane.OK_CANCEL_OPTION,
+                    JOptionPane.QUESTION_MESSAGE, null, null, null);
+            
+            int direction = directionCombo.getSelectedIndex();
+            
+            if(option != JOptionPane.OK_OPTION) return;
+            
             // Create and apply the filter
-            target.getImage().apply(new EmbossFilter(radius));
+            target.getImage().apply(new EmbossFilter(direction));
             target.repaint();
             target.getParent().revalidate();
         }

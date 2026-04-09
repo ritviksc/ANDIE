@@ -42,7 +42,7 @@ public class FilterActions {
         actions.add(new SharpenFilterAction(I18nManager.get("Sharpen"), null, I18nManager.get("Sharpen_desc"), KeyEvent.VK_S));
         actions.add(new GaussianFilterAction(I18nManager.get("Gaussian"), null, I18nManager.get("Gaussian_desc"), KeyEvent.VK_G));
         actions.add(new MedianFilterAction(I18nManager.get("Median"), null, I18nManager.get("Median_desc"), KeyEvent.VK_D));
-
+        actions.add(new EmbossFilterAction("Emboss", null, "Apply an emboss filter", KeyEvent.VK_E));
     }
 
     /**
@@ -445,7 +445,7 @@ public class FilterActions {
                 radius = radiusModel.getNumber().intValue();
             }
             // Create and apply the filter
-            target.getImage().apply(new MedianFilter(radius));
+            target.getImage().apply(new EmbossFilter(radius));
             target.repaint();
             target.getParent().revalidate();
         }

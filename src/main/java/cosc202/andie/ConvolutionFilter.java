@@ -100,6 +100,8 @@ public class ConvolutionFilter {
 
                         } else {
 
+                            
+
                             sums[RED] += (r * filterWeight);
                             sums[GREEN] += (g * filterWeight);
                             sums[BLUE] += (b * filterWeight);
@@ -124,7 +126,7 @@ public class ConvolutionFilter {
                     newG += 128;
                     newB += 128;
                 }
-                
+
                 int newA = (input.getRGB(x, y) >>> 24) & 0xff;
                 newR = Math.min(255, Math.max(0, newR));
                 newG = Math.min(255, Math.max(0, newG));
@@ -138,5 +140,5 @@ public class ConvolutionFilter {
         }
         return output;
     }
-    
+
 }

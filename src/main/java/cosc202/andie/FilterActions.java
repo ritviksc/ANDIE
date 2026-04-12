@@ -33,12 +33,12 @@ public class FilterActions extends ToolbarActions{
      */
     public FilterActions() {
         actions = new ArrayList<>();
-        actions.add(new MeanFilterAction(I18nManager.get("Mean"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Colour/greyscale.png")), I18nManager.get("Mean_desc"), KeyEvent.VK_M));
-        actions.add(new SharpenFilterAction(I18nManager.get("Sharpen"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Colour/greyscale.png")), I18nManager.get("Sharpen_desc"), KeyEvent.VK_S));
-        actions.add(new GaussianFilterAction(I18nManager.get("Gaussian"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Colour/greyscale.png")), I18nManager.get("Gaussian_desc"), KeyEvent.VK_G));
-        actions.add(new MedianFilterAction(I18nManager.get("Median"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Colour/greyscale.png")), I18nManager.get("Median_desc"), KeyEvent.VK_D));
-        actions.add(new EmbossFilterAction(I18nManager.get("Emboss"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Colour/greyscale.png")), I18nManager.get("Emboss_desc"), KeyEvent.VK_E));
-        actions.add(new SobelFilterAction(I18nManager.get("Sobel"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Colour/greyscale.png")), I18nManager.get("Sobel_desc"), KeyEvent.VK_O));
+        actions.add(new MeanFilterAction(I18nManager.get("Mean"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Filters/Mean.png")), I18nManager.get("Mean_desc"), KeyEvent.VK_M));
+        actions.add(new SharpenFilterAction(I18nManager.get("Sharpen"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Filters/Sharpen.png")), I18nManager.get("Sharpen_desc"), KeyEvent.VK_S));
+        actions.add(new GaussianFilterAction(I18nManager.get("Gaussian"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Filters/Gaussian.png")), I18nManager.get("Gaussian_desc"), KeyEvent.VK_G));
+        actions.add(new MedianFilterAction(I18nManager.get("Median"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Filters/Median.png")), I18nManager.get("Median_desc"), KeyEvent.VK_D));
+        actions.add(new EmbossFilterAction(I18nManager.get("Emboss"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Filters/Emboss.png")), I18nManager.get("Emboss_desc"), KeyEvent.VK_E));
+        actions.add(new SobelFilterAction(I18nManager.get("Sobel"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Filters/Sobel.png")), I18nManager.get("Sobel_desc"), KeyEvent.VK_O));
         
     }
 

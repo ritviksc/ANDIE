@@ -88,7 +88,7 @@ public class SobelFilter implements ImageOperation, java.io.Serializable {
         BufferedImage output = input;
         BufferedImage horizontal = input;
         BufferedImage vertical = input;
-        
+
         if (direction == 0 || direction == 2) {
             kernel = new float[]{-0.5f, 0.0f, 0.5f,
                 -1.0f, 0.0f, 1.0f,
@@ -96,7 +96,9 @@ public class SobelFilter implements ImageOperation, java.io.Serializable {
             };
 
             horizontal = convOp.applyConvolution(input, kernel, EMBOSS);
-
+            if (direction == 0) {
+                output = horizontal;
+            }
         }
 
         if (direction == 1 || direction == 2) {
@@ -107,7 +109,9 @@ public class SobelFilter implements ImageOperation, java.io.Serializable {
             };
 
             vertical = convOp.applyConvolution(input, kernel, EMBOSS);
-
+            if (direction == 1) {
+                output = vertical;
+            }
         }
 
         if (direction == 2) {

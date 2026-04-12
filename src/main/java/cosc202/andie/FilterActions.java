@@ -476,7 +476,7 @@ public class FilterActions extends ToolbarActions{
                 return;
             }
 
-            String[] options = {"Right", "Down"};
+            String[] options = {"Horizontal", "Vertical", "Combined"};
             JComboBox<String> directionCombo = new JComboBox<>(options);
 
             int option = JOptionPane.showOptionDialog(null, directionCombo,

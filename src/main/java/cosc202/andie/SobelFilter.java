@@ -56,14 +56,14 @@ public class SobelFilter implements ImageOperation, java.io.Serializable {
      * </p
      * >
      * <p>
-     * By default, a Sobel filter has direction 1.
+     * By default, a Sobel filter has direction 2 (combined).
      * </p>
      *
      * @see SobelFilter(int)
      */
     @SuppressWarnings("unused")
     SobelFilter() {
-        this(1);
+        this(2);
     }
 
     /**

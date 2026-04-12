@@ -37,8 +37,8 @@ public class FilterActions extends ToolbarActions{
         actions.add(new SharpenFilterAction(I18nManager.get("Sharpen"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Colour/greyscale.png")), I18nManager.get("Sharpen_desc"), KeyEvent.VK_S));
         actions.add(new GaussianFilterAction(I18nManager.get("Gaussian"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Colour/greyscale.png")), I18nManager.get("Gaussian_desc"), KeyEvent.VK_G));
         actions.add(new MedianFilterAction(I18nManager.get("Median"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Colour/greyscale.png")), I18nManager.get("Median_desc"), KeyEvent.VK_D));
-        actions.add(new EmbossFilterAction("Emboss", new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Colour/greyscale.png")), "Apply an emboss filter", KeyEvent.VK_E));
-        actions.add(new SobelFilterAction("Sobel", new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Colour/greyscale.png")), "Apply an emboss filter", KeyEvent.VK_E));
+        actions.add(new EmbossFilterAction(I18nManager.get("Emboss"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Colour/greyscale.png")), I18nManager.get("Emboss_desc"), KeyEvent.VK_E));
+        actions.add(new SobelFilterAction(I18nManager.get("Sobel"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Colour/greyscale.png")), I18nManager.get("Sobel_desc"), KeyEvent.VK_O));
         
     }
 
@@ -412,11 +412,20 @@ public class FilterActions extends ToolbarActions{
                 return;
             }
 
-            String[] options = {"Right", "Down-right", "Down", "Down-left", "Left", "Up-left", "Up", "Up-right"};
+            String[] options = {
+                I18nManager.get("Right"),
+                I18nManager.get("Down_right"),
+                I18nManager.get("Down"),
+                I18nManager.get("Down_left"),
+                I18nManager.get("Left"),
+                I18nManager.get("Up_left"),
+                I18nManager.get("Up"),
+                I18nManager.get("Up_right")
+            };
             JComboBox<String> directionCombo = new JComboBox<>(options);
 
             int option = JOptionPane.showOptionDialog(null, directionCombo,
-                    "Select Emboss Direction",
+                    I18nManager.get("Emboss_directions_msg"),
                     JOptionPane.OK_CANCEL_OPTION,
                     JOptionPane.QUESTION_MESSAGE, null, null, null);
             
@@ -476,11 +485,15 @@ public class FilterActions extends ToolbarActions{
                 return;
             }
 
-            String[] options = {"Horizontal", "Vertical", "Combined"};
+            String[] options = {
+                I18nManager.get("Horizontal"),
+                I18nManager.get("Vertical"),
+                I18nManager.get("Combined")
+            };
             JComboBox<String> directionCombo = new JComboBox<>(options);
 
             int option = JOptionPane.showOptionDialog(null, directionCombo,
-                    "Select Sobel Direction",
+                    I18nManager.get("Sobel_options_msg"),
                     JOptionPane.OK_CANCEL_OPTION,
                     JOptionPane.QUESTION_MESSAGE, null, null, null);
             

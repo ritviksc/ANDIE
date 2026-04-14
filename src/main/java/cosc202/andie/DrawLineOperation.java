@@ -23,7 +23,7 @@ public class DrawLineOperation implements ImageOperation, java.io.Serializable {
         BufferedImage copy = new BufferedImage(
             input.getWidth(),
             input.getHeight(),
-            input.getType()
+            BufferedImage.TYPE_INT_ARGB
         );
 
         Graphics2D g2 = copy.createGraphics();

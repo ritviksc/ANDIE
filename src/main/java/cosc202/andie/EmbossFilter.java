@@ -52,11 +52,11 @@ public class EmbossFilter implements ImageOperation, java.io.Serializable {
 
     /**
      * <p>
-     * Construct a Emboss filter with the default size.
+     * Construct an Emboss filter with the default size.
      * </p
      * >
      * <p>
-     * By default, a Emboss filter has radius 1.
+     * By default, an Emboss filter has direction 1.
      * </p>
      *
      * @see EmbossFilter(int)

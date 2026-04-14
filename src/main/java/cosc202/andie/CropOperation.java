@@ -5,7 +5,7 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 /* Class for cropping a rectangle, which is considerd the default operation when a user selects a area to manipulate given a image */
-public class CropOperation implements ImageOperation {
+public class CropOperation implements ImageOperation, java.io.Serializable {
 
     private Rectangle selection;
 

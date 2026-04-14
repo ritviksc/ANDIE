@@ -24,7 +24,8 @@ import javax.swing.*;
  * @author Steven Mills
  * @version 1.0
  */
-public class ColourActions extends ToolbarActions{
+public class ColourActions extends ToolbarActions {
+
     /**
      * <p>
      * Create a set of Colour menu actions.
@@ -32,22 +33,26 @@ public class ColourActions extends ToolbarActions{
      */
     public ColourActions() {
         actions = new ArrayList<>();
-        actions.add(new ConvertToGreyAction(I18nManager.get("greyscale"), 
-                new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Colour/greyscale.png")), 
-                I18nManager.get("greyscale_desc"), 
+        actions.add(new ConvertToGreyAction(I18nManager.get("greyscale"),
+                new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Colour/greyscale.png")),
+                I18nManager.get("greyscale_desc"),
                 KeyEvent.VK_G));
-        actions.add(new ThresholdAction(I18nManager.get("threshold"), 
-                new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Colour/dark.png")), 
-                I18nManager.get("threshold_desc"), 
+        actions.add(new ThresholdAction(I18nManager.get("threshold"),
+                new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Colour/dark.png")),
+                I18nManager.get("threshold_desc"),
                 KeyEvent.VK_T));
         actions.add(new InversionAction(I18nManager.get("invert"),
-                new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Colour/invert.png")), 
-                I18nManager.get("invert_desc"), 
+                new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Colour/invert.png")),
+                I18nManager.get("invert_desc"),
                 KeyEvent.VK_I));
         actions.add(new ChannelSwapAction(I18nManager.get("channel_swap"),
-                new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Colour/rgb.png")), 
+                new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Colour/rgb.png")),
                 I18nManager.get("channel_swap_desc"),
                 KeyEvent.VK_C));
+        actions.add(new BrightnessAndContrastAction(I18nManager.get("brightness_contrast"),
+                new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Colour/brightness.png")),
+                I18nManager.get("brightness_contrast_desc"),
+                KeyEvent.VK_B));
 
     }
 
@@ -289,6 +294,63 @@ public class ColourActions extends ToolbarActions{
 
             int selectedIndex = colourChannelCycle.getSelectedIndex(); // 0–5
             target.getImage().apply(new ColourChannelSwapping(selectedIndex));
+            target.repaint();
+            target.getParent().revalidate();
+        }
+    }
+
+    /**
+     * <p>
+     * Action to adjust brightness and contrast of an image.
+     * </p>
+     */
+
+    public class BrightnessAndContrastAction extends ImageAction {
+
+        BrightnessAndContrastAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+            super(name, icon, desc, mnemonic);
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // No image loaded error
+            if (target.getImage() == null || target.getImage().getCurrentImage() == null) {
+                JOptionPane.showMessageDialog(
+                        null,
+                        I18nManager.get("brightness_no_image"),
+                        I18nManager.get("error_title"),
+                        JOptionPane.ERROR_MESSAGE
+                );
+                return;
+            }
+
+            String brightnessInput = JOptionPane.showInputDialog(I18nManager.get("brightness_prompt"));
+            if (brightnessInput == null) {
+                return;
+            }
+
+            String contrastInput = JOptionPane.showInputDialog(I18nManager.get("contrast_prompt"));
+            if (contrastInput == null) {
+                return;
+            }
+
+            double brightness;
+            double contrast;
+
+            try {
+                brightness = Double.parseDouble(brightnessInput);
+                contrast = Double.parseDouble(contrastInput);
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(
+                        null,
+                        I18nManager.get("brightness_contrast_not_number"),
+                        I18nManager.get("error_title"),
+                        JOptionPane.ERROR_MESSAGE
+                );
+                return;
+            }
+
+            target.getImage().apply(new BrightnessAndContrastAdjustment(brightness, contrast));
             target.repaint();
             target.getParent().revalidate();
         }

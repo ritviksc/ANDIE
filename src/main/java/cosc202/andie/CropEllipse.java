@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 import java.awt.AlphaComposite;
 
 /* Crop ellipse out of selected area in the image loaded */
-public class CropEllipse implements ImageOperation {
+public class CropEllipse implements ImageOperation, java.io.Serializable {
 
     private Rectangle selection;
 

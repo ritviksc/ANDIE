@@ -33,11 +33,13 @@ public class FilterActions extends ToolbarActions{
      */
     public FilterActions() {
         actions = new ArrayList<>();
-        actions.add(new MeanFilterAction(I18nManager.get("Mean"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Colour/greyscale.png")), I18nManager.get("Mean_desc"), KeyEvent.VK_M));
-        actions.add(new SharpenFilterAction(I18nManager.get("Sharpen"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Colour/greyscale.png")), I18nManager.get("Sharpen_desc"), KeyEvent.VK_S));
-        actions.add(new GaussianFilterAction(I18nManager.get("Gaussian"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Colour/greyscale.png")), I18nManager.get("Gaussian_desc"), KeyEvent.VK_G));
-        actions.add(new MedianFilterAction(I18nManager.get("Median"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Colour/greyscale.png")), I18nManager.get("Median_desc"), KeyEvent.VK_D));
-        actions.add(new EmbossFilterAction("Emboss", new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Colour/greyscale.png")), "Apply an emboss filter", KeyEvent.VK_E));
+        actions.add(new MeanFilterAction(I18nManager.get("Mean"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Filters/Mean.png")), I18nManager.get("Mean_desc"), KeyEvent.VK_M));
+        actions.add(new SharpenFilterAction(I18nManager.get("Sharpen"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Filters/Sharpen.png")), I18nManager.get("Sharpen_desc"), KeyEvent.VK_S));
+        actions.add(new GaussianFilterAction(I18nManager.get("Gaussian"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Filters/Gaussian.png")), I18nManager.get("Gaussian_desc"), KeyEvent.VK_G));
+        actions.add(new MedianFilterAction(I18nManager.get("Median"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Filters/Median.png")), I18nManager.get("Median_desc"), KeyEvent.VK_D));
+        actions.add(new EmbossFilterAction(I18nManager.get("Emboss"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Filters/Emboss.png")), I18nManager.get("Emboss_desc"), KeyEvent.VK_E));
+        actions.add(new SobelFilterAction(I18nManager.get("Sobel"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Filters/Sobel.png")), I18nManager.get("Sobel_desc"), KeyEvent.VK_O));
+        
     }
 
     /**
@@ -410,11 +412,20 @@ public class FilterActions extends ToolbarActions{
                 return;
             }
 
-            String[] options = {"Right", "Down-right", "Down", "Down-left", "Left", "Up-left", "Up", "Up-right"};
+            String[] options = {
+                I18nManager.get("Right"),
+                I18nManager.get("Down_right"),
+                I18nManager.get("Down"),
+                I18nManager.get("Down_left"),
+                I18nManager.get("Left"),
+                I18nManager.get("Up_left"),
+                I18nManager.get("Up"),
+                I18nManager.get("Up_right")
+            };
             JComboBox<String> directionCombo = new JComboBox<>(options);
 
             int option = JOptionPane.showOptionDialog(null, directionCombo,
-                    "Select Emboss Direction",
+                    I18nManager.get("Emboss_directions_msg"),
                     JOptionPane.OK_CANCEL_OPTION,
                     JOptionPane.QUESTION_MESSAGE, null, null, null);
             
@@ -430,4 +441,72 @@ public class FilterActions extends ToolbarActions{
 
     }
 
+    /**
+     * <p>
+     * Action to apply a Median blur an image with a Median blurring filter.
+     * </p>
+     *
+     * @see MedianFilter
+     */
+    public class SobelFilterAction extends ImageAction {
+
+        /**
+         * <p>
+         * Create a new Emboss-filter action.
+         * </p>
+         *
+         * @param name The name of the action (ignored if null).
+         * @param icon An icon to use to represent the action (ignored if null).
+         * @param desc A brief description of the action (ignored if null).
+         * @param mnemonic A mnemonic key to use as a shortcut (ignored if
+         * null).
+         */
+        SobelFilterAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+            super(name, icon, desc, mnemonic);
+        }
+
+        /**
+         * <p>
+         * Callback for when the Median-filter-action action is triggered.
+         * </p>
+         *
+         * <p>
+         * This method is called whenever the MedianFilterAction is triggered.
+         * It then applies a {@link MedianFilter}
+         * </p>
+         *
+         * @param e The event triggering this callback.
+         */
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            if (!target.getImage().hasImage()) {
+                JOptionPane.showMessageDialog(null, I18nManager.get("Filter_no_image"), I18nManager.get("Filter_error_title"), JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            String[] options = {
+                I18nManager.get("Horizontal"),
+                I18nManager.get("Vertical"),
+                I18nManager.get("Combined")
+            };
+            JComboBox<String> directionCombo = new JComboBox<>(options);
+
+            int option = JOptionPane.showOptionDialog(null, directionCombo,
+                    I18nManager.get("Sobel_options_msg"),
+                    JOptionPane.OK_CANCEL_OPTION,
+                    JOptionPane.QUESTION_MESSAGE, null, null, null);
+            
+            int direction = directionCombo.getSelectedIndex();
+            
+            if(option != JOptionPane.OK_OPTION) return;
+            
+            // Create and apply the filter
+            target.getImage().apply(new SobelFilter(direction));
+            target.repaint();
+            target.getParent().revalidate();
+        }
+
+    }
+    
 }

@@ -143,7 +143,7 @@ public class Andie {
             setActiveButton(viewButton);
             toolbarPanel.setVisible(true);
         });
-
+        
         colourButton.addActionListener((ActionEvent e) -> {
             cardLayout.show(toolbarPanel, "COLOUR");
             setActiveButton(colourButton);
@@ -152,7 +152,7 @@ public class Andie {
         
         filterButton.addActionListener((ActionEvent e) -> {
             cardLayout.show(toolbarPanel, "FILTER");
-            setActiveButton(colourButton);
+            setActiveButton(filterButton);
             toolbarPanel.setVisible(true);
         });
         

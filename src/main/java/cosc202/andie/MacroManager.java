@@ -5,8 +5,11 @@
 package cosc202.andie;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
@@ -14,13 +17,14 @@ import java.util.ArrayList;
  *
  * @author loekvanbroekhoven
  */
-public class MacroManger {
-    private boolean recording = false;
-    private ArrayList<ImageOperation> operationsList = new ArrayList<>();
+public class MacroManager {
+    private static boolean recording = false;
+    private static final ArrayList<ImageOperation> operationsList = new ArrayList<>();
+  
     /**
      * starts macro and clears previous operationsList
      */
-    public void start(){
+    public static void start(){
         recording = true;
         operationsList.clear();
     }
@@ -30,7 +34,7 @@ public class MacroManger {
      * @return true if macro is saved, false if there where no operations and macro wasn't saved
      * @throws java.io.IOException if save(file) fails
      */
-    public boolean stop(File file) throws IOException{
+    public static boolean stop(File file) throws IOException{
         recording = false;
         
         if(operationsList.isEmpty()){
@@ -41,7 +45,7 @@ public class MacroManger {
         
     }
     
-    public void record(ImageOperation op){
+    public static void record(ImageOperation op){
         if(recording){
             operationsList.add(op);
         }
@@ -51,7 +55,7 @@ public class MacroManger {
      * @param file  
      * @throws IOException 
      */
-    public void save(File file) throws IOException{
+    public static void save(File file) throws IOException{
         try (
             FileOutputStream fileOut = new FileOutputStream(file);
             ObjectOutputStream objOut = new ObjectOutputStream(fileOut);
@@ -60,4 +64,12 @@ public class MacroManger {
         }
     }
     
+    public static ArrayList<ImageOperation> loadMacro(File file) throws FileNotFoundException, IOException, ClassNotFoundException{
+        try (
+            FileInputStream fileIn = new FileInputStream(file);
+            ObjectInputStream objIn = new ObjectInputStream(fileIn);
+        ) {
+            return (ArrayList<ImageOperation>) objIn.readObject();
+    }
+    }
 }

@@ -110,16 +110,7 @@ public class Andie {
         SettingsActions languageActions = new SettingsActions();
         JButton settingsButton = new JButton(I18nManager.get("Setting_title"));
         mainRow.add(settingsButton);
-<<<<<<< HEAD
-        
-        
-        
-        
-        
-           
-=======
 
->>>>>>> 2dee498f2f40d1be089ed8d4b9fa40654fd9bae6
         //aesthetic fix on the buttons
         styleMenuButton(fileButton);
         styleMenuButton(editButton);
@@ -127,13 +118,8 @@ public class Andie {
         styleMenuButton(filterButton);
         styleMenuButton(colourButton);
         styleMenuButton(settingsButton);
-<<<<<<< HEAD
         styleMenuButton(macroButton);
-        
-        
-=======
 
->>>>>>> 2dee498f2f40d1be089ed8d4b9fa40654fd9bae6
         JPanel toolbarPanel = new JPanel(new CardLayout());
         toolbarPanel.setBackground(Color.WHITE);
         toolbarPanel.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.BLACK));
@@ -145,12 +131,7 @@ public class Andie {
         toolbarPanel.add(colourActions.createToolBar(), "COLOUR");
         toolbarPanel.add(macroActions.createToolBar(), "MACRO");
         toolbarPanel.add(filterActions.createToolBar(), "FILTER");
-<<<<<<< HEAD
-        
-             
-=======
 
->>>>>>> 2dee498f2f40d1be089ed8d4b9fa40654fd9bae6
         CardLayout cardLayout = (CardLayout) toolbarPanel.getLayout();
 
         editButton.addActionListener((ActionEvent e) -> {
@@ -176,7 +157,6 @@ public class Andie {
             setActiveButton(filterButton);
             toolbarPanel.setVisible(true);
         });
-<<<<<<< HEAD
         
         macroButton.addActionListener((ActionEvent e) -> {
             cardLayout.show(toolbarPanel, "MACRO");
@@ -186,9 +166,6 @@ public class Andie {
         
         
         
-=======
-
->>>>>>> 2dee498f2f40d1be089ed8d4b9fa40654fd9bae6
         //drop down menu for file
         JMenu fileMenu = fileActions.createMenu();
         JPopupMenu filePopup = fileMenu.getPopupMenu();

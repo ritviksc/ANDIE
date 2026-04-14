@@ -119,6 +119,7 @@ public class FileActions {
                     target.getImage().open(imageFilepath);
                 } catch (Exception ex) {
                     
+                    ex.printStackTrace();
                     JOptionPane.showMessageDialog(null, I18nManager.get("Save_as_error"), I18nManager.get("Save_as_error_title"), JOptionPane.WARNING_MESSAGE);
                 
                 }
@@ -171,6 +172,8 @@ public class FileActions {
             try {
                 target.getImage().save();
             } catch (Exception ex) {
+                
+                ex.printStackTrace();
                 JOptionPane.showMessageDialog(null, I18nManager.get("No_image_open"), I18nManager.get("No_image_open_title"), JOptionPane.WARNING_MESSAGE);
                         
             }

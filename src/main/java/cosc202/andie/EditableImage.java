@@ -264,6 +264,7 @@ class EditableImage {
         isSaved = false;
         redoOps.clear(); // clear redo operations to prevent bugs
         ops.add(op);
+        MacroManager.record(op);
         refresh();
     }
 

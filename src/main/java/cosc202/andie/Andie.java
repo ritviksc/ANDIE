@@ -3,7 +3,6 @@ package cosc202.andie;
 import static cosc202.andie.ImageAction.target;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.FileInputStream;
@@ -103,10 +102,16 @@ public class Andie {
         ColourActions colourActions = new ColourActions();
         JButton colourButton = new JButton(I18nManager.get("colour_title"));
         mainRow.add(colourButton);
+        //Macros action controls
+        MacroActions macroActions = new MacroActions();
+        JButton macroButton = new JButton("Macro");
+        mainRow.add(macroButton);
         // Language action controls language of the app
         SettingsActions languageActions = new SettingsActions();  
         JButton settingsButton = new JButton(I18nManager.get("Setting_title"));
         mainRow.add(settingsButton);
+        
+        
         
         
         
@@ -118,9 +123,11 @@ public class Andie {
         styleMenuButton(filterButton);
         styleMenuButton(colourButton);
         styleMenuButton(settingsButton);
+        styleMenuButton(macroButton);
+        
         
         JPanel toolbarPanel = new JPanel(new CardLayout());
-        toolbarPanel.setBackground(new Color(255, 255, 255));
+        toolbarPanel.setBackground(Color.WHITE);
         toolbarPanel.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.BLACK));
         toolbarPanel.setVisible(false);
         
@@ -128,7 +135,9 @@ public class Andie {
         toolbarPanel.add(editActions.createToolBar(), "EDIT");
         toolbarPanel.add(viewActions.createToolBar(), "VIEW");
         toolbarPanel.add(colourActions.createToolBar(), "COLOUR");
+        toolbarPanel.add(macroActions.createToolBar(), "MACRO");
         toolbarPanel.add(filterActions.createToolBar(), "FILTER");
+        
              
         CardLayout cardLayout = (CardLayout) toolbarPanel.getLayout();
         
@@ -152,9 +161,17 @@ public class Andie {
         
         filterButton.addActionListener((ActionEvent e) -> {
             cardLayout.show(toolbarPanel, "FILTER");
-            setActiveButton(colourButton);
+            setActiveButton(filterButton);
             toolbarPanel.setVisible(true);
         });
+        
+        macroButton.addActionListener((ActionEvent e) -> {
+            cardLayout.show(toolbarPanel, "MACRO");
+            setActiveButton(macroButton);
+            toolbarPanel.setVisible(true);
+        });
+        
+        
         
         //drop down menu for file
         JMenu fileMenu = fileActions.createMenu();
@@ -163,14 +180,8 @@ public class Andie {
         fileButton.addActionListener(e -> {
             filePopup.show(fileButton, 0, fileButton.getHeight());
         });
-//        //drop down menu for filter
-//        JMenu filterMenu = filterActions.createMenu();
-//        JPopupMenu filterPopup = filterMenu.getPopupMenu();
-//        
-//        filterButton.addActionListener( e -> {
-//                filterPopup.show(filterButton, 0, filterButton.getHeight());
-//        });
-        //drop down menu for settings
+        
+        
         JMenu settingsMenu = languageActions.createMenu();
         JPopupMenu settingsPopup = settingsMenu.getPopupMenu();
 

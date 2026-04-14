@@ -246,8 +246,8 @@ class EditableImage {
      * @param imageFilename The file location to save the image to.
      * @throws Exception If something goes wrong.
      */
-    public void saveAs(String imageFilename) throws Exception {
-        this.imageFilename = imageFilename;
+    public void saveAs(String imageFilename, String fileExtension) throws Exception {
+        this.imageFilename = imageFilename + "." + fileExtension;
         this.opsFilename = imageFilename + ".ops";
         save();
         

@@ -105,23 +105,21 @@ public class FileActions {
         public void actionPerformed(ActionEvent e) {
             JFileChooser fileChooser = new JFileChooser();
             int result = fileChooser.showOpenDialog(target);
-            
-            
 
             if (result == JFileChooser.APPROVE_OPTION) {
-                
-                if(target.getImage().hasImage()){
-                        JOptionPane.showMessageDialog(fileChooser, I18nManager.get("image_already_open"), I18nManager.get("iao_title"), JOptionPane.WARNING_MESSAGE);
-                        return;
+
+                if (target.getImage().hasImage()) {
+                    JOptionPane.showMessageDialog(fileChooser, I18nManager.get("image_already_open"), I18nManager.get("iao_title"), JOptionPane.WARNING_MESSAGE);
+                    return;
                 }
                 try {
                     String imageFilepath = fileChooser.getSelectedFile().getCanonicalPath();
                     target.getImage().open(imageFilepath);
                 } catch (Exception ex) {
-                    
+
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(null, I18nManager.get("Save_as_error"), I18nManager.get("Save_as_error_title"), JOptionPane.WARNING_MESSAGE);
-                
+
                 }
             }
 
@@ -172,10 +170,10 @@ public class FileActions {
             try {
                 target.getImage().save();
             } catch (Exception ex) {
-                
+
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(null, I18nManager.get("No_image_open"), I18nManager.get("No_image_open_title"), JOptionPane.WARNING_MESSAGE);
-                        
+
             }
         }
 
@@ -220,12 +218,43 @@ public class FileActions {
         @Override
         public void actionPerformed(ActionEvent e) {
             JFileChooser fileChooser = new JFileChooser();
+
+            FileNameExtensionFilter jpegFormat = new FileNameExtensionFilter("JPEG Image (*.jpg)", "jpg");
+            FileNameExtensionFilter pngFormat = new FileNameExtensionFilter("PNG Image (*.png)", "png");
+            FileNameExtensionFilter giffFormat = new FileNameExtensionFilter("GIF Image (*.gif)", "gif");
+            //adds the file times as a choosable ooption
+            fileChooser.addChoosableFileFilter(pngFormat);
+            fileChooser.addChoosableFileFilter(jpegFormat);
+            fileChooser.addChoosableFileFilter(giffFormat);
+
+            fileChooser.setAcceptAllFileFilterUsed(false);
+            fileChooser.setFileFilter(jpegFormat);
+
             int result = fileChooser.showSaveDialog(target);
 
             if (result == JFileChooser.APPROVE_OPTION) {
                 try {
                     String imageFilepath = fileChooser.getSelectedFile().getCanonicalPath();
-                    target.getImage().saveAs(imageFilepath);
+                    
+                    //gets the filter that the user selects (pngFormat)
+                    FileNameExtensionFilter filter = (FileNameExtensionFilter) fileChooser.getFileFilter();
+
+                    //gets the acutal format from filter
+                    String selectedFormat = filter.getExtensions()[0].toLowerCase();
+
+                    //if the file name is left as empty user has wnarnign message pop up
+                    if (fileChooser.getSelectedFile().getName().trim().isEmpty()) {
+                        JOptionPane.showMessageDialog(fileChooser, I18nManager.get("no_File_Name"), I18nManager.get("nfn_Title"), JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
+                    //check for image to have transparency when saved as jpeg
+                    if (selectedFormat.equals("jpg") && target.getImage().hasTransparency()) {
+                        JOptionPane.showMessageDialog(fileChooser, "Your image has a transparency, select another format", "Transparency warning", JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
+                    
+                    target.getImage().saveAs(imageFilepath, selectedFormat);
+                    
                 } catch (Exception ex) {
                     System.exit(1);
                 }
@@ -233,8 +262,7 @@ public class FileActions {
         }
 
     }
-   
-        
+
     public class FileExportAction extends ImageAction {
 
         FileExportAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
@@ -243,8 +271,8 @@ public class FileActions {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            
-            if(!target.getImage().hasImage()){
+
+            if (!target.getImage().hasImage()) {
                 JOptionPane.showMessageDialog(target, I18nManager.get("no_Image"));
                 return;
             }
@@ -252,8 +280,7 @@ public class FileActions {
             JFileChooser fileChooser = new JFileChooser();
             //set title to "export image"
             fileChooser.setDialogTitle(I18nManager.get("export_Title"));
-            
-            
+
             //creates the possible file types
             FileNameExtensionFilter jpegFormat = new FileNameExtensionFilter("JPEG Image (*.jpg)", "jpg");
             FileNameExtensionFilter pngFormat = new FileNameExtensionFilter("PNG Image (*.png)", "png");
@@ -262,52 +289,47 @@ public class FileActions {
             fileChooser.addChoosableFileFilter(pngFormat);
             fileChooser.addChoosableFileFilter(jpegFormat);
             fileChooser.addChoosableFileFilter(giffFormat);
-            
+
             fileChooser.setAcceptAllFileFilterUsed(false);
             fileChooser.setFileFilter(jpegFormat);
-            
-            
 
             int result = fileChooser.showSaveDialog(target);
-            
-                
+
             //if the users select to approve option (save)
             if (result == JFileChooser.APPROVE_OPTION) {
                 try {
-                    
+
                     //gets the full file path that the user has select to store in 
                     String imageFilepath = fileChooser.getSelectedFile().getCanonicalPath();
-                    
-                    
+
                     //gets the filter that the user selects (pngFormat)
-                    FileNameExtensionFilter filter = (FileNameExtensionFilter) fileChooser.getFileFilter(); 
-                    
+                    FileNameExtensionFilter filter = (FileNameExtensionFilter) fileChooser.getFileFilter();
+
                     //gets the acutal format from filter
                     String selectedFormat = filter.getExtensions()[0].toLowerCase();
-                    
+
                     //if the file name is left as empty user has wnarnign message pop up
-                    if(fileChooser.getSelectedFile().getName().trim().isEmpty()){
+                    if (fileChooser.getSelectedFile().getName().trim().isEmpty()) {
                         JOptionPane.showMessageDialog(fileChooser, I18nManager.get("no_File_Name"), I18nManager.get("nfn_Title"), JOptionPane.WARNING_MESSAGE);
                         return;
                     }
                     //check for image to have transparency when saved as jpeg
-                    if(selectedFormat.equals("jpg") && target.getImage().hasTransparency()){
-                        JOptionPane.showMessageDialog(fileChooser,"Your image has a transparency, select another format", "Transparency warning", JOptionPane.WARNING_MESSAGE);
+                    if (selectedFormat.equals("jpg") && target.getImage().hasTransparency()) {
+                        JOptionPane.showMessageDialog(fileChooser, "Your image has a transparency, select another format", "Transparency warning", JOptionPane.WARNING_MESSAGE);
                         return;
                     }
 
-                    
                     //get the image object and calls export method with the filepath
                     target.getImage().export(imageFilepath, selectedFormat);
 
                 } catch (IOException ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(
-        target,
-        "Error exporting image:\n" + ex.getMessage(),
-        "Export Error",
-        JOptionPane.ERROR_MESSAGE
-);
+                            target,
+                            "Error exporting image:\n" + ex.getMessage(),
+                            "Export Error",
+                            JOptionPane.ERROR_MESSAGE
+                    );
                 }
             }
         }
@@ -353,16 +375,16 @@ public class FileActions {
         public void actionPerformed(ActionEvent e) {
             boolean readyToClose = true;
 
-                // Close all windows safely
-                for (java.awt.Window window : java.awt.Window.getWindows()) {
-                    if (window instanceof JFrame) {
-                        ((JFrame) window).dispatchEvent(new WindowEvent((JFrame) window, WindowEvent.WINDOW_CLOSING));
-                        if (!target.windowClosed) {
-                            readyToClose = false;
-                            break;
-                        }
+            // Close all windows safely
+            for (java.awt.Window window : java.awt.Window.getWindows()) {
+                if (window instanceof JFrame) {
+                    ((JFrame) window).dispatchEvent(new WindowEvent((JFrame) window, WindowEvent.WINDOW_CLOSING));
+                    if (!target.windowClosed) {
+                        readyToClose = false;
+                        break;
                     }
                 }
+            }
 
         }
 

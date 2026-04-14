@@ -17,6 +17,7 @@ import javax.swing.*;
 import javax.imageio.*;
 import java.util.Locale;
 import java.util.Properties;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  * <p>
@@ -38,7 +39,7 @@ import java.util.Properties;
  * @version 1.0
  */
 public class Andie {
-    
+
     private static JButton activeButton;
 
     /**
@@ -56,7 +57,7 @@ public class Andie {
      *
      * @see ImagePanel
      * @see ImageAction
-    * @see ImageOperation
+     * @see ImageOperation
      * @see FileActions
      * @see EditActions
      * @see ViewActions
@@ -65,7 +66,6 @@ public class Andie {
      *
      * @throws Exception if something goes wrong.
      */
-    
     private static void createAndShowGUI() throws Exception {
         // Set up the main GUI frame
         JFrame frame = new JFrame("ANDIE");
@@ -86,7 +86,7 @@ public class Andie {
         // File menus are pretty standard, so things that usually go in File menus go here.
         FileActions fileActions = new FileActions();
         JButton fileButton = new JButton(I18nManager.get("file_Title"));
-        mainRow.add(fileButton); 
+        mainRow.add(fileButton);
         // Likewise Edit menus are very common, so should be clear what might go here.
         EditActions editActions = new EditActions();
         JButton editButton = new JButton(I18nManager.get("Edit_title"));
@@ -96,7 +96,7 @@ public class Andie {
         JButton viewButton = new JButton(I18nManager.get("View_title"));
         mainRow.add(viewButton);
         // Filters apply a per-pixel operation to the image, generally based on a local window
-        FilterActions filterActions = new FilterActions(); 
+        FilterActions filterActions = new FilterActions();
         JButton filterButton = new JButton(I18nManager.get("Filter_title"));
         mainRow.add(filterButton);
         // Actions that affect the representation of colour in the image
@@ -104,13 +104,10 @@ public class Andie {
         JButton colourButton = new JButton(I18nManager.get("colour_title"));
         mainRow.add(colourButton);
         // Language action controls language of the app
-        SettingsActions languageActions = new SettingsActions();  
+        SettingsActions languageActions = new SettingsActions();
         JButton settingsButton = new JButton(I18nManager.get("Setting_title"));
         mainRow.add(settingsButton);
-        
-        
-        
-           
+
         //aesthetic fix on the buttons
         styleMenuButton(fileButton);
         styleMenuButton(editButton);
@@ -118,20 +115,20 @@ public class Andie {
         styleMenuButton(filterButton);
         styleMenuButton(colourButton);
         styleMenuButton(settingsButton);
-        
+
         JPanel toolbarPanel = new JPanel(new CardLayout());
         toolbarPanel.setBackground(new Color(255, 255, 255));
         toolbarPanel.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.BLACK));
         toolbarPanel.setVisible(false);
-        
+
         //add functions to toolbar
         toolbarPanel.add(editActions.createToolBar(), "EDIT");
         toolbarPanel.add(viewActions.createToolBar(), "VIEW");
         toolbarPanel.add(colourActions.createToolBar(), "COLOUR");
         toolbarPanel.add(filterActions.createToolBar(), "FILTER");
-             
+
         CardLayout cardLayout = (CardLayout) toolbarPanel.getLayout();
-        
+
         editButton.addActionListener((ActionEvent e) -> {
             cardLayout.show(toolbarPanel, "EDIT");
             setActiveButton(editButton);
@@ -143,19 +140,19 @@ public class Andie {
             setActiveButton(viewButton);
             toolbarPanel.setVisible(true);
         });
-        
+
         colourButton.addActionListener((ActionEvent e) -> {
             cardLayout.show(toolbarPanel, "COLOUR");
             setActiveButton(colourButton);
             toolbarPanel.setVisible(true);
         });
-        
+
         filterButton.addActionListener((ActionEvent e) -> {
             cardLayout.show(toolbarPanel, "FILTER");
             setActiveButton(filterButton);
             toolbarPanel.setVisible(true);
         });
-        
+
         //drop down menu for file
         JMenu fileMenu = fileActions.createMenu();
         JPopupMenu filePopup = fileMenu.getPopupMenu();
@@ -191,7 +188,7 @@ public class Andie {
             public void windowClosing(WindowEvent e) {
 
                 target.windowClosed = true;
-                
+
                 if (target.getImage().isSaved()) {
                     e.getWindow().dispose();
                 } else if (target.getImage() != null && !target.getImage().isSaved()) {
@@ -219,20 +216,47 @@ public class Andie {
                         case 1:
 
                             JFileChooser fileChooser = new JFileChooser();
+
+                            FileNameExtensionFilter jpegFormat = new FileNameExtensionFilter("JPEG Image (*.jpg)", "jpg");
+                            FileNameExtensionFilter pngFormat = new FileNameExtensionFilter("PNG Image (*.png)", "png");
+                            FileNameExtensionFilter giffFormat = new FileNameExtensionFilter("GIF Image (*.gif)", "gif");
+                            //adds the file times as a choosable ooption
+                            fileChooser.addChoosableFileFilter(pngFormat);
+                            fileChooser.addChoosableFileFilter(jpegFormat);
+                            fileChooser.addChoosableFileFilter(giffFormat);
+
+                            fileChooser.setAcceptAllFileFilterUsed(false);
+                            fileChooser.setFileFilter(jpegFormat);
+
                             int result = fileChooser.showSaveDialog(target);
 
                             if (result == JFileChooser.APPROVE_OPTION) {
                                 try {
                                     String imageFilepath = fileChooser.getSelectedFile().getCanonicalPath();
-                                    target.getImage().saveAs(imageFilepath);
-                                    e.getWindow().dispose();
-                                } catch (Exception ex) {
-                                    JOptionPane.showMessageDialog(null, I18nManager.get("save_menu_save_as_error"));
-                                }
-                            } else if (result == JFileChooser.CANCEL_OPTION) {
-                                target.windowClosed = false;
-                            }
 
+                                    //gets the filter that the user selects (pngFormat)
+                                    FileNameExtensionFilter filter = (FileNameExtensionFilter) fileChooser.getFileFilter();
+
+                                    //gets the acutal format from filter
+                                    String selectedFormat = filter.getExtensions()[0].toLowerCase();
+
+                                    //if the file name is left as empty user has wnarnign message pop up
+                                    if (fileChooser.getSelectedFile().getName().trim().isEmpty()) {
+                                        JOptionPane.showMessageDialog(fileChooser, I18nManager.get("no_File_Name"), I18nManager.get("nfn_Title"), JOptionPane.WARNING_MESSAGE);
+                                        return;
+                                    }
+                                    //check for image to have transparency when saved as jpeg
+                                    if (selectedFormat.equals("jpg") && target.getImage().hasTransparency()) {
+                                        JOptionPane.showMessageDialog(fileChooser, "Your image has a transparency, select another format", "Transparency warning", JOptionPane.WARNING_MESSAGE);
+                                        return;
+                                    }
+
+                                    target.getImage().saveAs(imageFilepath, selectedFormat);
+
+                                } catch (Exception ex) {
+                                    System.exit(1);
+                                }
+                            }
                             break;
 
                         case 2:
@@ -251,13 +275,16 @@ public class Andie {
             }
         });
 
-
         frame.pack();
         frame.setVisible(true);
     }
-    /**makes some aesthetic changes to the main menu button, change colour when the mouse hovers over
-     * @param button 
-     */ 
+
+    /**
+     * makes some aesthetic changes to the main menu button, change colour when
+     * the mouse hovers over
+     *
+     * @param button
+     */
     private static void styleMenuButton(JButton button) {
         Color normalColour = Color.WHITE;
         Color hoverColour = new Color(240, 240, 240);
@@ -286,12 +313,13 @@ public class Andie {
             }
         });
     }
+
     //chnages the aestheics of the button that is currerntly selects also changes back the previously selected menu button
     private static void setActiveButton(JButton button) {
         if (activeButton != null) {
             activeButton.setBackground(Color.WHITE);
         }
-        
+
         button.setBackground(new Color(240, 240, 240));
         activeButton = button;
     }

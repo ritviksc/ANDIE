@@ -31,9 +31,13 @@ Unchanged as of 20/03
 
 ### Filter
 
+* Edge detection - All filters have image edge detection and will use the closest available pixel if the kernel overhangs the edge of the image.
+* Mean - Applys a box blur using a kernel of a user inputted radius. 
 * Sharpen - Applys a sharpen filter to the working image using a kernel and convolution. No user input is required.
 * Gaussian - Applys a Gaussian filter to the working image using a given radius to apply values to a kernel and then is applied via convolution. This has a maximum radius of 10 and will default to 1 if limits are exceeded or subceeded, though using the built in menu will confine itself to the limits.
-* Median - Applys a median filter to the working image by averaging the colour channel (inlcuding alpha channel) of each surrounding pixel and then making the new pixel the median of the surrounding pixels. This operation is applied to a new image so it does not reuse already processed pixels. This has a maximum radius of 10 and will default to 1 if limits are exceeded or subceeded, though using the built in menu will confine itself to the limits. (Note: this operation is O(n^4) so take care if using radius > 10)
+* Median - Applys a median filter to the working image by averaging the colour channel (inlcuding alpha channel) of each surrounding pixel and then making the new pixel the median of the surrounding pixels. This operation is applied to a new image so it does not reuse already processed pixels. This has a maximum radius of 10 and will default to 1 if limits are exceeded or subceeded, though using the built in menu will confine itself to the limits.
+* Emboss - Applys an embossing filter to the working image by applying a user specified directional emboss convolution. A kernel is hardcoded for each (cardinal) direction and passed to the convolution based on user input.
+* Sobel - Applys a Sobel filter to the working image in a very similar way to emboss except with 3 different hardcoded Sobel kernels.
 
 ### Colour
 
@@ -63,10 +67,9 @@ Newly developed functions were tested with undo and redo operations, saving, sav
 
 ## Known bugs
 
-### Edge detection on certain blur filters
+### Save as works weirdly
 
-Edge detection hasn't been implemented for blur filters using Kernels and convolution. This will be fixed in phase 2.
-
+Save as must include the file extension IN the name of the saved file for it save a new file, otherwise it will only save the .ops file. The .ops file will also inlcude the file extension when being saved.
 ## Refactoring
 
 ### Internationalisation

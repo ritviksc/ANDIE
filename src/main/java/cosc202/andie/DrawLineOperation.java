@@ -7,7 +7,7 @@ import java.awt.Point;
 import java.awt.Color;
 
 /* Class to draw a Line on the image. It is a image operation that can be undone.*/
-public class DrawLineOperation implements ImageOperation {
+public class DrawLineOperation implements ImageOperation, java.io.Serializable {
     private Point start; // Top point of the line
     private Point end;  // Bottom point of the line
     private Color col; // Color user wants

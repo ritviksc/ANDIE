@@ -7,7 +7,7 @@ import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 
 /* Class for drawing a ellipse on a given image. */
-public class DrawEllipse implements ImageOperation {
+public class DrawEllipse implements ImageOperation,java.io.Serializable {
 
     private Rectangle rect; // Area of image to be used to draw the ellipse
     private Color color; // Color user wants

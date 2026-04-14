@@ -6,7 +6,7 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 /* Class for drawing a rectangle (filled or solid) depending on what the user wants. */
-public class DrawRectangle implements ImageOperation {
+public class DrawRectangle implements ImageOperation, java.io.Serializable {
 
     private Rectangle rect; // Portion of image to draw rectangle on
     private Color color; // get color user wants 

@@ -24,7 +24,7 @@ import javax.swing.text.NumberFormatter;
  * @author Steven Mills, Robert Hannaford
  * @version 1.1
  */
-public class FilterActions extends ToolbarActions{
+public class FilterActions extends ToolbarActions {
 
     /**
      * <p>
@@ -39,7 +39,7 @@ public class FilterActions extends ToolbarActions{
         actions.add(new MedianFilterAction(I18nManager.get("Median"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Filters/Median.png")), I18nManager.get("Median_desc"), KeyEvent.VK_D));
         actions.add(new EmbossFilterAction(I18nManager.get("Emboss"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Filters/Emboss.png")), I18nManager.get("Emboss_desc"), KeyEvent.VK_E));
         actions.add(new SobelFilterAction(I18nManager.get("Sobel"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Filters/Sobel.png")), I18nManager.get("Sobel_desc"), KeyEvent.VK_O));
-        
+
     }
 
     /**
@@ -107,36 +107,33 @@ public class FilterActions extends ToolbarActions{
             // Determine the radius - ask the user.
             int radius = 1;
 
-            do {
+            int minRadius = 1;
+            int maxRadius = 10;
 
-                int minRadius = 1;
-                int maxRadius = 10;
+            SpinnerNumberModel radiusModel = new SpinnerNumberModel(minRadius, minRadius, maxRadius, 1);
 
-                SpinnerNumberModel radiusModel = new SpinnerNumberModel(minRadius, minRadius, maxRadius, 1);
+            JSpinner radiusSpinner = new JSpinner(radiusModel);
 
-                JSpinner radiusSpinner = new JSpinner(radiusModel);
+            JSpinner.NumberEditor editor = new JSpinner.NumberEditor(radiusSpinner, "#");
+            JFormattedTextField radiusInput = editor.getTextField();
+            radiusSpinner.setEditor(editor);
 
-                JSpinner.NumberEditor editor = new JSpinner.NumberEditor(radiusSpinner, "#");
-                JFormattedTextField radiusInput = editor.getTextField();
-                radiusSpinner.setEditor(editor);
+            NumberFormatter formatter = (NumberFormatter) radiusInput.getFormatter();
 
-                NumberFormatter formatter = (NumberFormatter) radiusInput.getFormatter();
+            formatter.setValueClass(Integer.class);
 
-                formatter.setValueClass(Integer.class);
+            formatter.setAllowsInvalid(false);
+            formatter.setCommitsOnValidEdit(true);
 
-                formatter.setAllowsInvalid(false);
-                formatter.setCommitsOnValidEdit(true);
+            int option = JOptionPane.showOptionDialog(null, radiusSpinner, I18nManager.get("Filter_radius_msg"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 
-                int option = JOptionPane.showOptionDialog(null, radiusSpinner, I18nManager.get("Filter_radius_msg"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
-
-                // Check the return value from the dialog box.
-                if (option == JOptionPane.CANCEL_OPTION) {
-                    radius = 0;
-                    return;
-                } else if (option == JOptionPane.OK_OPTION) {
-                    radius = radiusModel.getNumber().intValue();
-                }
-            } while (radius > 10 || radius <= 0); //Enforce a hard limit on a O(n^4) operation
+            // Check the return value from the dialog box.
+            if (option == JOptionPane.CANCEL_OPTION) {
+                radius = 0;
+                return;
+            } else if (option == JOptionPane.OK_OPTION) {
+                radius = radiusModel.getNumber().intValue();
+            }
 
             // Create and apply the filter
             target.getImage().apply(new MeanFilter(radius));
@@ -245,36 +242,33 @@ public class FilterActions extends ToolbarActions{
             // Determine the radius - ask the user.
             int radius = 1;
 
-            do {
+            int minRadius = 1;
+            int maxRadius = 10;
 
-                int minRadius = 1;
-                int maxRadius = 10;
+            SpinnerNumberModel radiusModel = new SpinnerNumberModel(minRadius, minRadius, maxRadius, 1);
 
-                SpinnerNumberModel radiusModel = new SpinnerNumberModel(minRadius, minRadius, maxRadius, 1);
+            JSpinner radiusSpinner = new JSpinner(radiusModel);
 
-                JSpinner radiusSpinner = new JSpinner(radiusModel);
+            JSpinner.NumberEditor editor = new JSpinner.NumberEditor(radiusSpinner, "#");
+            JFormattedTextField radiusInput = editor.getTextField();
+            radiusSpinner.setEditor(editor);
 
-                JSpinner.NumberEditor editor = new JSpinner.NumberEditor(radiusSpinner, "#");
-                JFormattedTextField radiusInput = editor.getTextField();
-                radiusSpinner.setEditor(editor);
+            NumberFormatter formatter = (NumberFormatter) radiusInput.getFormatter();
 
-                NumberFormatter formatter = (NumberFormatter) radiusInput.getFormatter();
+            formatter.setValueClass(Integer.class);
 
-                formatter.setValueClass(Integer.class);
+            formatter.setAllowsInvalid(false);
+            formatter.setCommitsOnValidEdit(true);
 
-                formatter.setAllowsInvalid(false);
-                formatter.setCommitsOnValidEdit(true);
+            int option = JOptionPane.showOptionDialog(null, radiusSpinner, I18nManager.get("Filter_radius_msg"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 
-                int option = JOptionPane.showOptionDialog(null, radiusSpinner, I18nManager.get("Filter_radius_msg"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
-
-                // Check the return value from the dialog box.
-                if (option == JOptionPane.CANCEL_OPTION) {
-                    radius = 0;
-                    return;
-                } else if (option == JOptionPane.OK_OPTION) {
-                    radius = radiusModel.getNumber().intValue();
-                }
-            } while (radius > 10 || radius <= 0); //Enforce a hard limit on a O(n^4) operation
+            // Check the return value from the dialog box.
+            if (option == JOptionPane.CANCEL_OPTION) {
+                radius = 0;
+                return;
+            } else if (option == JOptionPane.OK_OPTION) {
+                radius = radiusModel.getNumber().intValue();
+            }
 
             // Create and apply the filter
             target.getImage().apply(new GaussianFilter(radius));
@@ -330,36 +324,35 @@ public class FilterActions extends ToolbarActions{
 
             // Determine the radius - ask the user.
             int radius = 0;
-            do {
 
-                int minRadius = 1;
-                int maxRadius = 10;
+            int minRadius = 1;
+            int maxRadius = 10;
 
-                SpinnerNumberModel radiusModel = new SpinnerNumberModel(minRadius, minRadius, maxRadius, 1);
+            SpinnerNumberModel radiusModel = new SpinnerNumberModel(minRadius, minRadius, maxRadius, 1);
 
-                JSpinner radiusSpinner = new JSpinner(radiusModel);
+            JSpinner radiusSpinner = new JSpinner(radiusModel);
 
-                JSpinner.NumberEditor editor = new JSpinner.NumberEditor(radiusSpinner, "#");
-                JFormattedTextField radiusInput = editor.getTextField();
-                radiusSpinner.setEditor(editor);
+            JSpinner.NumberEditor editor = new JSpinner.NumberEditor(radiusSpinner, "#");
+            JFormattedTextField radiusInput = editor.getTextField();
+            radiusSpinner.setEditor(editor);
 
-                NumberFormatter formatter = (NumberFormatter) radiusInput.getFormatter();
+            NumberFormatter formatter = (NumberFormatter) radiusInput.getFormatter();
 
-                formatter.setValueClass(Integer.class);
+            formatter.setValueClass(Integer.class);
 
-                formatter.setAllowsInvalid(false);
-                formatter.setCommitsOnValidEdit(true);
+            formatter.setAllowsInvalid(false);
+            formatter.setCommitsOnValidEdit(true);
 
-                int option = JOptionPane.showOptionDialog(null, radiusSpinner, I18nManager.get("Filter_radius_msg_median"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+            int option = JOptionPane.showOptionDialog(null, radiusSpinner, I18nManager.get("Filter_radius_msg_median"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 
-                // Check the return value from the dialog box.
-                if (option == JOptionPane.CANCEL_OPTION) {
-                    radius = 0;
-                    return;
-                } else if (option == JOptionPane.OK_OPTION) {
-                    radius = radiusModel.getNumber().intValue();
-                }
-            } while (radius > 10 || radius <= 0); //Enforce a hard limit on a O(n^4) operation
+            // Check the return value from the dialog box.
+            if (option == JOptionPane.CANCEL_OPTION) {
+                radius = 0;
+                return;
+            } else if (option == JOptionPane.OK_OPTION) {
+                radius = radiusModel.getNumber().intValue();
+            }
+
             // Create and apply the filter
             target.getImage().apply(new MedianFilter(radius));
             target.repaint();
@@ -428,11 +421,13 @@ public class FilterActions extends ToolbarActions{
                     I18nManager.get("Emboss_directions_msg"),
                     JOptionPane.OK_CANCEL_OPTION,
                     JOptionPane.QUESTION_MESSAGE, null, null, null);
-            
+
             int direction = directionCombo.getSelectedIndex();
-            
-            if(option != JOptionPane.OK_OPTION) return;
-            
+
+            if (option != JOptionPane.OK_OPTION) {
+                return;
+            }
+
             // Create and apply the filter
             target.getImage().apply(new EmbossFilter(direction));
             target.repaint();
@@ -496,11 +491,13 @@ public class FilterActions extends ToolbarActions{
                     I18nManager.get("Sobel_options_msg"),
                     JOptionPane.OK_CANCEL_OPTION,
                     JOptionPane.QUESTION_MESSAGE, null, null, null);
-            
+
             int direction = directionCombo.getSelectedIndex();
-            
-            if(option != JOptionPane.OK_OPTION) return;
-            
+
+            if (option != JOptionPane.OK_OPTION) {
+                return;
+            }
+
             // Create and apply the filter
             target.getImage().apply(new SobelFilter(direction));
             target.repaint();
@@ -508,5 +505,5 @@ public class FilterActions extends ToolbarActions{
         }
 
     }
-    
+
 }

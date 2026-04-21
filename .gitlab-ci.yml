@@ -32,3 +32,8 @@ pages:
     - public
   only:
   - main
+
+unit-test-job:
+  script:
+  - echo "Attempting to run unit tests..."
+  - gradle test

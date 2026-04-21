@@ -1,13 +1,18 @@
 package cosc202.andie;
 
+import static cosc202.andie.ImageAction.target;
+
+import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Properties;
+import java.util.prefs.Preferences;
 
 import javax.swing.Action;
 import javax.swing.ImageIcon;
@@ -31,7 +36,10 @@ public class SettingsActions {
      */
     public SettingsActions() {
         actions = new ArrayList<>();
-        actions.add(new LanguageAction(I18nManager.get("Language_title"), null, I18nManager.get("Language_desc"), KeyEvent.VK_L));
+        actions.add(new LanguageAction(I18nManager.get("Language_title"), null, I18nManager.get("Language_desc"),
+                KeyEvent.VK_L));
+        actions.add(new PopUpAction(I18nManager.get("Popup_title"), null, I18nManager.get("Popup_desc"), KeyEvent.VK_P));
+        actions.add(new DocumentAction(I18nManager.get("Document_title"), null, I18nManager.get("Document_desc"), KeyEvent.VK_D));
     }
 
     /**
@@ -57,6 +65,95 @@ public class SettingsActions {
      * </p>
      *
      */
+    public class PopUpAction extends ImageAction {
+
+        /**
+         * <p>
+         * Show pop-up message when Andie starts up, if disabled.
+         * </p>
+         *
+         * @param name     The name of the action (ignored if null).
+         * @param icon     An icon to use to represent the action (ignored if null).
+         * @param desc     A brief description of the action (ignored if null).
+         * @param mnemonic A mnemonic key to use as a shortcut (ignored if
+         *                 null).
+         */
+        PopUpAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+            super(name, icon, desc, mnemonic);
+        }
+
+        /**
+         * <p>
+         * Callback for when the pop-up action is triggered.
+         * </p>
+         *
+         * <p>
+         * This method is called whenever the PopUpAction is triggered. It
+         * enables welcome pop-up whenever Andie starts up.
+         * </p>
+         *
+         * @param e The event triggering this callback.
+         */
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            Preferences pref = Andie.prefs;
+            pref.putBoolean("showWelcome", true); // enable pop up
+        }
+
+    }
+
+    /**
+     * <p>
+     * Action to change app language.
+     * </p>
+     *
+     */
+    public class DocumentAction extends ImageAction {
+
+        /**
+         * <p>
+         * Open Andie documentation page in seperate page in default browser.
+         * </p>
+         *
+         * @param name     The name of the action (ignored if null).
+         * @param icon     An icon to use to represent the action (ignored if null).
+         * @param desc     A brief description of the action (ignored if null).
+         * @param mnemonic A mnemonic key to use as a shortcut (ignored if
+         *                 null).
+         */
+        DocumentAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+            super(name, icon, desc, mnemonic);
+        }
+
+        /**
+         * <p>
+         * Callback for when the document action is triggered.
+         * </p>
+         *
+         * <p>
+         * This method is called whenever the DocumentAction is triggered. It
+         * opens up the offical Andie documentation hosted on GitLab pages.
+         * </p>
+         *
+         * @param e The event triggering this callback.
+         */
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                Desktop.getDesktop().browse(new URI("https://your-link.com"));
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+    }
+
+    /**
+     * <p>
+     * Action to change app language.
+     * </p>
+     *
+     */
     public class LanguageAction extends ImageAction {
 
         /**
@@ -64,11 +161,11 @@ public class SettingsActions {
          * Create a new language action.
          * </p>
          *
-         * @param name The name of the action (ignored if null).
-         * @param icon An icon to use to represent the action (ignored if null).
-         * @param desc A brief description of the action (ignored if null).
+         * @param name     The name of the action (ignored if null).
+         * @param icon     An icon to use to represent the action (ignored if null).
+         * @param desc     A brief description of the action (ignored if null).
          * @param mnemonic A mnemonic key to use as a shortcut (ignored if
-         * null).
+         *                 null).
          */
         LanguageAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
@@ -98,7 +195,7 @@ public class SettingsActions {
                     return;
                 }
 
-                String[] options = {"English", "Dutch"};
+                String[] options = { "English", "Dutch" };
 
                 String choice = (String) JOptionPane.showInputDialog(
                         null,
@@ -107,8 +204,7 @@ public class SettingsActions {
                         JOptionPane.QUESTION_MESSAGE,
                         null,
                         options,
-                        options[0]
-                );
+                        options[0]);
 
                 if (choice == null) {
                     return;
@@ -155,7 +251,7 @@ public class SettingsActions {
                 // Restart app with new language preference.
                 SwingUtilities.invokeLater(() -> {
                     try {
-                        Andie.main(new String[]{});
+                        Andie.main(new String[] {});
                     } catch (Exception e1) {
                         e1.printStackTrace();
                     }

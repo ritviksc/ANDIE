@@ -201,6 +201,18 @@ tasks.register("generateWrapper", Wrapper) {
 	}
 }
 
+tasks.named("jar") {
+
+    archiveBaseName.set("andie");
+    archiveVersion.set("1.0.0");
+
+    manifest {
+        attributes(
+            "Main-Class": defaultMainClassName
+        );
+    }
+}
+
 javadoc {
 	options {
 		failOnError = false

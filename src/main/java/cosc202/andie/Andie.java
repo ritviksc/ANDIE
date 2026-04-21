@@ -389,7 +389,7 @@ public class Andie {
             @SuppressWarnings("unused")
             public void mouseClicked(MouseEvent e) {
                 try {
-                     Desktop.getDesktop().browse(new URI("https://your-link.com"));
+                     Desktop.getDesktop().browse(new URI("https://andie-a82b24.cspages.otago.ac.nz/docs/"));
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }

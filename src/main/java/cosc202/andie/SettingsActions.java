@@ -61,7 +61,7 @@ public class SettingsActions {
 
     /**
      * <p>
-     * Action to change app language.
+     * Action to change pop-up behaviour.
      * </p>
      *
      */
@@ -104,7 +104,7 @@ public class SettingsActions {
 
     /**
      * <p>
-     * Action to change app language.
+     * Action to open up Andie documentation.
      * </p>
      *
      */
@@ -140,7 +140,7 @@ public class SettingsActions {
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
-                Desktop.getDesktop().browse(new URI("https://your-link.com"));
+                Desktop.getDesktop().browse(new URI("https://andie-a82b24.cspages.otago.ac.nz/docs/"));
             } catch (Exception ex) {
                 ex.printStackTrace();
             }

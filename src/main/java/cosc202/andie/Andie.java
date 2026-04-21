@@ -6,19 +6,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.net.URI;
-import java.nio.file.FileAlreadyExistsException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 import javax.swing.*;
-import javax.swing.event.HyperlinkEvent;
 import javax.imageio.*;
 import java.util.Locale;
-import java.util.Properties;
 import java.util.prefs.Preferences;
 
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -72,7 +63,13 @@ public class Andie {
      *
      * @throws Exception if something goes wrong.
      */
-    private static void createAndShowGUI() throws Exception {
+    public static void createAndShowGUI() throws Exception {
+        // Load ANDIE's language before building UI
+        String language = prefs.get("lang", "en");
+
+        Locale locale = new Locale(language);
+        I18nManager.init(locale.equals(new Locale("en")) ? null : locale);
+
         // Set up the main GUI frame
         JFrame frame = new JFrame("ANDIE");
 
@@ -351,14 +348,14 @@ public class Andie {
         activeButton = button;
     }
 
-    private static void showWelcomePopup(JFrame frame,Preferences prefs) {
+    private static void showWelcomePopup(JFrame frame, Preferences prefs) {
 
         // Check if user disabled it
         boolean showWelcome = prefs.getBoolean("showWelcome", true);
         if (!showWelcome)
             return;
 
-        JDialog dialog = new JDialog(frame, "Welcome to ANDIE", true);
+        JDialog dialog = new JDialog(frame, I18nManager.get("welcome"), true);
         dialog.setSize(400, 250);
         dialog.setLocationRelativeTo(frame);
         dialog.setLayout(new BorderLayout(10, 10));
@@ -367,7 +364,7 @@ public class Andie {
         dialog.getRootPane().setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
         // Title
-        JLabel title = new JLabel("Welcome to ANDIE ", SwingConstants.CENTER);
+        JLabel title = new JLabel(I18nManager.get("welcome"), SwingConstants.CENTER);
         title.setFont(new Font("SansSerif", Font.BOLD, 18));
         dialog.add(title, BorderLayout.NORTH);
 
@@ -375,13 +372,13 @@ public class Andie {
         JPanel center = new JPanel();
         center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
 
-        JLabel text = new JLabel("Get started with the ANDIE 101 guide.");
+        JLabel text = new JLabel(I18nManager.get("get_started"));
         text.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JLabel text1 = new JLabel("We hope ANDIE becomes your new favorite editor :)");
+        JLabel text1 = new JLabel(I18nManager.get("fav_editor"));
         text1.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JLabel link = new JLabel("<html><a href=''>Open Documentation</a></html>");
+        JLabel link = new JLabel(I18nManager.get("doc_link"));
         link.setCursor(new Cursor(Cursor.HAND_CURSOR));
         link.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -389,7 +386,7 @@ public class Andie {
             @SuppressWarnings("unused")
             public void mouseClicked(MouseEvent e) {
                 try {
-                     Desktop.getDesktop().browse(new URI("https://andie-a82b24.cspages.otago.ac.nz/docs/"));
+                    Desktop.getDesktop().browse(new URI("https://andie-a82b24.cspages.otago.ac.nz/docs/"));
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -407,9 +404,9 @@ public class Andie {
         // Bottom section
         JPanel bottom = new JPanel(new BorderLayout());
 
-        JCheckBox dontShow = new JCheckBox("Don't show again");
+        JCheckBox dontShow = new JCheckBox(I18nManager.get("dont_show"));
 
-        JButton ok = new JButton("Get Started");
+        JButton ok = new JButton(I18nManager.get("get_started_button"));
         ok.addActionListener(e -> {
             if (dontShow.isSelected()) {
                 prefs.putBoolean("showWelcome", false);
@@ -440,36 +437,6 @@ public class Andie {
      * @see #createAndShowGUI()
      */
     public static void main(String[] args) throws Exception {
-        Properties props = new Properties();
-        String myPath = "src/main/resources/config.properties";
-        Path path = Paths.get(myPath);
-        try {
-            // Attempt to create the file. If it already exists, it throws
-            // FileAlreadyExistsException.
-            Files.createFile(path);
-        } catch (FileAlreadyExistsException ignored) {
-            // File already exists, no need to create it again.
-        } catch (IOException e) {
-            System.err.println("Error creating file: " + e.getMessage());
-            throw e;
-        }
-
-        // Ensure parent directories exist
-        if (Files.notExists(path.getParent())) {
-            Files.createDirectories(path.getParent());
-        }
-        try (FileInputStream in = new FileInputStream(path.toFile())) {
-            props.load(in);
-        }
-
-        String language = props.getProperty("language", "en");
-
-        if (language.equals("en")) {
-            I18nManager.init(null);
-        } else {
-            Locale locale = new Locale(language);
-            I18nManager.init(locale);
-        }
         javax.swing.SwingUtilities.invokeLater(() -> {
             try {
                 createAndShowGUI();

@@ -50,7 +50,7 @@ public class ColourActions extends ToolbarActions {
                 I18nManager.get("channel_swap_desc"),
                 KeyEvent.VK_C));
         actions.add(new BrightnessAndContrastAction(I18nManager.get("brightness_contrast"),
-                new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Colour/brightness.png")),
+                new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Colour/Brightness.png")),
                 I18nManager.get("brightness_contrast_desc"),
                 KeyEvent.VK_B));
 

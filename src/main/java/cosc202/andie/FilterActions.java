@@ -39,6 +39,8 @@ public class FilterActions extends ToolbarActions {
         actions.add(new MedianFilterAction(I18nManager.get("Median"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Filters/Median.png")), I18nManager.get("Median_desc"), KeyEvent.VK_D));
         actions.add(new EmbossFilterAction(I18nManager.get("Emboss"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Filters/Emboss.png")), I18nManager.get("Emboss_desc"), KeyEvent.VK_E));
         actions.add(new SobelFilterAction(I18nManager.get("Sobel"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Filters/Sobel.png")), I18nManager.get("Sobel_desc"), KeyEvent.VK_O));
+        actions.add(new ContrastMaskAction(I18nManager.get("Contrast_mask"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Filters/contrastMask.png")), I18nManager.get("Contrast_mask_desc"), KeyEvent.VK_C));
+
 
     }
 
@@ -506,4 +508,122 @@ public class FilterActions extends ToolbarActions {
 
     }
 
+    /**
+     * <p>
+     * Action to apply a contrast mask effect.
+     * </p>
+     *
+     */
+    public class ContrastMaskAction extends ImageAction {
+
+        /**
+         * <p>
+         * Create a new ContrastMask action.
+         * </p>
+         *
+         * @param name The name of the action.
+         * @param icon An icon to use to represent the action.
+         * @param desc A brief description of the action.
+         * @param mnemonic A mnemonic key to use as a shortcut.
+         */
+        ContrastMaskAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+            super(name, icon, desc, mnemonic);
+        }
+
+        /**
+         * <p>
+         * Callback for when the contrast mask action is triggered.
+         * </p>
+         *
+         * @param e The event triggering this callback.
+         */
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            if (!target.getImage().hasImage()) {
+                JOptionPane.showMessageDialog(null, I18nManager.get("Filter_no_image"), I18nManager.get("Filter_error_title"), JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            int radius = 1;
+            int strength = 50;
+
+            // Asks for blur radius
+            do {
+                int minRadius = 1;
+                int maxRadius = 10;
+
+                SpinnerNumberModel radiusModel = new SpinnerNumberModel(radius, minRadius, maxRadius, 1);
+                JSpinner radiusSpinner = new JSpinner(radiusModel);
+
+                JSpinner.NumberEditor editor = new JSpinner.NumberEditor(radiusSpinner, "#");
+                JFormattedTextField radiusInput = editor.getTextField();
+                radiusSpinner.setEditor(editor);
+
+                NumberFormatter formatter = (NumberFormatter) radiusInput.getFormatter();
+                formatter.setValueClass(Integer.class);
+                formatter.setAllowsInvalid(false);
+                formatter.setCommitsOnValidEdit(true);
+
+                int option = JOptionPane.showOptionDialog(
+                        null,
+                        radiusSpinner,
+                        I18nManager.get("Contrast_mask_radius_msg"),
+                        JOptionPane.OK_CANCEL_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        null,
+                        null
+                );
+
+                if (option == JOptionPane.CANCEL_OPTION) {
+                    return;
+                } else if (option == JOptionPane.OK_OPTION) {
+                    radius = radiusModel.getNumber().intValue();
+                }
+
+            } while (radius > 10 || radius <= 0);
+
+            // Asks for strength
+            do {
+                int minStrength = 0;
+                int maxStrength = 100;
+
+                SpinnerNumberModel strengthModel = new SpinnerNumberModel(strength, minStrength, maxStrength, 1);
+                JSpinner strengthSpinner = new JSpinner(strengthModel);
+
+                JSpinner.NumberEditor editor = new JSpinner.NumberEditor(strengthSpinner, "#");
+                JFormattedTextField strengthInput = editor.getTextField();
+                strengthSpinner.setEditor(editor);
+
+                NumberFormatter formatter = (NumberFormatter) strengthInput.getFormatter();
+                formatter.setValueClass(Integer.class);
+                formatter.setAllowsInvalid(false);
+                formatter.setCommitsOnValidEdit(true);
+
+                int option = JOptionPane.showOptionDialog(
+                        null,
+                        strengthSpinner,
+                        I18nManager.get("Contrast_mask_strength_msg"),
+                        JOptionPane.OK_CANCEL_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        null,
+                        null
+                );
+
+                if (option == JOptionPane.CANCEL_OPTION) {
+                    return;
+                } else if (option == JOptionPane.OK_OPTION) {
+                    strength = strengthModel.getNumber().intValue();
+                }
+
+            } while (strength < 0 || strength > 100);
+
+            // Apply contrast mask
+            target.getImage().apply(new ContrastMask(radius, strength));
+            target.repaint();
+            target.getParent().revalidate();
+        }
+    }
 }

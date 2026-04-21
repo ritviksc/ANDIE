@@ -11,7 +11,6 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.*;
 
-
 /**
  * <p>
  * UI display element for {@link EditableImage}s.
@@ -30,7 +29,7 @@ import javax.swing.*;
  * @author Steven Mills
  * @version 1.0
  */
-public class ImagePanel extends JPanel implements MouseListener, MouseMotionListener{
+public class ImagePanel extends JPanel {
 
     /**
      * The image to display in the ImagePanel.
@@ -53,17 +52,17 @@ public class ImagePanel extends JPanel implements MouseListener, MouseMotionList
      * </p>
      */
     private double scale;
-    
+
     /**
      * A boolean to check if the window is ready to be closed
      */
     public static boolean windowClosed = true;
-    
 
     /**
      * <p>
      * Create a new ImagePanel and register mouse actions.
-     * Using those mouse actions, deterimine what Image Operation is to be carried out, if it is the case.
+     * Using those mouse actions, deterimine what Image Operation is to be carried
+     * out, if it is the case.
      * </p>
      *
      * <p>
@@ -74,101 +73,114 @@ public class ImagePanel extends JPanel implements MouseListener, MouseMotionList
         image = new EditableImage();
         scale = 1.0;
         addMouseListener(new MouseAdapter() {
-        public void mousePressed(MouseEvent e) {
-            if (!image.hasImage()) return;
-            startPoint = e.getPoint();
-            endPoint = startPoint;
-            selection = null;
-        }
+            public void mousePressed(MouseEvent e) {
+                if (!image.hasImage())
+                    return;
+                startPoint = new Point(
+                        (int) (e.getX() / scale),
+                        (int) (e.getY() / scale));
+                endPoint = startPoint;
+                selection = null;
+            }
 
-        public void mouseReleased(MouseEvent e) {
-            if (!image.hasImage()) return;
-            endPoint = e.getPoint();
-            updateSelection();
-            repaint();
+            public void mouseReleased(MouseEvent e) {
+                if (!image.hasImage())
+                    return;
+                endPoint = new Point(
+                        (int) (e.getX() / scale),
+                        (int) (e.getY() / scale));
 
-            if (selection != null) {
-                String[] options = {
-                    I18nManager.get("crop_rectangle"),
-                    I18nManager.get("crop_ellipse"),
-                    I18nManager.get("draw_line"),
-                    I18nManager.get("draw_rectangle"),
-                    I18nManager.get("draw_ellipse"),
-                    I18nManager.get("cancel_crop")
-                };
+                updateSelection();
+                repaint();
 
-                int choice = JOptionPane.showOptionDialog(
-                    ImagePanel.this,
-                    I18nManager.get("crop_action"),
-                    I18nManager.get("crop_selection"),
-                    JOptionPane.DEFAULT_OPTION,
-                    JOptionPane.PLAIN_MESSAGE,
-                    null,
-                    options,
-                    options[0]
-                );
+                if (selection == null) return;
+                
+                if (selection != null) {
+                    String[] options = {
+                            I18nManager.get("crop_rectangle"),
+                            I18nManager.get("crop_ellipse"),
+                            I18nManager.get("draw_line"),
+                            I18nManager.get("draw_rectangle"),
+                            I18nManager.get("draw_ellipse"),
+                            I18nManager.get("cancel_crop")
+                    };
 
-                switch (choice) {
-                    case 0: // Crop as rectangle
-                        Rectangle normalized = getSelectionRectangle(startPoint, endPoint);
-                        ImageOperation op = new CropOperation(normalized);
-                        image.apply(op);   
-                        selection = null;
-                        repaint(); 
-                        break;
-                    case 1: // Crop as ellipse
-                        Rectangle normalizedE = getSelectionRectangle(startPoint, endPoint);
-                        ImageOperation opEllipse = new CropEllipse(normalizedE);
-                        image.apply(opEllipse);   
-                        selection = null;
-                        repaint();
-                        break;
-                    case 2: // Draw line
-                        ShapeOptions lineOptions = getShapeOptions();
-                        if (lineOptions != null){
-                            ImageOperation opLine = new DrawLineOperation(lineOptions.color,startPoint,endPoint);
-                            image.apply(opLine); 
-                        }  
-                        selection = null;
-                        repaint();
-                        break;
-                    case 3: // Rectangle
-                        ShapeOptions rectOptions = getShapeOptions();
-                        if (rectOptions != null) {
-                            ImageOperation opR = new DrawRectangle(selection, rectOptions.color, rectOptions.filled);
-                            image.apply(opR);
-                        }
-                        selection = null;
-                        repaint();
-                        break;
+                    int choice = JOptionPane.showOptionDialog(
+                            ImagePanel.this,
+                            I18nManager.get("crop_action"),
+                            I18nManager.get("crop_selection"),
+                            JOptionPane.DEFAULT_OPTION,
+                            JOptionPane.PLAIN_MESSAGE,
+                            null,
+                            options,
+                            options[0]);
 
-                    case 4: // Ellipse
-                        ShapeOptions ellipseOptions = getShapeOptions();
-                        if (ellipseOptions != null) {
-                            ImageOperation opE = new DrawEllipse(selection, ellipseOptions.color, ellipseOptions.filled);
-                            image.apply(opE);
-                        }
-                        selection = null;
-                        repaint();
-                        break;
-                    default:
-                        selection = null;
-                        repaint();
-                        break;
+                    switch (choice) {
+                        case 0: // Crop as rectangle
+                            Rectangle normalized = getSelectionRectangle(startPoint, endPoint);
+                            ImageOperation op = new CropOperation(normalized);
+                            image.apply(op);
+                            selection = null;
+                            repaint();
+                            break;
+                        case 1: // Crop as ellipse
+                            Rectangle normalizedE = getSelectionRectangle(startPoint, endPoint);
+                            ImageOperation opEllipse = new CropEllipse(normalizedE);
+                            image.apply(opEllipse);
+                            selection = null;
+                            repaint();
+                            break;
+                        case 2: // Draw line
+                            ShapeOptions lineOptions = getShapeOptions();
+                            if (lineOptions != null) {
+                                ImageOperation opLine = new DrawLineOperation(lineOptions.color, startPoint, endPoint);
+                                image.apply(opLine);
+                            }
+                            selection = null;
+                            repaint();
+                            break;
+                        case 3: // Rectangle
+                            ShapeOptions rectOptions = getShapeOptions();
+                            if (rectOptions != null) {
+                                ImageOperation opR = new DrawRectangle(selection, rectOptions.color,
+                                        rectOptions.filled);
+                                image.apply(opR);
+                            }
+                            selection = null;
+                            repaint();
+                            break;
+
+                        case 4: // Ellipse
+                            ShapeOptions ellipseOptions = getShapeOptions();
+                            if (ellipseOptions != null) {
+                                ImageOperation opE = new DrawEllipse(selection, ellipseOptions.color,
+                                        ellipseOptions.filled);
+                                image.apply(opE);
+                            }
+                            selection = null;
+                            repaint();
+                            break;
+                        default:
+                            selection = null;
+                            repaint();
+                            break;
+                    }
                 }
             }
-        }
-    });
+        });
 
-    addMouseMotionListener(new MouseMotionAdapter() {
-        public void mouseDragged(MouseEvent e) {
-            if (!image.hasImage()) return;
-            endPoint = e.getPoint();
-            updateSelection();
-            repaint();
-        }
-    });
-}
+        addMouseMotionListener(new MouseMotionAdapter() {
+            public void mouseDragged(MouseEvent e) {
+                if (!image.hasImage())
+                    return;
+                endPoint = new Point(
+                        (int) (e.getX() / scale),
+                        (int) (e.getY() / scale));
+                updateSelection();
+                repaint();
+            }
+        });
+    }
 
     /**
      * <p>
@@ -221,7 +233,6 @@ public class ImagePanel extends JPanel implements MouseListener, MouseMotionList
         scale = zoomPercent / 100;
     }
 
-
     /**
      * <p>
      * Gets the preferred size of this component for UI layout.
@@ -246,18 +257,19 @@ public class ImagePanel extends JPanel implements MouseListener, MouseMotionList
 
     // Update rectangular area the user is highlighting as the mouse is dragged
     private void updateSelection() {
-        int x1 = (int)(startPoint.x / scale);
-        int y1 = (int)(startPoint.y / scale);
-        int x2 = (int)(endPoint.x / scale);
-        int y2 = (int)(endPoint.y / scale);
 
-        if (image.getCurrentImage().getWidth() - startPoint.x < 0 || image.getCurrentImage().getHeight() - startPoint.y < 0 ){
-            return;
-        } 
+        int x1 = startPoint.x;
+        int y1 = startPoint.y;
+        int x2 = endPoint.x;
+        int y2 = endPoint.y;
 
-        if (image.getCurrentImage().getWidth() - endPoint.x < 0 || image.getCurrentImage().getHeight() - endPoint.y < 0 ){
-            return;
-        } 
+        int imgWidth = image.getCurrentImage().getWidth();
+        int imgHeight = image.getCurrentImage().getHeight();
+
+        x1 = Math.max(0, Math.min(x1, imgWidth));
+        y1 = Math.max(0, Math.min(y1, imgHeight));
+        x2 = Math.max(0, Math.min(x2, imgWidth));
+        y2 = Math.max(0, Math.min(y2, imgHeight));
 
         int x = Math.min(x1, x2);
         int y = Math.min(y1, y2);
@@ -266,7 +278,6 @@ public class ImagePanel extends JPanel implements MouseListener, MouseMotionList
 
         selection = new Rectangle(x, y, width, height);
     }
-    
 
     /**
      * <p>
@@ -284,22 +295,15 @@ public class ImagePanel extends JPanel implements MouseListener, MouseMotionList
             g2.drawImage(image.getCurrentImage(), null, 0, 0);
 
             if (selection != null) {
-                // get proper coordinates w.r.t to scale
-                int x = (int)(selection.x * scale); 
-                int y = (int)(selection.y * scale);
-                int w = (int)(selection.width * scale);
-                int h = (int)(selection.height * scale);
+                g2.setColor(new Color(0, 0, 255, 50));
+                g2.fillRect(selection.x, selection.y, selection.width, selection.height);
 
-                g2.setColor(new Color(0, 0, 255, 50)); // transparent blue (convention)
-                g2.fillRect(x, y, w, h);
-
-                g2.setColor(Color.BLUE); // solid border for asthetic purpose
-                g2.drawRect(x, y, w, h);
+                g2.setColor(Color.BLUE);
+                g2.drawRect(selection.x, selection.y, selection.width, selection.height);
             }
             g2.dispose();
         }
 
-        
     }
 
     // Get rectangle area that user is highlighting with proper coordinates
@@ -317,16 +321,18 @@ public class ImagePanel extends JPanel implements MouseListener, MouseMotionList
      * </p>
      *
      * <p>
-     * A panel is launched so the user can select the color, and 'solidness' of the object to be drawn.
+     * A panel is launched so the user can select the color, and 'solidness' of the
+     * object to be drawn.
      * 
      * </p>
      *
-     * @return Instance of the ShapeOptions class that collects users preferences and uses those for 
-     * operation to be carried out 
+     * @return Instance of the ShapeOptions class that collects users preferences
+     *         and uses those for
+     *         operation to be carried out
      */
     private ShapeOptions getShapeOptions() {
         JColorChooser colorChooser = new JColorChooser();
-        String[] styles = {I18nManager.get("outline"), I18nManager.get("solid")};
+        String[] styles = { I18nManager.get("outline"), I18nManager.get("solid") };
         JComboBox<String> styleBox = new JComboBox<>(styles);
 
         JPanel panel = new JPanel(new BorderLayout());
@@ -334,12 +340,11 @@ public class ImagePanel extends JPanel implements MouseListener, MouseMotionList
         panel.add(colorChooser, BorderLayout.CENTER);
 
         int result = JOptionPane.showConfirmDialog(
-            this, // child of Image Panel
-            panel,
-            I18nManager.get("shape_options"),
-            JOptionPane.OK_CANCEL_OPTION,
-            JOptionPane.PLAIN_MESSAGE
-        );
+                this, // child of Image Panel
+                panel,
+                I18nManager.get("shape_options"),
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE);
 
         if (result == JOptionPane.OK_OPTION) {
             Color chosenColor = colorChooser.getColor();
@@ -349,15 +354,5 @@ public class ImagePanel extends JPanel implements MouseListener, MouseMotionList
 
         return null; // cancelled
     }
-
-    
-    // Unused functions required for interface(s)
-    public void mouseClicked(MouseEvent e) {}
-    public void mouseEntered(MouseEvent e) {}
-    public void mouseExited(MouseEvent e) {}
-    public void mouseMoved(MouseEvent e) {}
-    public void mouseDragged(MouseEvent e) {}
-    public void mousePressed(MouseEvent e) {}
-    public void mouseReleased(MouseEvent e) {}
 
 }

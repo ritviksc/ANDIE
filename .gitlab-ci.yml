@@ -15,7 +15,8 @@ before_script:
     systemProp.http.nonProxyHosts=altitude.otago.ac.nz|docker|172.17.0.*
     systemProp.https.proxyHost=rtis-proxy-r01.uod.otago.ac.nz
     systemProp.https.proxyPort=3128
-    systemProp.https.nonProxyHosts=altitude.otago.ac.nz|docker|172.17.0.* EOF
+    systemProp.https.nonProxyHosts=altitude.otago.ac.nz|docker|172.17.0.* 
+    EOF
 pages: 
   stage: build
   script:

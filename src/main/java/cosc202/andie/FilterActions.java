@@ -687,4 +687,4 @@ public class FilterActions extends ToolbarActions {
         }
     }
 }
-}
+

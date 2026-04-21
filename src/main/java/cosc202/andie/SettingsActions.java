@@ -1,17 +1,11 @@
 package cosc202.andie;
 
-import static cosc202.andie.ImageAction.target;
-
 import java.awt.Desktop;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.awt.event.WindowEvent;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Locale;
-import java.util.Properties;
 import java.util.prefs.Preferences;
 
 import javax.swing.Action;
@@ -38,8 +32,10 @@ public class SettingsActions {
         actions = new ArrayList<>();
         actions.add(new LanguageAction(I18nManager.get("Language_title"), null, I18nManager.get("Language_desc"),
                 KeyEvent.VK_L));
-        actions.add(new PopUpAction(I18nManager.get("Popup_title"), null, I18nManager.get("Popup_desc"), KeyEvent.VK_P));
-        actions.add(new DocumentAction(I18nManager.get("Document_title"), null, I18nManager.get("Document_desc"), KeyEvent.VK_D));
+        actions.add(
+                new PopUpAction(I18nManager.get("Popup_title"), null, I18nManager.get("Popup_desc"), KeyEvent.VK_P));
+        actions.add(new DocumentAction(I18nManager.get("Document_title"), null, I18nManager.get("Document_desc"),
+                KeyEvent.VK_D));
     }
 
     /**
@@ -187,14 +183,6 @@ public class SettingsActions {
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
-                Properties props = new Properties();
-                try (FileInputStream in = new FileInputStream("src/main/resources/config.properties")) {
-                    props.load(in);
-                } catch (Exception ex) {
-                    System.out.println("Error reading config.properties!");
-                    return;
-                }
-
                 String[] options = { "English", "Dutch" };
 
                 String choice = (String) JOptionPane.showInputDialog(
@@ -210,25 +198,31 @@ public class SettingsActions {
                     return;
                 }
 
-                Locale newLocale = null;
-
                 switch (choice) {
                     case "Dutch":
-                        newLocale = new Locale("nl");
-                        props.setProperty("language", "nl");
+                        if (Andie.prefs.get("lang", "en").equals("nl")) {
+                            JOptionPane.showMessageDialog(
+                                    null,
+                                    I18nManager.get("lang_set"),
+                                    I18nManager.get("no_change"),
+                                    JOptionPane.INFORMATION_MESSAGE);
+                            return;
+                        }
+                        Andie.prefs.put("lang", "nl");
                         break;
                     case "English":
-                        props.setProperty("language", "en");
+                        if (Andie.prefs.get("lang", "en").equals("en")) {
+                            JOptionPane.showMessageDialog(
+                                    null,
+                                    I18nManager.get("lang_set"),
+                                    I18nManager.get("no_change"),
+                                    JOptionPane.INFORMATION_MESSAGE);
+                            return;
+                        }
+                        Andie.prefs.put("lang", "en");
                         break;
                     default:
                         break;
-                }
-
-                try (FileOutputStream out = new FileOutputStream("src/main/resources/config.properties")) {
-                    props.store(out, "Updated language");
-                } catch (Exception ex) {
-                    System.out.println("Error writing to config.properties!");
-                    return;
                 }
 
                 JOptionPane.showMessageDialog(null, I18nManager.get("Lan_successful"));
@@ -236,22 +230,20 @@ public class SettingsActions {
                 boolean readyToClose = true;
 
                 // Close all windows safely
-                for (java.awt.Window window : java.awt.Window.getWindows()) {
-                    if (window instanceof JFrame) {
-                        ((JFrame) window).dispatchEvent(new WindowEvent((JFrame) window, WindowEvent.WINDOW_CLOSING));
-                        if (!target.windowClosed) {
-                            readyToClose = false;
-                            break;
-                        }
+                for (Window window : Window.getWindows()) {
+                    if (window instanceof JFrame frame) {
+                        frame.dispose(); // close immediately
                     }
                 }
                 if (!readyToClose) {
                     return;
                 }
-                // Restart app with new language preference.
+
+                // 'Soft' reboot app with new language preference.
                 SwingUtilities.invokeLater(() -> {
                     try {
-                        Andie.main(new String[] {});
+                        new Andie();
+                        Andie.createAndShowGUI();
                     } catch (Exception e1) {
                         e1.printStackTrace();
                     }

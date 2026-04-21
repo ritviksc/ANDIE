@@ -37,3 +37,36 @@ unit-test-job:
   script:
   - echo "Attempting to run unit tests..."
   - gradle test
+  
+  # Docker image to use on the CI / pipeline worker machines
+image: gradle:8-jdk17-alpine
+# List of stages for jobs, and their order of execution
+stages:
+  - build
+  - test
+  - package
+  - deploy
+compile-code:
+  stage: build
+  script:
+    - echo 'Attempting to compile the code...'
+    - gradle -Dorg.gradle.welcome=never --no-daemon compileJava
+    - echo 'Done.'
+  artifacts:
+    paths:
+        - build
+test:
+  stage: test
+  script:
+    - echo 'Running unit tests...'
+    - gradle -Dorg.gradle.welcome=never --no-daemon test
+    - echo 'Done.'
+create-jar:
+  stage: package
+  script:
+    - echo 'Attempting to create JAR file...'
+    - gradle -Dorg.gradle.welcome=never --no-daemon jar
+    - echo 'Done.'
+  artifacts:
+    paths:
+        - build/libs/andie-1.0.0.jar

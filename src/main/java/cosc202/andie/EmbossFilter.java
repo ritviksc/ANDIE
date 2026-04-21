@@ -18,7 +18,7 @@ import java.awt.image.*;
  * </p>
  *
  * @see ConvolutionFilter
- * @author Steven Mills
+ * @author Robert Hannaford
  * @version 1.0
  */
 public class EmbossFilter implements ImageOperation, java.io.Serializable {

@@ -366,7 +366,7 @@ public class FilterActions extends ToolbarActions {
      * Action to apply a Median blur an image with a Median blurring filter.
      * </p>
      *
-     * @see MedianFilter
+     * @see EmbossFilter
      */
     public class EmbossFilterAction extends ImageAction {
 
@@ -387,11 +387,11 @@ public class FilterActions extends ToolbarActions {
 
         /**
          * <p>
-         * Callback for when the Median-filter-action action is triggered.
+         * Callback for when the Emboss-filter-action action is triggered.
          * </p>
          *
          * <p>
-         * This method is called whenever the MedianFilterAction is triggered.
+         * This method is called whenever the EmbossFilterAction is triggered.
          * It then applies a {@link MedianFilter}
          * </p>
          *
@@ -438,16 +438,16 @@ public class FilterActions extends ToolbarActions {
 
     /**
      * <p>
-     * Action to apply a Median blur an image with a Median blurring filter.
+     * Action to apply a Sobel blur an image with a Sobel edge-detection filter.
      * </p>
      *
-     * @see MedianFilter
+     * @see SobelFilter
      */
     public class SobelFilterAction extends ImageAction {
 
         /**
          * <p>
-         * Create a new Emboss-filter action.
+         * Create a new Sobel-filter action.
          * </p>
          *
          * @param name The name of the action (ignored if null).

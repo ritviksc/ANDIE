@@ -40,6 +40,7 @@ public class EditActions extends ToolbarActions{
             I18nManager.get("Undo_desc"),
             KeyEvent.VK_Z
         ));
+        
 
         actions.add(new RedoAction(
             I18nManager.get("Redo"),
@@ -130,6 +131,8 @@ public class EditActions extends ToolbarActions{
          */
         UndoAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
+            
+            putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_Z, shortcut));
         }
 
         /**
@@ -174,6 +177,8 @@ public class EditActions extends ToolbarActions{
          */
         RedoAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
+            //ctrl/cmd + shift + z
+            putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_Z, shortcut | KeyEvent.SHIFT_DOWN_MASK));
         }
 
         /**
@@ -217,7 +222,9 @@ public class EditActions extends ToolbarActions{
          * null).
          */
         ResizeAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
-            super(name, icon, desc, mnemonic);
+            super(name, icon, desc, mnemonic);  
+            //ctrl/comd + shift + r
+            putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_R, shortcut | KeyEvent.SHIFT_DOWN_MASK));
         }
 
         /**
@@ -304,6 +311,8 @@ public class EditActions extends ToolbarActions{
          */
         FlipActionHorizontal(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
+            //ctrl/comd + shift + h
+            putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_H, shortcut | KeyEvent.SHIFT_DOWN_MASK));
         }
 
         /**
@@ -362,6 +371,8 @@ public class EditActions extends ToolbarActions{
          */
         FlipActionVertically(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
+            //ctrl/comd + shift + v
+            putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_V, shortcut | KeyEvent.SHIFT_DOWN_MASK));
         }
 
         /**
@@ -420,6 +431,8 @@ public class EditActions extends ToolbarActions{
          */
         RotateAction90C(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
+            //ctrl/comd + shift + right
+            putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, shortcut | KeyEvent.SHIFT_DOWN_MASK));
         }
 
         /**
@@ -478,6 +491,8 @@ public class EditActions extends ToolbarActions{
          */
         RotateAction90CC(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
+            //ctrl/comd + shift + left
+            putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, shortcut | KeyEvent.SHIFT_DOWN_MASK));
         }
 
         /**
@@ -536,6 +551,8 @@ public class EditActions extends ToolbarActions{
          */
         RotateAction180(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
+            //ctrl/comd + shift + down
+            putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, shortcut | KeyEvent.SHIFT_DOWN_MASK));
         }
 
         /**

@@ -1,12 +1,9 @@
 package cosc202.andie;
 
-import java.awt.Color;
-import java.awt.Insets;
 import java.util.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.text.NumberFormatter;
-import java.awt.event.ActionListener;
 
 /**
  * <p>

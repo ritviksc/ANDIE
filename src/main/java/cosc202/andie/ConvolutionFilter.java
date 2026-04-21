@@ -1,7 +1,6 @@
 package cosc202.andie;
 
 import java.awt.image.BufferedImage;
-import java.util.Arrays;
 
 /**
  * <p>

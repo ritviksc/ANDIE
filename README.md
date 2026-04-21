@@ -67,9 +67,10 @@ Newly developed functions were tested with undo and redo operations, saving, sav
 
 ## Known bugs
 
-### Save as works weirdly
+### Scaling transparency issue
 
-Save as must include the file extension IN the name of the saved file for it save a new file, otherwise it will only save the .ops file. The .ops file will also inlcude the file extension when being saved.
+### Zooming breaks selection
+
 ## Refactoring
 
 ### Internationalisation

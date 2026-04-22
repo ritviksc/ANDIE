@@ -1,6 +1,5 @@
 package cosc202.andie;
 
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.awt.Graphics2D;
 import java.awt.Point;

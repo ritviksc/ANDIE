@@ -93,6 +93,15 @@ public class SettingsActions {
         @Override
         public void actionPerformed(ActionEvent e) {
             Preferences pref = Andie.prefs;
+            if (pref.getBoolean("showWelcome",true) == true){
+               JOptionPane.showMessageDialog(
+                                    null,
+                                    I18nManager.get("popup_set"),
+                                    I18nManager.get("no_change"),
+                                    JOptionPane.INFORMATION_MESSAGE);
+                            
+                return;
+            }
             pref.putBoolean("showWelcome", true); // enable pop up
         }
 

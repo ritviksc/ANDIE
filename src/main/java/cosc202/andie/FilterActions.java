@@ -25,6 +25,14 @@ import javax.swing.text.NumberFormatter;
  * @version 1.1
  */
 public class FilterActions extends ToolbarActions {
+    
+    public Action mean;
+    public Action sharpen;
+    public Action gaussian;
+    public Action median;
+    public Action emboss;
+    public Action sobel;
+    public Action contrastMask;
 
     /**
      * <p>
@@ -33,14 +41,20 @@ public class FilterActions extends ToolbarActions {
      */
     public FilterActions() {
         actions = new ArrayList<>();
-        actions.add(new MeanFilterAction(I18nManager.get("Mean"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Filters/Mean.png")), I18nManager.get("Mean_desc"), KeyEvent.VK_M));
-        actions.add(new SharpenFilterAction(I18nManager.get("Sharpen"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Filters/Sharpen.png")), I18nManager.get("Sharpen_desc"), KeyEvent.VK_S));
-        actions.add(new GaussianFilterAction(I18nManager.get("Gaussian"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Filters/Gaussian.png")), I18nManager.get("Gaussian_desc"), KeyEvent.VK_G));
-        actions.add(new MedianFilterAction(I18nManager.get("Median"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Filters/Median.png")), I18nManager.get("Median_desc"), KeyEvent.VK_D));
-        actions.add(new EmbossFilterAction(I18nManager.get("Emboss"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Filters/Emboss.png")), I18nManager.get("Emboss_desc"), KeyEvent.VK_E));
-        actions.add(new SobelFilterAction(I18nManager.get("Sobel"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Filters/Sobel.png")), I18nManager.get("Sobel_desc"), KeyEvent.VK_O));
-        actions.add(new ContrastMaskAction(I18nManager.get("Contrast_mask"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Filters/contrastMask.png")), I18nManager.get("Contrast_mask_desc"), KeyEvent.VK_C));
-
+        mean = new MeanFilterAction(I18nManager.get("Mean"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Filters/Mean.png")), I18nManager.get("Mean_desc"), KeyEvent.VK_M); 
+        actions.add(mean);
+        sharpen = new SharpenFilterAction(I18nManager.get("Sharpen"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Filters/Sharpen.png")), I18nManager.get("Sharpen_desc"), KeyEvent.VK_S); 
+        actions.add(sharpen);
+        gaussian = new GaussianFilterAction(I18nManager.get("Gaussian"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Filters/Gaussian.png")), I18nManager.get("Gaussian_desc"), KeyEvent.VK_G); 
+        actions.add(gaussian);
+        median = new MedianFilterAction(I18nManager.get("Median"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Filters/Median.png")), I18nManager.get("Median_desc"), KeyEvent.VK_D); 
+        actions.add(median);
+        emboss = new EmbossFilterAction(I18nManager.get("Emboss"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Filters/Emboss.png")), I18nManager.get("Emboss_desc"), KeyEvent.VK_E); 
+        actions.add(emboss);
+        sobel = new SobelFilterAction(I18nManager.get("Sobel"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Filters/Sobel.png")), I18nManager.get("Sobel_desc"), KeyEvent.VK_O); 
+        actions.add(sobel);
+        contrastMask = new ContrastMaskAction(I18nManager.get("Contrast_mask"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Filters/contrastMask.png")), I18nManager.get("Contrast_mask_desc"), KeyEvent.VK_C); 
+        actions.add(contrastMask);
 
     }
 

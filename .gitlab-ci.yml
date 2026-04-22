@@ -17,18 +17,30 @@ before_script:
     systemProp.https.proxyPort=3128
     systemProp.https.nonProxyHosts=altitude.otago.ac.nz|docker|172.17.0.* 
     EOF
-pages:
+
+javadoc:
   stage: build
   script:
-    - echo "Generating Javadoc..."
-    - gradle javadoc
+    - echo 'Attempting to generate JavaDoc documentation...'
+    - gradle -Dorg.gradle.welcome=never javadoc
+    - echo 'Done.'
+  artifacts:
+    paths:
+      - build/docs
 
+
+pages:
+  stage: deploy
+  script:
+
+    - set +o pipefail
+    
     - echo "Preparing pages..."
     - mkdir -p public/javadoc
     - mkdir -p public/docs
 
-    - mv build/docs/javadoc/* public/javadoc/
-
+    - cp -r build/docs/javadoc/* public/javadoc/
+    - cp build/libs/andie-1.0.0.jar public/
     - cp -r docs/* public/docs/ || true
 
     - ls -R public | head
@@ -39,40 +51,10 @@ pages:
   only:
     - main
 
+
+
+
 unit-test-job:
   script:
   - echo "Attempting to run unit tests..."
   - gradle test
-  
-  # Docker image to use on the CI / pipeline worker machines
-image: gradle:8-jdk17-alpine
-# List of stages for jobs, and their order of execution
-stages:
-  - build
-  - test
-  - package
-  - deploy
-compile-code:
-  stage: build
-  script:
-    - echo 'Attempting to compile the code...'
-    - gradle -Dorg.gradle.welcome=never --no-daemon compileJava
-    - echo 'Done.'
-  artifacts:
-    paths:
-        - build
-test:
-  stage: test
-  script:
-    - echo 'Running unit tests...'
-    - gradle -Dorg.gradle.welcome=never --no-daemon test
-    - echo 'Done.'
-create-jar:
-  stage: package
-  script:
-    - echo 'Attempting to create JAR file...'
-    - gradle -Dorg.gradle.welcome=never --no-daemon jar
-    - echo 'Done.'
-  artifacts:
-    paths:
-        - build/libs/andie-1.0.0.jar

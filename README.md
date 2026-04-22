@@ -67,10 +67,6 @@ Newly developed functions were tested with undo and redo operations, saving, sav
 
 ## Known bugs
 
-### Scaling transparency issue
-
-### Zooming breaks selection
-
 ## Refactoring
 
 ### Internationalisation

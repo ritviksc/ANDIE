@@ -27,6 +27,15 @@ import java.awt.event.ActionListener;
  * @version 1.0
  */
 public class EditActions extends ToolbarActions{
+    
+    public Action undoAction;
+    public Action redoAction;
+    public Action resizeAction;
+    public Action rotate90CAction;
+    public Action rotate90CCAction;
+    public Action rotate180Action;
+    public Action flipHorizontalAction;
+    public Action flipVerticalAction;
     /**
      * <p>
      * Create a set of Edit menu actions.
@@ -34,79 +43,70 @@ public class EditActions extends ToolbarActions{
      */
     public EditActions() {
         actions = new ArrayList<>();
-        actions.add(new UndoAction(
+
+        undoAction = new UndoAction(
             I18nManager.get("Undo"),
             new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Edit/Undo.png")),
             I18nManager.get("Undo_desc"),
             KeyEvent.VK_Z
-        ));
-        
+        );
+        actions.add(undoAction);
 
-        actions.add(new RedoAction(
+        redoAction = new RedoAction(
             I18nManager.get("Redo"),
             new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Edit/Redo.png")),
             I18nManager.get("Redo_desc"),
             KeyEvent.VK_Y
-        ));
+        );
+        actions.add(redoAction);
 
-        actions.add(new ResizeAction(
+        resizeAction = new ResizeAction(
             I18nManager.get("Resize"),
             new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Edit/resize.png")),
             I18nManager.get("Resize_desc"),
             KeyEvent.VK_R
-        ));
+        );
+        actions.add(resizeAction);
 
-        actions.add(new RotateAction90C(
+        rotate90CAction = new RotateAction90C(
             I18nManager.get("Rotate90C"),
             new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Edit/rotateclockwise90.png")),
             I18nManager.get("Rotate90C_desc"),
             KeyEvent.VK_F
-        ));
+        );
+        actions.add(rotate90CAction);
 
-        actions.add(new RotateAction90CC(
+        rotate90CCAction = new RotateAction90CC(
             I18nManager.get("Rotate90CC"),
             new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Edit/rotateanticlockwise90.png")),
             I18nManager.get("Rotate90CC_desc"),
             KeyEvent.VK_1
-        ));
+        );
+        actions.add(rotate90CCAction);
 
-        actions.add(new RotateAction180(
+        rotate180Action = new RotateAction180(
             I18nManager.get("Rotate180"),
             new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Edit/rotate180.png")),
             I18nManager.get("Rotate180_desc"),
             KeyEvent.VK_2
-        ));
+        );
+        actions.add(rotate180Action);
 
-        actions.add(new FlipActionHorizontal(
+        flipHorizontalAction = new FlipActionHorizontal(
             I18nManager.get("FlipHorizontal"),
             new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Edit/fliphorizontal.png")),
             I18nManager.get("FlipHorizontal_desc"),
             KeyEvent.VK_3
-        ));
+        );
+        actions.add(flipHorizontalAction);
 
-        actions.add(new FlipActionVertically(
+        flipVerticalAction = new FlipActionVertically(
             I18nManager.get("FlipVertical"),
             new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Edit/flipvertical.png")),
             I18nManager.get("FlipVertical_desc"),
             KeyEvent.VK_V
-        ));
-    }
-
-    /**
-     * <p>
-     * Create a menu containing the list of Edit actions.
-     * </p>
-     *
-     * @return The edit menu UI element.
-     */
-    public JMenu createMenu() {
-        JMenu editMenu = new JMenu(I18nManager.get("Edit_title"));
-
-        for (Action action : actions) {
-            editMenu.add(new JMenuItem(action));
-        }
-
-        return editMenu;
+        );
+        actions.add(flipVerticalAction);
     }
 
     /**
@@ -130,9 +130,7 @@ public class EditActions extends ToolbarActions{
          * null).
          */
         UndoAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
-            super(name, icon, desc, mnemonic);
-            
-            putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_Z, shortcut));
+            super(name, icon, desc, mnemonic); 
         }
 
         /**
@@ -177,8 +175,6 @@ public class EditActions extends ToolbarActions{
          */
         RedoAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
-            //ctrl/cmd + shift + z
-            putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_Z, shortcut | KeyEvent.SHIFT_DOWN_MASK));
         }
 
         /**
@@ -223,8 +219,6 @@ public class EditActions extends ToolbarActions{
          */
         ResizeAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);  
-            //ctrl/comd + shift + r
-            putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_R, shortcut | KeyEvent.SHIFT_DOWN_MASK));
         }
 
         /**
@@ -311,8 +305,6 @@ public class EditActions extends ToolbarActions{
          */
         FlipActionHorizontal(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
-            //ctrl/comd + shift + h
-            putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_H, shortcut | KeyEvent.SHIFT_DOWN_MASK));
         }
 
         /**
@@ -371,8 +363,6 @@ public class EditActions extends ToolbarActions{
          */
         FlipActionVertically(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
-            //ctrl/comd + shift + v
-            putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_V, shortcut | KeyEvent.SHIFT_DOWN_MASK));
         }
 
         /**
@@ -431,8 +421,6 @@ public class EditActions extends ToolbarActions{
          */
         RotateAction90C(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
-            //ctrl/comd + shift + right
-            putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, shortcut | KeyEvent.SHIFT_DOWN_MASK));
         }
 
         /**
@@ -491,8 +479,6 @@ public class EditActions extends ToolbarActions{
          */
         RotateAction90CC(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
-            //ctrl/comd + shift + left
-            putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, shortcut | KeyEvent.SHIFT_DOWN_MASK));
         }
 
         /**
@@ -551,8 +537,6 @@ public class EditActions extends ToolbarActions{
          */
         RotateAction180(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
-            //ctrl/comd + shift + down
-            putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, shortcut | KeyEvent.SHIFT_DOWN_MASK));
         }
 
         /**

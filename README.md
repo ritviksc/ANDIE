@@ -80,3 +80,16 @@ ANDIE's provided ui has been internationalised and an I18N manager has been adde
 ### Save on exit functionality
 
 The EditableImage class has been altered to include an isSaved boolean to check for if the latest changes to the image have been saved before the program exits. As a result, the default close operation has been changed to be _DO_NOTHING_ON_CLOSE_. Thus anything that would usually exit the program must be modifided to send a Window_Closing flag so the windowListener registers the close.
+
+### Shorcuts:
+
+Edit:
+- undo: ctrl/cmd + z
+- redo: ctrl/cmd + shift + z
+- resize: ctrl/cmd + shift + r
+- flip horizontally: ctrl/cmd + shift + h
+- flip vertically: ctrl/cmd + shift + v
+- rotate 90 degrees clockwise: ctrl/cmd + shift + right
+- rotate 90 degrees anti-clockwise: ctrl/cmd + shift + left
+- rotate 180 degrees: ctrl/cmd + shift + down
+            

@@ -17,21 +17,27 @@ before_script:
     systemProp.https.proxyPort=3128
     systemProp.https.nonProxyHosts=altitude.otago.ac.nz|docker|172.17.0.* 
     EOF
-pages: 
+pages:
   stage: build
   script:
-    - echo "Attempting to generate Javadoc..."
+    - echo "Generating Javadoc..."
     - gradle javadoc
-    - echo "Publishing Javadoc..."
-    - mkdir public
-    - mv build/docs/javadoc/ public/
+
+    - echo "Preparing pages..."
+    - mkdir -p public/javadoc
+    - mkdir -p public/docs
+
+    - mv build/docs/javadoc/* public/javadoc/
+
+    - cp -r docs/* public/docs/ || true
+
     - ls -R public | head
-    - echo 'first ten public/ files listed'
+
   artifacts:
     paths:
-    - public
+      - public
   only:
-  - main
+    - main
 
 unit-test-job:
   script:

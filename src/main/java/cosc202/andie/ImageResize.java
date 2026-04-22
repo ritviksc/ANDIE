@@ -42,7 +42,7 @@ public class ImageResize implements ImageOperation, java.io.Serializable {
 
         // Create copy of input and and draw new image
         Image resultingImage = input.getScaledInstance(newWidth, newHeight, Image.SCALE_DEFAULT);
-        BufferedImage outputImage = new BufferedImage(newWidth, newHeight, input.getType());
+        BufferedImage outputImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = outputImage.createGraphics();
         g2d.drawImage(resultingImage, 0, 0, null);
         g2d.dispose(); // avoid memory leaks if ANDIE runs for a longer amount of time

@@ -3,20 +3,17 @@ package cosc202.andie;
 import static cosc202.andie.ImageAction.target;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.nio.file.FileAlreadyExistsException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
+import java.net.URI;
 import javax.swing.*;
 import javax.imageio.*;
 import java.util.Locale;
-import java.util.Properties;
+import java.util.prefs.Preferences;
+
 import javax.swing.filechooser.FileNameExtensionFilter;
+import java.awt.event.MouseEvent;
 
 /**
  * <p>
@@ -40,6 +37,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class Andie {
 
     private static JButton activeButton;
+    public static Preferences prefs = Preferences.userNodeForPackage(Andie.class);
 
     /**
      * <p>
@@ -65,7 +63,13 @@ public class Andie {
      *
      * @throws Exception if something goes wrong.
      */
-    private static void createAndShowGUI() throws Exception {
+    public static void createAndShowGUI() throws Exception {
+        // Load ANDIE's language before building UI
+        String language = prefs.get("lang", "en");
+
+        Locale locale = new Locale(language);
+        I18nManager.init(locale.equals(new Locale("en")) ? null : locale);
+
         // Set up the main GUI frame
         JFrame frame = new JFrame("ANDIE");
 
@@ -79,10 +83,11 @@ public class Andie {
         JScrollPane scrollPane = new JScrollPane(imagePanel);
         frame.add(scrollPane, BorderLayout.CENTER);
 
-        //create the top row for all the main actions headers
+        // create the top row for all the main actions headers
         JPanel mainRow = new JPanel(new FlowLayout(FlowLayout.LEFT));
         mainRow.setBackground(new Color(255, 255, 255));
-        // File menus are pretty standard, so things that usually go in File menus go here.
+        // File menus are pretty standard, so things that usually go in File menus go
+        // here.
         FileActions fileActions = new FileActions();
         JButton fileButton = new JButton(I18nManager.get("file_Title"));
         mainRow.add(fileButton);
@@ -90,11 +95,13 @@ public class Andie {
         EditActions editActions = new EditActions();
         JButton editButton = new JButton(I18nManager.get("Edit_title"));
         mainRow.add(editButton);
-        // View actions control how the image is displayed, but do not alter its actual content
+        // View actions control how the image is displayed, but do not alter its actual
+        // content
         ViewActions viewActions = new ViewActions();
         JButton viewButton = new JButton(I18nManager.get("View_title"));
         mainRow.add(viewButton);
-        // Filters apply a per-pixel operation to the image, generally based on a local window
+        // Filters apply a per-pixel operation to the image, generally based on a local
+        // window
         FilterActions filterActions = new FilterActions();
         JButton filterButton = new JButton(I18nManager.get("Filter_title"));
         mainRow.add(filterButton);
@@ -102,7 +109,7 @@ public class Andie {
         ColourActions colourActions = new ColourActions();
         JButton colourButton = new JButton(I18nManager.get("colour_title"));
         mainRow.add(colourButton);
-        //Macros action controls
+        // Macros action controls
         MacroActions macroActions = new MacroActions();
         JButton macroButton = new JButton("Macro");
         mainRow.add(macroButton);
@@ -111,7 +118,7 @@ public class Andie {
         JButton settingsButton = new JButton(I18nManager.get("Setting_title"));
         mainRow.add(settingsButton);
 
-        //aesthetic fix on the buttons
+        // aesthetic fix on the buttons
         styleMenuButton(fileButton);
         styleMenuButton(editButton);
         styleMenuButton(viewButton);
@@ -125,7 +132,7 @@ public class Andie {
         toolbarPanel.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.BLACK));
         toolbarPanel.setVisible(false);
 
-        //add functions to toolbar
+        // add functions to toolbar
         toolbarPanel.add(editActions.createToolBar(), "EDIT");
         toolbarPanel.add(viewActions.createToolBar(), "VIEW");
         toolbarPanel.add(colourActions.createToolBar(), "COLOUR");
@@ -157,24 +164,21 @@ public class Andie {
             setActiveButton(filterButton);
             toolbarPanel.setVisible(true);
         });
-        
+
         macroButton.addActionListener((ActionEvent e) -> {
             cardLayout.show(toolbarPanel, "MACRO");
             setActiveButton(macroButton);
             toolbarPanel.setVisible(true);
         });
-        
-        
-        
-        //drop down menu for file
+
+        // drop down menu for file
         JMenu fileMenu = fileActions.createMenu();
         JPopupMenu filePopup = fileMenu.getPopupMenu();
 
         fileButton.addActionListener(e -> {
             filePopup.show(fileButton, 0, fileButton.getHeight());
         });
-        
-        
+
         JMenu settingsMenu = languageActions.createMenu();
         JPopupMenu settingsPopup = settingsMenu.getPopupMenu();
 
@@ -200,7 +204,8 @@ public class Andie {
                     e.getWindow().dispose();
                 } else if (target.getImage() != null && !target.getImage().isSaved()) {
 
-                    Object[] saveOptions = {I18nManager.get("save_menu_save"), I18nManager.get("save_menu_save_as"), I18nManager.get("save_menu_exit_without_saving"), I18nManager.get("save_menu_cancel")};
+                    Object[] saveOptions = { I18nManager.get("save_menu_save"), I18nManager.get("save_menu_save_as"),
+                            I18nManager.get("save_menu_exit_without_saving"), I18nManager.get("save_menu_cancel") };
 
                     int saveOption = JOptionPane.showOptionDialog(null,
                             I18nManager.get("save_menu_message"), I18nManager.get("save_menu_title"),
@@ -224,10 +229,12 @@ public class Andie {
 
                             JFileChooser fileChooser = new JFileChooser();
 
-                            FileNameExtensionFilter jpegFormat = new FileNameExtensionFilter("JPEG Image (*.jpg)", "jpg");
+                            FileNameExtensionFilter jpegFormat = new FileNameExtensionFilter("JPEG Image (*.jpg)",
+                                    "jpg");
                             FileNameExtensionFilter pngFormat = new FileNameExtensionFilter("PNG Image (*.png)", "png");
-                            FileNameExtensionFilter giffFormat = new FileNameExtensionFilter("GIF Image (*.gif)", "gif");
-                            //adds the file times as a choosable ooption
+                            FileNameExtensionFilter giffFormat = new FileNameExtensionFilter("GIF Image (*.gif)",
+                                    "gif");
+                            // adds the file times as a choosable ooption
                             fileChooser.addChoosableFileFilter(pngFormat);
                             fileChooser.addChoosableFileFilter(jpegFormat);
                             fileChooser.addChoosableFileFilter(giffFormat);
@@ -241,20 +248,24 @@ public class Andie {
                                 try {
                                     String imageFilepath = fileChooser.getSelectedFile().getCanonicalPath();
 
-                                    //gets the filter that the user selects (pngFormat)
-                                    FileNameExtensionFilter filter = (FileNameExtensionFilter) fileChooser.getFileFilter();
+                                    // gets the filter that the user selects (pngFormat)
+                                    FileNameExtensionFilter filter = (FileNameExtensionFilter) fileChooser
+                                            .getFileFilter();
 
-                                    //gets the acutal format from filter
+                                    // gets the acutal format from filter
                                     String selectedFormat = filter.getExtensions()[0].toLowerCase();
 
-                                    //if the file name is left as empty user has wnarnign message pop up
+                                    // if the file name is left as empty user has wnarnign message pop up
                                     if (fileChooser.getSelectedFile().getName().trim().isEmpty()) {
-                                        JOptionPane.showMessageDialog(fileChooser, I18nManager.get("no_File_Name"), I18nManager.get("nfn_Title"), JOptionPane.WARNING_MESSAGE);
+                                        JOptionPane.showMessageDialog(fileChooser, I18nManager.get("no_File_Name"),
+                                                I18nManager.get("nfn_Title"), JOptionPane.WARNING_MESSAGE);
                                         return;
                                     }
-                                    //check for image to have transparency when saved as jpeg
+                                    // check for image to have transparency when saved as jpeg
                                     if (selectedFormat.equals("jpg") && target.getImage().hasTransparency()) {
-                                        JOptionPane.showMessageDialog(fileChooser, "Your image has a transparency, select another format", "Transparency warning", JOptionPane.WARNING_MESSAGE);
+                                        JOptionPane.showMessageDialog(fileChooser,
+                                                "Your image has a transparency, select another format",
+                                                "Transparency warning", JOptionPane.WARNING_MESSAGE);
                                         return;
                                     }
 
@@ -284,6 +295,11 @@ public class Andie {
 
         frame.pack();
         frame.setVisible(true);
+        boolean showWelcome = prefs.getBoolean("showWelcome", true);
+
+        if (showWelcome) {
+            showWelcomePopup(frame, prefs);
+        }
     }
 
     /**
@@ -321,7 +337,8 @@ public class Andie {
         });
     }
 
-    //chnages the aestheics of the button that is currerntly selects also changes back the previously selected menu button
+    // chnages the aestheics of the button that is currerntly selects also changes
+    // back the previously selected menu button
     private static void setActiveButton(JButton button) {
         if (activeButton != null) {
             activeButton.setBackground(Color.WHITE);
@@ -329,6 +346,80 @@ public class Andie {
 
         button.setBackground(new Color(240, 240, 240));
         activeButton = button;
+    }
+
+    private static void showWelcomePopup(JFrame frame, Preferences prefs) {
+
+        // Check if user disabled it
+        boolean showWelcome = prefs.getBoolean("showWelcome", true);
+        if (!showWelcome)
+            return;
+
+        JDialog dialog = new JDialog(frame, I18nManager.get("welcome"), true);
+        dialog.setSize(400, 250);
+        dialog.setLocationRelativeTo(frame);
+        dialog.setLayout(new BorderLayout(10, 10));
+
+        // Padding
+        dialog.getRootPane().setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+
+        // Title
+        JLabel title = new JLabel(I18nManager.get("welcome"), SwingConstants.CENTER);
+        title.setFont(new Font("SansSerif", Font.BOLD, 18));
+        dialog.add(title, BorderLayout.NORTH);
+
+        // Center content
+        JPanel center = new JPanel();
+        center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
+
+        JLabel text = new JLabel(I18nManager.get("get_started"));
+        text.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JLabel text1 = new JLabel(I18nManager.get("fav_editor"));
+        text1.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JLabel link = new JLabel(I18nManager.get("doc_link"));
+        link.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        link.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        link.addMouseListener(new MouseAdapter() {
+            @SuppressWarnings("unused")
+            public void mouseClicked(MouseEvent e) {
+                try {
+                    Desktop.getDesktop().browse(new URI("https://andie-a82b24.cspages.otago.ac.nz/docs/"));
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        center.add(Box.createVerticalStrut(10));
+        center.add(text);
+        center.add(text1);
+        center.add(Box.createVerticalStrut(10));
+        center.add(link);
+
+        dialog.add(center, BorderLayout.CENTER);
+
+        // Bottom section
+        JPanel bottom = new JPanel(new BorderLayout());
+
+        JCheckBox dontShow = new JCheckBox(I18nManager.get("dont_show"));
+
+        JButton ok = new JButton(I18nManager.get("get_started_button"));
+        ok.addActionListener(e -> {
+            if (dontShow.isSelected()) {
+                prefs.putBoolean("showWelcome", false);
+            }
+            dialog.dispose();
+        });
+
+        bottom.add(dontShow, BorderLayout.WEST);
+        bottom.add(ok, BorderLayout.EAST);
+
+        dialog.add(bottom, BorderLayout.SOUTH);
+
+        dialog.setVisible(true);
     }
 
     /**
@@ -346,35 +437,6 @@ public class Andie {
      * @see #createAndShowGUI()
      */
     public static void main(String[] args) throws Exception {
-        Properties props = new Properties();
-        String myPath = "src/main/resources/config.properties";
-        Path path = Paths.get(myPath);
-        try {
-            // Attempt to create the file. If it already exists, it throws FileAlreadyExistsException.
-            Files.createFile(path);
-        } catch (FileAlreadyExistsException ignored) {
-            // File already exists, no need to create it again.
-        } catch (IOException e) {
-            System.err.println("Error creating file: " + e.getMessage());
-            throw e;
-        }
-
-        // Ensure parent directories exist
-        if (Files.notExists(path.getParent())) {
-            Files.createDirectories(path.getParent());
-        }
-        try (FileInputStream in = new FileInputStream(path.toFile())) {
-            props.load(in);
-        }
-
-        String language = props.getProperty("language", "en");
-
-        if (language.equals("en")) {
-            I18nManager.init(null);
-        } else {
-            Locale locale = new Locale(language);
-            I18nManager.init(locale);
-        }
         javax.swing.SwingUtilities.invokeLater(() -> {
             try {
                 createAndShowGUI();

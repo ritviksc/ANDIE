@@ -40,8 +40,7 @@ public class FilterActions extends ToolbarActions {
         actions.add(new EmbossFilterAction(I18nManager.get("Emboss"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Filters/Emboss.png")), I18nManager.get("Emboss_desc"), KeyEvent.VK_E));
         actions.add(new SobelFilterAction(I18nManager.get("Sobel"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Filters/Sobel.png")), I18nManager.get("Sobel_desc"), KeyEvent.VK_O));
         actions.add(new ContrastMaskAction(I18nManager.get("Contrast_mask"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Filters/contrastMask.png")), I18nManager.get("Contrast_mask_desc"), KeyEvent.VK_C));
-
-
+        actions.add(new RandomScatteringAction(I18nManager.get("random_scattering"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Filters/randomScattering.png")), I18nManager.get("random_scattering_desc"), KeyEvent.VK_R));
     }
 
     /**
@@ -626,4 +625,66 @@ public class FilterActions extends ToolbarActions {
             target.getParent().revalidate();
         }
     }
+
+    public class RandomScatteringAction extends ImageAction {
+
+        // Create a new random scattering action
+        public RandomScatteringAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+            super(name, icon, desc, mnemonic);
+        }
+
+        // Prompt user for a radius and apply random scattering
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (target.getImage().getCurrentImage() == null) {
+                JOptionPane.showMessageDialog(
+                        null,
+                        I18nManager.get("random_scattering_no_image"),
+                        I18nManager.get("error_title"),
+                        JOptionPane.ERROR_MESSAGE
+                );
+                return;
+            }
+
+            int radius = 0;
+
+            try {
+                String input = JOptionPane.showInputDialog(
+                        null,
+                        I18nManager.get("random_scattering_prompt"),
+                        I18nManager.get("random_scattering"),
+                        JOptionPane.QUESTION_MESSAGE
+                );
+
+                if (input == null) {
+                    return;
+                }
+
+                radius = Integer.parseInt(input);
+
+                if (radius < 0) {
+                    JOptionPane.showMessageDialog(
+                            null,
+                            I18nManager.get("random_scattering_out_of_range"),
+                            I18nManager.get("error_title"),
+                            JOptionPane.ERROR_MESSAGE
+                    );
+                    return;
+                }
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(
+                        null,
+                        I18nManager.get("random_scattering_not_number"),
+                        I18nManager.get("error_title"),
+                        JOptionPane.ERROR_MESSAGE
+                );
+                return;
+            }
+
+            target.getImage().apply(new RandomScattering(radius));
+            target.repaint();
+            target.getParent().revalidate();
+        }
+    }
 }
+

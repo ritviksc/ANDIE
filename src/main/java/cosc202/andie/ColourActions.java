@@ -191,7 +191,7 @@ public class ColourActions extends ToolbarActions {
                 return;
             }
 
-            // target.getImage().apply(new ConvertToGrey());
+            target.getImage().apply(new ConvertToGrey());
             target.getImage().apply(new ImageThresholdingFilter(threshold));
             target.repaint();
             target.getParent().revalidate();

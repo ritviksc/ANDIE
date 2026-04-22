@@ -36,6 +36,7 @@ import java.awt.event.MouseEvent;
  */
 public class Andie {
 
+    private static final String url = "https://andie-aa9d21.cspages.otago.ac.nz/docs/";
     private static JButton activeButton;
     public static Preferences prefs = Preferences.userNodeForPackage(Andie.class);
 
@@ -386,7 +387,7 @@ public class Andie {
             @SuppressWarnings("unused")
             public void mouseClicked(MouseEvent e) {
                 try {
-                    Desktop.getDesktop().browse(new URI("https://andie-a82b24.cspages.otago.ac.nz/docs/"));
+                    Desktop.getDesktop().browse(new URI(url));
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }

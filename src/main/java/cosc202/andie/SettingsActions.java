@@ -115,6 +115,7 @@ public class SettingsActions {
      *
      */
     public class DocumentAction extends ImageAction {
+        private static final String url = "https://andie-aa9d21.cspages.otago.ac.nz/docs/";
 
         /**
          * <p>
@@ -146,7 +147,7 @@ public class SettingsActions {
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
-                Desktop.getDesktop().browse(new URI("https://andie-a82b24.cspages.otago.ac.nz/docs/"));
+                Desktop.getDesktop().browse(new URI(url));
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -255,7 +256,7 @@ public class SettingsActions {
                     return;
                 }
 
-                if (languageToggle){
+                if (languageToggle) {
                     Andie.prefs.put("lang", "nl");
                 } else {
                     Andie.prefs.put("lang", "en");

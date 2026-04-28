@@ -50,9 +50,13 @@ public class ColourActions extends ToolbarActions {
                 I18nManager.get("channel_swap_desc"),
                 KeyEvent.VK_C));
         actions.add(new BrightnessAndContrastAction(I18nManager.get("brightness_contrast"),
-                new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Colour/Brightness.png")),
+                new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Colour/brightness.png")),
                 I18nManager.get("brightness_contrast_desc"),
                 KeyEvent.VK_B));
+        actions.add(new SaturationAction(I18nManager.get("saturation"),
+                new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Colour/saturation.png")),
+                I18nManager.get("saturation_desc"),
+                KeyEvent.VK_S));
 
     }
 
@@ -191,7 +195,7 @@ public class ColourActions extends ToolbarActions {
                 return;
             }
 
-            // target.getImage().apply(new ConvertToGrey());
+            target.getImage().apply(new ConvertToGrey());
             target.getImage().apply(new ImageThresholdingFilter(threshold));
             target.repaint();
             target.getParent().revalidate();
@@ -305,7 +309,6 @@ public class ColourActions extends ToolbarActions {
      * Action to adjust brightness and contrast of an image.
      * </p>
      */
-
     public class BrightnessAndContrastAction extends ImageAction {
 
         BrightnessAndContrastAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
@@ -352,6 +355,64 @@ public class ColourActions extends ToolbarActions {
             }
 
             target.getImage().apply(new BrightnessAndContrastAdjustment(brightness, contrast));
+            target.repaint();
+            target.getParent().revalidate();
+        }
+    }
+
+    // Action to adjust the saturation of an image
+    public class SaturationAction extends ImageAction {
+
+        // Create a new saturation action
+        SaturationAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+            super(name, icon, desc, mnemonic);
+        }
+
+        // Ask user for a saturation value and apply the saturation filter
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            if (target.getImage() == null || target.getImage().getCurrentImage() == null) {
+                JOptionPane.showMessageDialog(
+                        null,
+                        I18nManager.get("saturation_no_image"),
+                        I18nManager.get("error_title"),
+                        JOptionPane.ERROR_MESSAGE
+                );
+                return;
+            }
+
+            int minSaturation = 0;
+            int maxSaturation = 300;
+            int defaultSaturation = 100;
+
+            JSlider saturationSlider = new JSlider(
+                    JSlider.HORIZONTAL,
+                    minSaturation,
+                    maxSaturation,
+                    defaultSaturation
+            );
+
+            saturationSlider.setMajorTickSpacing(50);
+            saturationSlider.setMinorTickSpacing(10);
+            saturationSlider.setPaintTicks(true);
+            saturationSlider.setPaintLabels(true);
+
+            int option = JOptionPane.showConfirmDialog(
+                    null,
+                    saturationSlider,
+                    I18nManager.get("saturation_prompt"),
+                    JOptionPane.OK_CANCEL_OPTION,
+                    JOptionPane.QUESTION_MESSAGE
+            );
+
+            if (option == JOptionPane.CANCEL_OPTION || option == JOptionPane.CLOSED_OPTION) {
+                return;
+            }
+
+            int saturation = saturationSlider.getValue();
+
+            target.getImage().apply(new SaturationFilter(saturation));
             target.repaint();
             target.getParent().revalidate();
         }

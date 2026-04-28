@@ -39,8 +39,10 @@ public class FilterActions extends ToolbarActions {
         actions.add(new MedianFilterAction(I18nManager.get("Median"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Filters/Median.png")), I18nManager.get("Median_desc"), KeyEvent.VK_D));
         actions.add(new EmbossFilterAction(I18nManager.get("Emboss"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Filters/Emboss.png")), I18nManager.get("Emboss_desc"), KeyEvent.VK_E));
         actions.add(new SobelFilterAction(I18nManager.get("Sobel"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Filters/Sobel.png")), I18nManager.get("Sobel_desc"), KeyEvent.VK_O));
+        actions.add(new FIRFilterAction(I18nManager.get("FIR"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Filters/randomScattering.png")), I18nManager.get("FIR_desc"), KeyEvent.VK_F));
         actions.add(new ContrastMaskAction(I18nManager.get("Contrast_mask"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Filters/contrastMask.png")), I18nManager.get("Contrast_mask_desc"), KeyEvent.VK_C));
         actions.add(new RandomScatteringAction(I18nManager.get("random_scattering"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Filters/randomScattering.png")), I18nManager.get("random_scattering_desc"), KeyEvent.VK_R));
+        
     }
 
     /**
@@ -501,6 +503,58 @@ public class FilterActions extends ToolbarActions {
 
             // Create and apply the filter
             target.getImage().apply(new SobelFilter(direction));
+            target.repaint();
+            target.getParent().revalidate();
+        }
+
+    }
+    
+    /**
+     * <p>
+     * Action to sharpen an image with a sharpening filter.
+     * </p>
+     *
+     * @see FIRFilter
+     */
+    public class FIRFilterAction extends ImageAction {
+
+        /**
+         * <p>
+         * Create a new mean-filter action.
+         * </p>
+         *
+         * @param name The name of the action (ignored if null).
+         * @param icon An icon to use to represent the action (ignored if null).
+         * @param desc A brief description of the action (ignored if null).
+         * @param mnemonic A mnemonic key to use as a shortcut (ignored if
+         * null).
+         */
+        FIRFilterAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+            super(name, icon, desc, mnemonic);
+        }
+
+        /**
+         * <p>
+         * Callback for when the sharpen-filter-action action is triggered.
+         * </p>
+         *
+         * <p>
+         * This method is called whenever the FIRFilterAction is triggered.
+         * It then applies a {@link FIRFilter}
+         * </p>
+         *
+         * @param e The event triggering this callback.
+         */
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            if (!target.getImage().hasImage()) {
+                JOptionPane.showMessageDialog(null, I18nManager.get("Filter_no_image"), I18nManager.get("Filter_error_title"), JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Create and apply the filter
+            target.getImage().apply(new FIRFilter());
             target.repaint();
             target.getParent().revalidate();
         }

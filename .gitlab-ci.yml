@@ -35,12 +35,12 @@ pages:
 
     - set +o pipefail
     
-    - cp index.html public/index.html
+    
     
     - echo "Preparing pages..."
     - mkdir -p public/javadoc
     - mkdir -p public/docs
-
+    - cp index.html public/index.html
     - cp -r build/docs/javadoc/* public/javadoc/
     - cp build/libs/andie-1.0.0.jar public/
     - cp -r docs/* public/docs/ || true

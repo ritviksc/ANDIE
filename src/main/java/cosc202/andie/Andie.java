@@ -3,6 +3,7 @@ package cosc202.andie;
 import static cosc202.andie.ImageAction.target;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.FileInputStream;
@@ -40,6 +41,9 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class Andie {
 
     private static JButton activeButton;
+    
+    //get control for windows and command for macos
+    private static final int shortcut = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
 
     /**
      * <p>
@@ -90,14 +94,17 @@ public class Andie {
         EditActions editActions = new EditActions();
         JButton editButton = new JButton(I18nManager.get("Edit_title"));
         mainRow.add(editButton);
+        bindEditShortcuts(frame.getRootPane(), editActions);
         // View actions control how the image is displayed, but do not alter its actual content
         ViewActions viewActions = new ViewActions();
         JButton viewButton = new JButton(I18nManager.get("View_title"));
         mainRow.add(viewButton);
+        bindViewShortCuts(frame.getRootPane(), viewActions);
         // Filters apply a per-pixel operation to the image, generally based on a local window
         FilterActions filterActions = new FilterActions();
         JButton filterButton = new JButton(I18nManager.get("Filter_title"));
         mainRow.add(filterButton);
+        bindFilterShortCuts(frame.getRootPane(), filterActions);
         // Actions that affect the representation of colour in the image
         ColourActions colourActions = new ColourActions();
         JButton colourButton = new JButton(I18nManager.get("colour_title"));
@@ -106,6 +113,7 @@ public class Andie {
         MacroActions macroActions = new MacroActions();
         JButton macroButton = new JButton("Macro");
         mainRow.add(macroButton);
+        bindMacroShortCuts(frame.getRootPane(), macroActions);
         // Language action controls language of the app
         SettingsActions languageActions = new SettingsActions();
         JButton settingsButton = new JButton(I18nManager.get("Setting_title"));
@@ -284,6 +292,49 @@ public class Andie {
 
         frame.pack();
         frame.setVisible(true);
+    }
+    
+    private static void bindEditShortcuts(JRootPane rootPane, EditActions editActions){   
+        bindShortcut(rootPane, KeyStroke.getKeyStroke(KeyEvent.VK_Z, shortcut), "undo", editActions.undoAction);
+        bindShortcut(rootPane, KeyStroke.getKeyStroke(KeyEvent.VK_Z, shortcut | KeyEvent.SHIFT_DOWN_MASK), "redo", editActions.redoAction);
+        bindShortcut(rootPane, KeyStroke.getKeyStroke(KeyEvent.VK_R, shortcut | KeyEvent.SHIFT_DOWN_MASK), "resize", editActions.resizeAction);
+        bindShortcut(rootPane, KeyStroke.getKeyStroke(KeyEvent.VK_H, shortcut | KeyEvent.SHIFT_DOWN_MASK),"flip horizontally", editActions.flipHorizontalAction);
+        bindShortcut(rootPane, KeyStroke.getKeyStroke(KeyEvent.VK_V, shortcut | KeyEvent.SHIFT_DOWN_MASK),"flip vertically", editActions.flipVerticalAction);
+        bindShortcut(rootPane, KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, shortcut | KeyEvent.SHIFT_DOWN_MASK), "rotate 90 degrees clockwise", editActions.rotate90CAction);
+        bindShortcut(rootPane, KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, shortcut | KeyEvent.SHIFT_DOWN_MASK), "rotate 90 degrees anti-clockwise", editActions.rotate90CCAction);
+        bindShortcut(rootPane, KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, shortcut | KeyEvent.SHIFT_DOWN_MASK), "rotate 180 degrees", editActions.rotate180Action);
+    }
+          
+    private static void bindViewShortCuts(JRootPane rootPane, ViewActions viewActions){
+        bindShortcut(rootPane, KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, shortcut), "zoom in", viewActions.zoomIn);
+        bindShortcut(rootPane, KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, shortcut), "zoom out", viewActions.zoomOut);
+        bindShortcut(rootPane, KeyStroke.getKeyStroke(KeyEvent.VK_F, shortcut | KeyEvent.SHIFT_DOWN_MASK), "zoom full", viewActions.zoomFull);
+    }
+    
+    private static void bindFilterShortCuts(JRootPane rootPane, FilterActions filterActions){ 
+        bindShortcut(rootPane, KeyStroke.getKeyStroke(KeyEvent.VK_M, shortcut | KeyEvent.SHIFT_DOWN_MASK), "mean", filterActions.mean);
+        bindShortcut(rootPane, KeyStroke.getKeyStroke(KeyEvent.VK_H, shortcut | KeyEvent.SHIFT_DOWN_MASK), "sharpen", filterActions.sharpen);
+        bindShortcut(rootPane, KeyStroke.getKeyStroke(KeyEvent.VK_G, shortcut | KeyEvent.SHIFT_DOWN_MASK), "gaussian", filterActions.gaussian);
+        bindShortcut(rootPane, KeyStroke.getKeyStroke(KeyEvent.VK_D, shortcut | KeyEvent.SHIFT_DOWN_MASK), "median", filterActions.median);
+        bindShortcut(rootPane, KeyStroke.getKeyStroke(KeyEvent.VK_E, shortcut | KeyEvent.SHIFT_DOWN_MASK), "emboss", filterActions.emboss);
+        bindShortcut(rootPane, KeyStroke.getKeyStroke(KeyEvent.VK_B, shortcut | KeyEvent.SHIFT_DOWN_MASK), "sobel", filterActions.sobel);
+        bindShortcut(rootPane, KeyStroke.getKeyStroke(KeyEvent.VK_C, shortcut | KeyEvent.SHIFT_DOWN_MASK), "contrast mask", filterActions.contrastMask);      
+    }
+
+    
+    private static void bindMacroShortCuts(JRootPane rootPane, MacroActions macroActions){
+        bindShortcut(rootPane, KeyStroke.getKeyStroke(KeyEvent.VK_Q, shortcut | KeyEvent.SHIFT_DOWN_MASK), "startMacro", macroActions.startMacro);
+        bindShortcut(rootPane, KeyStroke.getKeyStroke(KeyEvent.VK_W, shortcut | KeyEvent.SHIFT_DOWN_MASK), "stopMacro", macroActions.stopMacro);
+        bindShortcut(rootPane, KeyStroke.getKeyStroke(KeyEvent.VK_L, shortcut | KeyEvent.SHIFT_DOWN_MASK), "loadMacro", macroActions.loadMacro);
+    }
+    
+    
+    private static void bindShortcut(JRootPane rootPane, KeyStroke keyStroke, String name, Action action) {
+        InputMap inputMap = rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap actionMap = rootPane.getActionMap();
+
+        inputMap.put(keyStroke, name);
+        actionMap.put(name, action);
     }
 
     /**

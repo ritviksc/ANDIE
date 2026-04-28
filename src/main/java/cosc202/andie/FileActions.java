@@ -1,9 +1,9 @@
 package cosc202.andie;
 
 import static cosc202.andie.ImageAction.target;
+import java.awt.Toolkit;
 import java.util.*;
 import java.awt.event.*;
-import java.io.File;
 import java.io.IOException;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -33,6 +33,11 @@ public class FileActions {
      * A list of actions for the File menu.
      */
     protected ArrayList<Action> actions;
+    public Action open;
+    public Action save;
+    public Action saveAs;
+    public Action export;
+    public Action exit;
 
     /**
      * <p>
@@ -41,11 +46,16 @@ public class FileActions {
      */
     public FileActions() {
         actions = new ArrayList<>();
-        actions.add(new FileOpenAction(I18nManager.get("open"), null, I18nManager.get("open_Desc"), KeyEvent.VK_O));
-        actions.add(new FileSaveAction(I18nManager.get("save"), null, I18nManager.get("save_Desc"), KeyEvent.VK_S));
-        actions.add(new FileSaveAsAction(I18nManager.get("save_As"), null, I18nManager.get("save_As_Desc"), KeyEvent.VK_A));
-        actions.add(new FileExportAction(I18nManager.get("export"), null, I18nManager.get("export_Desc"), KeyEvent.VK_E));
-        actions.add(new FileExitAction(I18nManager.get("exit"), null, I18nManager.get("exit_Desc"), 0));
+        open = new FileOpenAction(I18nManager.get("open"), null, I18nManager.get("open_Desc"), KeyEvent.VK_O);
+        actions.add(open);
+        save = new FileSaveAction(I18nManager.get("save"), null, I18nManager.get("save_Desc"), KeyEvent.VK_S);
+        actions.add(save);
+        saveAs = new FileSaveAsAction(I18nManager.get("save_As"), null, I18nManager.get("save_As_Desc"), KeyEvent.VK_A);
+        actions.add(saveAs);
+        export = new FileExportAction(I18nManager.get("export"), null, I18nManager.get("export_Desc"), KeyEvent.VK_E);
+        actions.add(export);
+        exit = new FileExitAction(I18nManager.get("exit"), null, I18nManager.get("exit_Desc"), 0);
+        actions.add(exit);
     }
 
     /**
@@ -58,9 +68,26 @@ public class FileActions {
     public JMenu createMenu() {
         JMenu fileMenu = new JMenu(I18nManager.get("file_Title"));
 
-        for (Action action : actions) {
-            fileMenu.add(new JMenuItem(action));
-        }
+        JMenuItem openItem = new JMenuItem(open);
+        openItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+        fileMenu.add(openItem);
+
+        JMenuItem saveItem = new JMenuItem(save);
+        saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+        fileMenu.add(saveItem);
+
+        JMenuItem saveAsItem = new JMenuItem(saveAs);
+        saveAsItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | KeyEvent.SHIFT_DOWN_MASK));
+        fileMenu.add(saveAsItem);
+
+        JMenuItem exportItem = new JMenuItem(export);
+        exportItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | KeyEvent.SHIFT_DOWN_MASK));
+        fileMenu.add(exportItem);
+
+        JMenuItem exitItem = new JMenuItem(exit);
+        exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+        fileMenu.add(exitItem);
+
 
         return fileMenu;
     }

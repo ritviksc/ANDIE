@@ -3,7 +3,7 @@ default:
     - docker
 
 image:
-  name: altitude.otago.ac.nz:4567/cosc202-2026-great-people/temurin-17-with-zip-tool:latest
+  name: altitude.otago.ac.nz:4567/cosc202-2026-great-people/temurin-17-with-zip-tool/main:latest
   pull_policy: if-not-present
 
 before_script:

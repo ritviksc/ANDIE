@@ -63,8 +63,6 @@ unit-test-job:
   - echo "Attempting to run unit tests..."
   - gradle test
   
-# Docker image to use on the CI / pipeline worker machines
-image: gradle:8-jdk17-alpine
 # List of stages for jobs, and their order of execution
 stages:
   - build

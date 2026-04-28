@@ -28,13 +28,19 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class MacroActions extends ToolbarActions {
     
     private static JButton activeButton;
-    private static File macroFolder;    
+    private static File macroFolder;  
+    public Action startMacro;
+    public Action stopMacro;
+    public Action loadMacro;
     
     public MacroActions(){
         actions = new ArrayList<>();
-        actions.add(new StartMacroAction("start recording", new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Macro/start.png")), "Starts recording", null));
-        actions.add(new StopMacroAction("stop recording", new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Macro/stop.png")), "Stops recording", null));
-        actions.add(new LoadMacroAction("load macro", new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Macro/load.png")), "Loads Macro", null));
+        startMacro = new StartMacroAction("start recording", new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Macro/start.png")), "Starts recording", null); 
+        actions.add(startMacro);
+        stopMacro = new StopMacroAction("stop recording", new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Macro/stop.png")), "Stops recording", null); 
+        actions.add(stopMacro);
+        loadMacro = new LoadMacroAction("load macro", new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Macro/load.png")), "Loads Macro", null); 
+        actions.add(loadMacro);
     }
     
     @Override

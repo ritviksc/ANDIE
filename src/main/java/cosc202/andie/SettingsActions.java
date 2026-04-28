@@ -4,6 +4,7 @@ import java.awt.Desktop;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.prefs.Preferences;
@@ -93,13 +94,13 @@ public class SettingsActions {
         @Override
         public void actionPerformed(ActionEvent e) {
             Preferences pref = Andie.prefs;
-            if (pref.getBoolean("showWelcome",true) == true){
-               JOptionPane.showMessageDialog(
-                                    null,
-                                    I18nManager.get("popup_set"),
-                                    I18nManager.get("no_change"),
-                                    JOptionPane.INFORMATION_MESSAGE);
-                            
+            if (pref.getBoolean("showWelcome", true) == true) {
+                JOptionPane.showMessageDialog(
+                        null,
+                        I18nManager.get("popup_set"),
+                        I18nManager.get("no_change"),
+                        JOptionPane.INFORMATION_MESSAGE);
+
                 return;
             }
             pref.putBoolean("showWelcome", true); // enable pop up
@@ -114,6 +115,7 @@ public class SettingsActions {
      *
      */
     public class DocumentAction extends ImageAction {
+        private static final String url = "https://andie-aa9d21.cspages.otago.ac.nz/docs/";
 
         /**
          * <p>
@@ -145,7 +147,7 @@ public class SettingsActions {
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
-                Desktop.getDesktop().browse(new URI("https://andie-a82b24.cspages.otago.ac.nz/docs/"));
+                Desktop.getDesktop().browse(new URI(url));
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -192,6 +194,7 @@ public class SettingsActions {
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
+                boolean languageToggle = false; // false for English,true for Dutch
                 String[] options = { "English", "Dutch" };
 
                 String choice = (String) JOptionPane.showInputDialog(
@@ -217,7 +220,7 @@ public class SettingsActions {
                                     JOptionPane.INFORMATION_MESSAGE);
                             return;
                         }
-                        Andie.prefs.put("lang", "nl");
+                        languageToggle = true;
                         break;
                     case "English":
                         if (Andie.prefs.get("lang", "en").equals("en")) {
@@ -228,30 +231,42 @@ public class SettingsActions {
                                     JOptionPane.INFORMATION_MESSAGE);
                             return;
                         }
-                        Andie.prefs.put("lang", "en");
                         break;
                     default:
                         break;
                 }
-
-                JOptionPane.showMessageDialog(null, I18nManager.get("Lan_successful"));
 
                 boolean readyToClose = true;
 
                 // Close all windows safely
                 for (Window window : Window.getWindows()) {
                     if (window instanceof JFrame frame) {
-                        frame.dispose(); // close immediately
+                        frame.dispatchEvent(
+                                new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+
+                        // user cancelled
+                        if (frame.isDisplayable()) {
+                            readyToClose = false;
+                            break;
+                        }
                     }
                 }
+
                 if (!readyToClose) {
                     return;
                 }
 
+                if (languageToggle) {
+                    Andie.prefs.put("lang", "nl");
+                } else {
+                    Andie.prefs.put("lang", "en");
+                }
+
+                JOptionPane.showMessageDialog(null, I18nManager.get("Lan_successful"));
+
                 // 'Soft' reboot app with new language preference.
                 SwingUtilities.invokeLater(() -> {
                     try {
-                        new Andie();
                         Andie.createAndShowGUI();
                     } catch (Exception e1) {
                         e1.printStackTrace();

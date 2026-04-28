@@ -35,11 +35,13 @@ pages:
 
     - set +o pipefail
     
-    
-    
     - echo "Preparing pages..."
     - mkdir -p public/javadoc
     - mkdir -p public/docs
+
+    - cd public
+    - zip -r9 ANDIE.zip andie-1.0.0.jar docs/
+    - cd -
     - cp index.html public/index.html
     - cp -r build/docs/javadoc/* public/javadoc/
     - cp build/libs/andie-1.0.0.jar public/

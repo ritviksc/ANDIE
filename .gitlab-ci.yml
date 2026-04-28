@@ -35,6 +35,8 @@ pages:
 
     - set +o pipefail
     
+    - cp index.html public/index.html
+    
     - echo "Preparing pages..."
     - mkdir -p public/javadoc
     - mkdir -p public/docs

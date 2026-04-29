@@ -37,7 +37,7 @@ import java.awt.event.MouseEvent;
 public class Andie {
 
     private static final String url = "https://andie-aa9d21.cspages.otago.ac.nz/docs/";
-    private static JButton activeButton;
+    static JButton activeButton;
     public static Preferences prefs = Preferences.userNodeForPackage(Andie.class);
 
     /**

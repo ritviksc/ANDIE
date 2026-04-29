@@ -236,19 +236,12 @@ public class SettingsActions {
                         break;
                 }
 
-                // Save preference 
-                if (languageToggle) {
-                    Andie.prefs.put("lang", "nl");
-                } else {
-                    Andie.prefs.put("lang", "en");
-                }
-
                 // Inform user BEFORE closing UI
                 JOptionPane.showMessageDialog(null, I18nManager.get("Lan_successful"));
 
                 boolean readyToClose = true;
 
-                //(handles unsaved work)
+                // (handles unsaved work)
                 for (Window window : Window.getWindows()) {
                     if (window instanceof JFrame frame) {
                         frame.dispatchEvent(
@@ -266,10 +259,25 @@ public class SettingsActions {
                     return;
                 }
 
+                // Save preference
+                if (languageToggle) {
+                    Andie.prefs.put("lang", "nl");
+                } else {
+                    Andie.prefs.put("lang", "en");
+                }
+
+                for (Window window : Window.getWindows()) {
+                    window.dispose();
+                }
+
+                // 3. reset static state
+                Andie.activeButton = null;
+                ImagePanel.windowClosed = true;
+
                 // Restart full app
                 SwingUtilities.invokeLater(() -> {
                     try {
-                        Andie.main(new String[] {});
+                        Andie.main(new String[] {}); // restart ANDIE
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }

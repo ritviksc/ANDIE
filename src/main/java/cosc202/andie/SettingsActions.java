@@ -194,7 +194,7 @@ public class SettingsActions {
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
-                boolean languageToggle = false; // false for English,true for Dutch
+                boolean languageToggle = false; // false = English, true = Dutch
                 String[] options = { "English", "Dutch" };
 
                 String choice = (String) JOptionPane.showInputDialog(
@@ -210,6 +210,7 @@ public class SettingsActions {
                     return;
                 }
 
+                // Check if already selected
                 switch (choice) {
                     case "Dutch":
                         if (Andie.prefs.get("lang", "en").equals("nl")) {
@@ -222,6 +223,7 @@ public class SettingsActions {
                         }
                         languageToggle = true;
                         break;
+
                     case "English":
                         if (Andie.prefs.get("lang", "en").equals("en")) {
                             JOptionPane.showMessageDialog(
@@ -232,19 +234,27 @@ public class SettingsActions {
                             return;
                         }
                         break;
-                    default:
-                        break;
                 }
+
+                // Save preference 
+                if (languageToggle) {
+                    Andie.prefs.put("lang", "nl");
+                } else {
+                    Andie.prefs.put("lang", "en");
+                }
+
+                // Inform user BEFORE closing UI
+                JOptionPane.showMessageDialog(null, I18nManager.get("Lan_successful"));
 
                 boolean readyToClose = true;
 
-                // Close all windows safely
+                //(handles unsaved work)
                 for (Window window : Window.getWindows()) {
                     if (window instanceof JFrame frame) {
                         frame.dispatchEvent(
                                 new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
 
-                        // user cancelled
+                        // If still open --> user cancelled
                         if (frame.isDisplayable()) {
                             readyToClose = false;
                             break;
@@ -256,20 +266,12 @@ public class SettingsActions {
                     return;
                 }
 
-                if (languageToggle) {
-                    Andie.prefs.put("lang", "nl");
-                } else {
-                    Andie.prefs.put("lang", "en");
-                }
-
-                JOptionPane.showMessageDialog(null, I18nManager.get("Lan_successful"));
-
-                // 'Soft' reboot app with new language preference.
+                // Restart full app
                 SwingUtilities.invokeLater(() -> {
                     try {
-                        Andie.createAndShowGUI();
-                    } catch (Exception e1) {
-                        e1.printStackTrace();
+                        Andie.main(new String[] {});
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
                 });
 
@@ -278,7 +280,5 @@ public class SettingsActions {
                 JOptionPane.showMessageDialog(null, I18nManager.get("Lan_error"));
             }
         }
-
     }
-
 }

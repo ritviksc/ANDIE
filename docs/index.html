@@ -3,7 +3,7 @@
 <head>
     <title>ANDIE 101</title>
 </head>
-<body>
+<body style="background-color:lightblue;">
     <h1>ANDIE 101</h1>
     <p><u>v1.0.0 Stable</u></p>
     <p>ANDIE's developers</p>
@@ -15,12 +15,12 @@
     </ul>
     
     <p>Welcome to the guide for ANDIE image editor, we hope you enjoy using the editor as much as we did developing it <3.</p>
-    <p>Andie is a <b>'A Non Destructive Editor'</b> (gives rise to the name of our editor :D) with simple and efficent features</p>
+    <p>ANDIE is a <b>'A Non Destructive Editor'</b> (gives rise to the name of our editor :D) with simple and efficent features</p>
     
-    <p>This document serves the purpose to help user navigate through ANDIE and be productive as possible. If there is anyhthing that is disambiguous please let us know.</p>
+    <p>This document serves the purpose to help user navigate through ANDIE and be productive as possible. If there is anything that is disambiguous in the documentation please let us know.</p>
     
     <h3>Undo/Redo is important!</h3>
-    <p>Andie keeps a <b>linear history of edits</b>, allowing you to undo and redo actions. However, if you undo an action and then perform a new one, the undone actions are permanently removed from the history, so keep that in mind! </p>
+    <p>Andie keeps a <strong>linear history of edits</strong>, allowing you to undo and redo actions. However, if you undo an action and then perform a new one, the undone actions are permanently removed from the history, so keep that in mind! </p>
     
     <h2>Features</h2>
     <p>Andie comes with a wide range of features ranging from drawing to manipulating image color. Pretty cool isn't it? Each of the following sections below will give a concise summary of features in ANDIE and how they can be useful to you while you edit.</p>
@@ -50,13 +50,17 @@
        <b>Gaussian</b> - Applys a Gaussian filter to the working image using a given radius to apply values to a kernel and then is applied via convolution. This has a maximum radius of 10 and will default to 1 if limits are exceeded or subceeded, though using the built in menu will confine itself to the limits.<br>
        <b>Median</b> - Applys a median filter to the working image by averaging the colour channel (inlcuding alpha channel) of each surrounding pixel and then making the new pixel the median of the surrounding pixels. This operation is applied to a new image so it does not reuse already processed pixels. This has a maximum radius of 10 and will default to 1 if limits are exceeded or subceeded, though using the built in menu will confine itself to the limits.<br>
        <b>Emboss</b> - Applys an embossing filter to the working image by applying a user specified directional emboss convolution. A kernel is hardcoded for each (cardinal) direction and passed to the convolution based on user input.<br>
-       <b>Sobel</b> - Applys a Sobel filter to the working image in a very similar way to emboss except with 3 different hardcoded Sobel kernels.
+       <b>Sobel</b> - Applys a Sobel filter to the working image in a very similar way to emboss except with 3 different hardcoded Sobel kernels.<br>
+       <b>Contrast mask</b> - Enhances the local contrast by creating a blurred inverted greyscale version of the image and blending it back with the original image. User inputs a blur radius and strength of the effect.<br>
+       <b>Random scattering</b> - Create a scattered effect by replacing each output pixel with a randomly chosen pixel from within a user-specified radius around the original pixel location
        </p>
        
     <h3>Colour Operations</h3>
     <p><b>Threshold</b> - Converts a colour image to black and white based on a specified intensity threshold. Pixels with average brightness above the threshold become white, and those below become black. The original alpha (transparency) of each pixel is preserved. The threshold value is provided by the user, between 0 and 255.<br>
        <b>Colour Channel Swapping</b> - Reorders the red, green, and blue channels of the working image according to a user-specified permutation (e.g., RGB, GBR, BRG). The user inputs the desired channel order via a dialog box. Alpha (transparency) values are preserved. Invalid input will leave the image unchanged.<br>
-       <b>Image Inversion</b> - Inverts all colours of the working image by subtracting each RGB channel from 255. For example, a pixel with (R=100, G=150, B=200) becomes (R=155, G=105, B=55). The alpha (transparency) channel is preserved. No user input is required.</p>
+       <b>Image Inversion</b> - Inverts all colours of the working image by subtracting each RGB channel from 255. For example, a pixel with (R=100, G=150, B=200) becomes (R=155, G=105, B=55). The alpha (transparency) channel is preserved. No user input is required.<br>
+       <b>Contrast mask</b> - Enhances the local contrast by creating a blurred inverted greyscale version of the image and blending it back with the original image. User inputs a blur radius and strength of the effect.<br>
+       <b>Random scattering</b> - Create a scattered effect by replacing each output pixel with a randomly chosen pixel from within a user-specified radius around the original pixel location</p>
        
     <h3>Image Cropping And Drawing</h3>
     <p>
@@ -72,7 +76,7 @@
     <b>DOCUMENT INCOMPLETE WIP ....</b>
     
     <h2>Bugs</h2>
-    <p>Andie was developed and tested thoroughly before being released to the public. We have tried out best to keep bugs out of the stable version. If you find any bugs please let us know!</p>
+    <p>ANDIE was developed and tested thoroughly before being released to the public. We have tried out best to keep bugs out of the stable version. If you find any bugs please let us know!</p>
     <h2>Contributing to Andie</h2>
     <p>If you have any ideas that would benefit ANDIE or would like to contribute to ANDIE please let us know.</p>
 </body>

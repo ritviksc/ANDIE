@@ -38,12 +38,17 @@ Unchanged as of 20/03
 * Median - Applys a median filter to the working image by averaging the colour channel (inlcuding alpha channel) of each surrounding pixel and then making the new pixel the median of the surrounding pixels. This operation is applied to a new image so it does not reuse already processed pixels. This has a maximum radius of 10 and will default to 1 if limits are exceeded or subceeded, though using the built in menu will confine itself to the limits.
 * Emboss - Applys an embossing filter to the working image by applying a user specified directional emboss convolution. A kernel is hardcoded for each (cardinal) direction and passed to the convolution based on user input.
 * Sobel - Applys a Sobel filter to the working image in a very similar way to emboss except with 3 different hardcoded Sobel kernels.
+* Contrast mask - Enhances the local contrast by creating a blurred inverted greyscale version of the image and blending it back with the original image. User inputs a blur radius and strength of the effect.
+* Random scattering - Create a scattered effect by replacing each output pixel with a randomly chosen pixel from within a user-specified radius around the original pixel location
 
 ### Colour
 
-* Threshold - Converts a colour image to black and white based on a specified intensity threshold. Pixels with average brightness above the threshold become white, and those below become black. The original alpha (transparency) of each pixel is preserved. The threshold value is provided by the user, between 0 and 255.
+* GreyScale - Converts coloured image into a greyscale image 
+* Threshold - Sets image to greyScale then converts image to black and white based on a specified intensity threshold. Pixels with average brightness above the threshold become white, and those below become black. The original alpha (transparency) of each pixel is preserved. The threshold value is provided by the user, between 0 and 255.
 * Colour Channel Swapping - Reorders the red, green, and blue channels of the working image according to a user-specified permutation (e.g., RGB, GBR, BRG). The user inputs the desired channel order via a dialog box. Alpha (transparency) values are preserved. Invalid input will leave the image unchanged.
 * Image Inversion - Inverts all colours of the working image by subtracting each RGB channel from 255. For example, a pixel with (R=100, G=150, B=200) becomes (R=155, G=105, B=55). The alpha (transparency) channel is preserved. No user input is required.
+* Brightness/ Contrast adjustment - Allown user to adjust the brightness and contrast of the working image. The user provides brightness and contrast values, which are applied to each RGB channel while preserving the alpha transparency channel.
+* Saturation - Adjusts the colour intensity of the working image. The user provides a saturation value, where lower values make the image more grey and higher values make the colours more vivid. RGB values are adjusted while preserving alpha transparency channel.
 
 ### Save when exiting
 

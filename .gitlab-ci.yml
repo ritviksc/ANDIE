@@ -76,13 +76,13 @@ pages:
     - mkdir -p public/docs
 
     - cd public
-    - zip -r9 ANDIE.zip andie-1.0.0.jar docs/
+    
     - cd -
     - cp index.html public/index.html
     - cp -r build/docs/javadoc/* public/javadoc/
     - cp build/libs/andie-1.0.0.jar public/
     - cp -r docs/* public/docs/ || true
-
+    - zip -r9 ANDIE.zip andie-1.0.0.jar docs/
     - ls -R public | head
 
   artifacts:

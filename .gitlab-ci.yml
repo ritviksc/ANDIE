@@ -68,21 +68,19 @@ create-jar:
 pages:
   stage: deploy
   script:
-
     - set +o pipefail
-    
-    - echo "Preparing pages..."
-    - mkdir -p public/javadoc
-    - mkdir -p public/docs
 
-    - cd public
-    
-    - cd -
+    - echo "Preparing pages..."
+    - mkdir -p public/javadoc public/docs
     - cp index.html public/index.html
-    - cp -r build/docs/javadoc/* public/javadoc/
     - cp build/libs/andie-1.0.0.jar public/
+    - cp -r build/docs/javadoc/* public/javadoc/
     - cp -r docs/* public/docs/ || true
+    - cd public
     - zip -r9 ANDIE.zip andie-1.0.0.jar docs/
+    - cd -
+
+    - echo "Final structure:"
     - ls -R public | head
 
   artifacts:

@@ -3,7 +3,7 @@ default:
     - docker
 
 image:
-  name: gradle:9-jdk25-alpine
+  name: altitude.otago.ac.nz:4567/hanro194/zip-tool-image/main:latest
   pull_policy: if-not-present
 
 before_script:
@@ -35,11 +35,13 @@ pages:
 
     - set +o pipefail
     
-    
-    
     - echo "Preparing pages..."
     - mkdir -p public/javadoc
     - mkdir -p public/docs
+
+    - cd public
+    - zip -r9 ANDIE.zip andie-1.0.0.jar docs/
+    - cd -
     - cp index.html public/index.html
     - cp -r build/docs/javadoc/* public/javadoc/
     - cp build/libs/andie-1.0.0.jar public/
@@ -61,8 +63,6 @@ unit-test-job:
   - echo "Attempting to run unit tests..."
   - gradle test
   
-# Docker image to use on the CI / pipeline worker machines
-image: gradle:8-jdk17-alpine
 # List of stages for jobs, and their order of execution
 stages:
   - build

@@ -25,14 +25,13 @@ import javax.swing.*;
  * @version 1.0
  */
 public class ColourActions extends ToolbarActions {
-
     /**
      * <p>
      * Create a set of Colour menu actions.
      * </p>
      */
     public ColourActions() {
-        actions = new ArrayList<>();
+        actions = new ArrayList<>();     
         actions.add(new ConvertToGreyAction(I18nManager.get("greyscale"),
                 new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Colour/greyscale.png")),
                 I18nManager.get("greyscale_desc"),

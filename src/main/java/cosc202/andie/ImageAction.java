@@ -38,9 +38,7 @@ public abstract class ImageAction extends AbstractAction {
      * be performed. This is common to all ImageActions.
      */
     protected static ImagePanel target;
-    //get control for windows and command for macos
-    protected static final int shortcut = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
-
+    
     /**
      * <p>
      * Constructor for ImageActions.

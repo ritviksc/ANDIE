@@ -15,6 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
 public class SettingsActions {
@@ -23,6 +24,9 @@ public class SettingsActions {
      * A list of actions for the setting menu.
      */
     protected ArrayList<Action> actions;
+    public Action language;
+    public Action popUp;
+    public Action document;
 
     /**
      * <p>
@@ -31,12 +35,14 @@ public class SettingsActions {
      */
     public SettingsActions() {
         actions = new ArrayList<>();
-        actions.add(new LanguageAction(I18nManager.get("Language_title"), null, I18nManager.get("Language_desc"),
-                KeyEvent.VK_L));
-        actions.add(
-                new PopUpAction(I18nManager.get("Popup_title"), null, I18nManager.get("Popup_desc"), KeyEvent.VK_P));
-        actions.add(new DocumentAction(I18nManager.get("Document_title"), null, I18nManager.get("Document_desc"),
-                KeyEvent.VK_D));
+
+        language = new LanguageAction(I18nManager.get("Language_title"), null, I18nManager.get("Language_desc"), KeyEvent.VK_L);
+        actions.add(language);
+        popUp = new PopUpAction(I18nManager.get("Popup_title"), null, I18nManager.get("Popup_desc"), KeyEvent.VK_P);
+        actions.add(popUp);
+        document = new DocumentAction(I18nManager.get("Document_title"), null, I18nManager.get("Document_desc"), KeyEvent.VK_U);
+        actions.add(document);
+
     }
 
     /**
@@ -47,13 +53,25 @@ public class SettingsActions {
      * @return The File menu UI element.
      */
     public JMenu createMenu() {
-        JMenu fileMenu = new JMenu(I18nManager.get("Setting_title"));
+        JMenu settingsMenu = new JMenu(I18nManager.get("Setting_title"));
 
-        for (Action action : actions) {
-            fileMenu.add(new JMenuItem(action));
-        }
+        JMenuItem languageItem = new JMenuItem(language);
+        // Visual shortcut, binded in andie
+        languageItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, Andie.shortcut | KeyEvent.SHIFT_DOWN_MASK));
+        settingsMenu.add(languageItem);
+        
+        JMenuItem popUpItem = new JMenuItem(popUp);
+        // Visual shortcut, binded in andie
+        popUpItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, Andie.shortcut | KeyEvent.SHIFT_DOWN_MASK));
+        settingsMenu.add(popUpItem);
+        
+        JMenuItem documentItem = new JMenuItem(document);
+        // Visual shortcut, binded in andie
+        documentItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, Andie.shortcut | KeyEvent.SHIFT_DOWN_MASK));
+        settingsMenu.add(documentItem);
 
-        return fileMenu;
+
+        return settingsMenu;
     }
 
     /**

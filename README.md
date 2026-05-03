@@ -84,6 +84,13 @@ The EditableImage class has been altered to include an isSaved boolean to check 
 
 ### Shorcuts:
 
+File:
+- open: ctrl/cmd + o
+- save: ctrl/cmd + s
+- save as: ctrl/cmd + shift + s
+- export: ctrl/cmd + shift + e
+- exit: ctrl/cmd + q
+
 Edit:
 - undo: ctrl/cmd + z
 - redo: ctrl/cmd + shift + z
@@ -94,3 +101,24 @@ Edit:
 - rotate 90 degrees anti-clockwise: ctrl/cmd + shift + left
 - rotate 180 degrees: ctrl/cmd + shift + down
             
+View:
+- zoom in: ctrl/cmd + +
+- zoom out: ctrl/cmd + -
+- zoom full: ctrl/cmd + shift + f
+
+Filter:
+- mean: ctrl/cmd + shift + m
+- sharpen: ctrl/cmd + shift + h
+- gaussian: ctrl/cmd + shift + g
+- median: ctrl/cmd + shift + d
+- emboss: ctrl/cmd + shift + e
+- sobel: ctrl/cmd + shift + b
+- contrast mask: ctrl/cmd + shift + t
+
+Macro:
+- start recording: ctrl/cmd + shift + q
+- stop recording: ctrl/cmd + shift + a
+- load macro: ctrl/cmd + shift + k
+
+Settings:
+- language ctrl/cmd + shift + i 

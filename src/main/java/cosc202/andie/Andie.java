@@ -345,7 +345,7 @@ public class Andie {
     //binds the shortcuts for all the filter options
     private static void bindFilterShortcuts(JRootPane rootPane, FilterActions filterActions){ 
         bindShortcut(rootPane, KeyStroke.getKeyStroke(KeyEvent.VK_M, shortcut | KeyEvent.SHIFT_DOWN_MASK), "mean", filterActions.mean);
-        bindShortcut(rootPane, KeyStroke.getKeyStroke(KeyEvent.VK_H, shortcut | KeyEvent.SHIFT_DOWN_MASK), "sharpen", filterActions.sharpen);
+        bindShortcut(rootPane, KeyStroke.getKeyStroke(KeyEvent.VK_K, shortcut | KeyEvent.SHIFT_DOWN_MASK), "sharpen", filterActions.sharpen);
         bindShortcut(rootPane, KeyStroke.getKeyStroke(KeyEvent.VK_G, shortcut | KeyEvent.SHIFT_DOWN_MASK), "gaussian", filterActions.gaussian);
         bindShortcut(rootPane, KeyStroke.getKeyStroke(KeyEvent.VK_D, shortcut | KeyEvent.SHIFT_DOWN_MASK), "median", filterActions.median);
         bindShortcut(rootPane, KeyStroke.getKeyStroke(KeyEvent.VK_E, shortcut | KeyEvent.SHIFT_DOWN_MASK), "emboss", filterActions.emboss);

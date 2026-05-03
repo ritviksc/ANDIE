@@ -108,7 +108,7 @@ View:
 
 Filter:
 - mean: ctrl/cmd + shift + m
-- sharpen: ctrl/cmd + shift + h
+- sharpen: ctrl/cmd + shift + k
 - gaussian: ctrl/cmd + shift + g
 - median: ctrl/cmd + shift + d
 - emboss: ctrl/cmd + shift + e
@@ -120,7 +120,7 @@ Filter:
 Macro:
 - start recording: ctrl/cmd + shift + q
 - stop recording: ctrl/cmd + shift + a
-- load macro: ctrl/cmd + shift + k
+- load macro: ctrl/cmd + shift + l
 
 Settings:
 - language ctrl/cmd + shift + i

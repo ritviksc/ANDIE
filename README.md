@@ -102,7 +102,7 @@ Edit:
 - rotate 180 degrees: ctrl/cmd + shift + down
             
 View:
-- zoom in: ctrl/cmd + +
+- zoom in: ctrl/cmd + = (+)
 - zoom out: ctrl/cmd + -
 - zoom full: ctrl/cmd + shift + f
 
@@ -114,6 +114,8 @@ Filter:
 - emboss: ctrl/cmd + shift + e
 - sobel: ctrl/cmd + shift + b
 - contrast mask: ctrl/cmd + shift + t
+- FIR: ctrl/cmd + Shift + j
+- Random Scattering: ctrl/cmd + Shift + n
 
 Macro:
 - start recording: ctrl/cmd + shift + q
@@ -121,4 +123,6 @@ Macro:
 - load macro: ctrl/cmd + shift + k
 
 Settings:
-- language ctrl/cmd + shift + i 
+- language ctrl/cmd + shift + i
+- Pop up: ctrl/cmd + shift + p
+- Documentation: ctrl/cmd + shift + u

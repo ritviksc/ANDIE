@@ -67,25 +67,30 @@ public class FileActions {
      */
     public JMenu createMenu() {
         JMenu fileMenu = new JMenu(I18nManager.get("file_Title"));
-
+        
         JMenuItem openItem = new JMenuItem(open);
-        openItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+        //still works a shortcut function but but only when drop down menu is visible, visually shows shortcut command
+        openItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Andie.shortcut));
         fileMenu.add(openItem);
 
         JMenuItem saveItem = new JMenuItem(save);
-        saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+        //still works a shortcut function but but only when drop down menu is visible, visually shows shortcut command
+        saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Andie.shortcut));
         fileMenu.add(saveItem);
 
         JMenuItem saveAsItem = new JMenuItem(saveAs);
-        saveAsItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | KeyEvent.SHIFT_DOWN_MASK));
+        //still works a shortcut function but but only when drop down menu is visible, visually shows shortcut command
+        saveAsItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Andie.shortcut | KeyEvent.SHIFT_DOWN_MASK));
         fileMenu.add(saveAsItem);
 
         JMenuItem exportItem = new JMenuItem(export);
-        exportItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | KeyEvent.SHIFT_DOWN_MASK));
+        //still works a shortcut function but but only when drop down menu is visible, visually shows shortcut command
+        exportItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, Andie.shortcut | KeyEvent.SHIFT_DOWN_MASK));
         fileMenu.add(exportItem);
 
         JMenuItem exitItem = new JMenuItem(exit);
-        exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+        //still works a shortcut function but but only when drop down menu is visible, visually shows shortcut command
+        exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, Andie.shortcut));
         fileMenu.add(exitItem);
 
 

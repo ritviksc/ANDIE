@@ -15,6 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
 public class SettingsActions {
@@ -23,6 +24,7 @@ public class SettingsActions {
      * A list of actions for the setting menu.
      */
     protected ArrayList<Action> actions;
+    public Action language;
 
     /**
      * <p>
@@ -31,7 +33,8 @@ public class SettingsActions {
      */
     public SettingsActions() {
         actions = new ArrayList<>();
-        actions.add(new LanguageAction(I18nManager.get("Language_title"), null, I18nManager.get("Language_desc"), KeyEvent.VK_L));
+        language = new LanguageAction(I18nManager.get("Language_title"), null, I18nManager.get("Language_desc"), KeyEvent.VK_L);
+        actions.add(language);
     }
 
     /**
@@ -42,13 +45,14 @@ public class SettingsActions {
      * @return The File menu UI element.
      */
     public JMenu createMenu() {
-        JMenu fileMenu = new JMenu(I18nManager.get("Setting_title"));
+        JMenu settingsMenu = new JMenu(I18nManager.get("Setting_title"));
 
-        for (Action action : actions) {
-            fileMenu.add(new JMenuItem(action));
-        }
+        JMenuItem languageItem = new JMenuItem(language);
+        //still works a shortcut function but but only when drop down menu is visible, visually shows shortcut command
+        languageItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, Andie.shortcut | KeyEvent.SHIFT_DOWN_MASK));
+        settingsMenu.add(languageItem);
 
-        return fileMenu;
+        return settingsMenu;
     }
 
     /**

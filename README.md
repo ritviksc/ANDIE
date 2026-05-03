@@ -119,3 +119,5 @@ Macro:
 - stop recording: ctrl/cmd + shift + a
 - load macro: ctrl/cmd + shift + k
 
+Settings:
+- language ctrl/cmd + shift + i 

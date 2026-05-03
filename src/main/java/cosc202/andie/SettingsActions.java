@@ -1,13 +1,13 @@
 package cosc202.andie;
 
+import java.awt.Desktop;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.net.URI;
 import java.util.ArrayList;
-import java.util.Locale;
-import java.util.Properties;
+import java.util.prefs.Preferences;
 
 import javax.swing.Action;
 import javax.swing.ImageIcon;
@@ -25,6 +25,8 @@ public class SettingsActions {
      */
     protected ArrayList<Action> actions;
     public Action language;
+    public Action popUp;
+    public Action document;
 
     /**
      * <p>
@@ -33,8 +35,14 @@ public class SettingsActions {
      */
     public SettingsActions() {
         actions = new ArrayList<>();
+
         language = new LanguageAction(I18nManager.get("Language_title"), null, I18nManager.get("Language_desc"), KeyEvent.VK_L);
         actions.add(language);
+        popUp = new PopUpAction(I18nManager.get("Popup_title"), null, I18nManager.get("Popup_desc"), KeyEvent.VK_P);
+        actions.add(popUp);
+        document = new DocumentAction(I18nManager.get("Document_title"), null, I18nManager.get("Document_desc"), KeyEvent.VK_U);
+        actions.add(document);
+
     }
 
     /**
@@ -48,11 +56,121 @@ public class SettingsActions {
         JMenu settingsMenu = new JMenu(I18nManager.get("Setting_title"));
 
         JMenuItem languageItem = new JMenuItem(language);
-        //still works a shortcut function but but only when drop down menu is visible, visually shows shortcut command
+        // Visual shortcut, binded in andie
         languageItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, Andie.shortcut | KeyEvent.SHIFT_DOWN_MASK));
         settingsMenu.add(languageItem);
+        
+        JMenuItem popUpItem = new JMenuItem(popUp);
+        // Visual shortcut, binded in andie
+        popUpItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, Andie.shortcut | KeyEvent.SHIFT_DOWN_MASK));
+        settingsMenu.add(popUpItem);
+        
+        JMenuItem documentItem = new JMenuItem(document);
+        // Visual shortcut, binded in andie
+        documentItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, Andie.shortcut | KeyEvent.SHIFT_DOWN_MASK));
+        settingsMenu.add(documentItem);
+
 
         return settingsMenu;
+    }
+
+    /**
+     * <p>
+     * Action to change pop-up behaviour.
+     * </p>
+     *
+     */
+    public class PopUpAction extends ImageAction {
+
+        /**
+         * <p>
+         * Show pop-up message when Andie starts up, if disabled.
+         * </p>
+         *
+         * @param name     The name of the action (ignored if null).
+         * @param icon     An icon to use to represent the action (ignored if null).
+         * @param desc     A brief description of the action (ignored if null).
+         * @param mnemonic A mnemonic key to use as a shortcut (ignored if
+         *                 null).
+         */
+        PopUpAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+            super(name, icon, desc, mnemonic);
+        }
+
+        /**
+         * <p>
+         * Callback for when the pop-up action is triggered.
+         * </p>
+         *
+         * <p>
+         * This method is called whenever the PopUpAction is triggered. It
+         * enables welcome pop-up whenever Andie starts up.
+         * </p>
+         *
+         * @param e The event triggering this callback.
+         */
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            Preferences pref = Andie.prefs;
+            if (pref.getBoolean("showWelcome", true) == true) {
+                JOptionPane.showMessageDialog(
+                        null,
+                        I18nManager.get("popup_set"),
+                        I18nManager.get("no_change"),
+                        JOptionPane.INFORMATION_MESSAGE);
+
+                return;
+            }
+            pref.putBoolean("showWelcome", true); // enable pop up
+        }
+
+    }
+
+    /**
+     * <p>
+     * Action to open up Andie documentation.
+     * </p>
+     *
+     */
+    public class DocumentAction extends ImageAction {
+        private static final String url = "https://andie-aa9d21.cspages.otago.ac.nz/docs/";
+
+        /**
+         * <p>
+         * Open Andie documentation page in seperate page in default browser.
+         * </p>
+         *
+         * @param name     The name of the action (ignored if null).
+         * @param icon     An icon to use to represent the action (ignored if null).
+         * @param desc     A brief description of the action (ignored if null).
+         * @param mnemonic A mnemonic key to use as a shortcut (ignored if
+         *                 null).
+         */
+        DocumentAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+            super(name, icon, desc, mnemonic);
+        }
+
+        /**
+         * <p>
+         * Callback for when the document action is triggered.
+         * </p>
+         *
+         * <p>
+         * This method is called whenever the DocumentAction is triggered. It
+         * opens up the offical Andie documentation hosted on GitLab pages.
+         * </p>
+         *
+         * @param e The event triggering this callback.
+         */
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                Desktop.getDesktop().browse(new URI(url));
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
     }
 
     /**
@@ -68,11 +186,11 @@ public class SettingsActions {
          * Create a new language action.
          * </p>
          *
-         * @param name The name of the action (ignored if null).
-         * @param icon An icon to use to represent the action (ignored if null).
-         * @param desc A brief description of the action (ignored if null).
+         * @param name     The name of the action (ignored if null).
+         * @param icon     An icon to use to represent the action (ignored if null).
+         * @param desc     A brief description of the action (ignored if null).
          * @param mnemonic A mnemonic key to use as a shortcut (ignored if
-         * null).
+         *                 null).
          */
         LanguageAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
@@ -94,15 +212,8 @@ public class SettingsActions {
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
-                Properties props = new Properties();
-                try (FileInputStream in = new FileInputStream("src/main/resources/config.properties")) {
-                    props.load(in);
-                } catch (Exception ex) {
-                    System.out.println("Error reading config.properties!");
-                    return;
-                }
-
-                String[] options = {"English", "Dutch"};
+                boolean languageToggle = false; // false = English, true = Dutch
+                String[] options = { "English", "Dutch" };
 
                 String choice = (String) JOptionPane.showInputDialog(
                         null,
@@ -111,57 +222,82 @@ public class SettingsActions {
                         JOptionPane.QUESTION_MESSAGE,
                         null,
                         options,
-                        options[0]
-                );
+                        options[0]);
 
                 if (choice == null) {
                     return;
                 }
 
-                Locale newLocale = null;
-
+                // Check if already selected
                 switch (choice) {
                     case "Dutch":
-                        newLocale = new Locale("nl");
-                        props.setProperty("language", "nl");
+                        if (Andie.prefs.get("lang", "en").equals("nl")) {
+                            JOptionPane.showMessageDialog(
+                                    null,
+                                    I18nManager.get("lang_set"),
+                                    I18nManager.get("no_change"),
+                                    JOptionPane.INFORMATION_MESSAGE);
+                            return;
+                        }
+                        languageToggle = true;
                         break;
+
                     case "English":
-                        props.setProperty("language", "en");
-                        break;
-                    default:
+                        if (Andie.prefs.get("lang", "en").equals("en")) {
+                            JOptionPane.showMessageDialog(
+                                    null,
+                                    I18nManager.get("lang_set"),
+                                    I18nManager.get("no_change"),
+                                    JOptionPane.INFORMATION_MESSAGE);
+                            return;
+                        }
                         break;
                 }
 
-                try (FileOutputStream out = new FileOutputStream("src/main/resources/config.properties")) {
-                    props.store(out, "Updated language");
-                } catch (Exception ex) {
-                    System.out.println("Error writing to config.properties!");
-                    return;
-                }
-
+                // Inform user BEFORE closing UI
                 JOptionPane.showMessageDialog(null, I18nManager.get("Lan_successful"));
 
                 boolean readyToClose = true;
 
-                // Close all windows safely
-                for (java.awt.Window window : java.awt.Window.getWindows()) {
-                    if (window instanceof JFrame) {
-                        ((JFrame) window).dispatchEvent(new WindowEvent((JFrame) window, WindowEvent.WINDOW_CLOSING));
-                        if (!target.windowClosed) {
+                // (handles unsaved work)
+                for (Window window : Window.getWindows()) {
+                    if (window instanceof JFrame frame) {
+                        frame.dispatchEvent(
+                                new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+
+                        // If still open --> user cancelled
+                        if (frame.isDisplayable()) {
                             readyToClose = false;
                             break;
                         }
                     }
                 }
+
                 if (!readyToClose) {
                     return;
                 }
-                // Restart app with new language preference.
+
+                // Save preference
+                if (languageToggle) {
+                    Andie.prefs.put("lang", "nl");
+                } else {
+                    Andie.prefs.put("lang", "en");
+                }
+
+                for (Window window : Window.getWindows()) {
+                    window.dispose();
+                }
+
+                // 3. reset static state
+                Andie.activeButton = null;
+                ImagePanel.windowClosed = true;
+
+                // Restart full app
                 SwingUtilities.invokeLater(() -> {
                     try {
-                        Andie.main(new String[]{});
-                    } catch (Exception e1) {
-                        e1.printStackTrace();
+                        Andie.main(new String[] {}); // restart ANDIE
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
                 });
 
@@ -170,7 +306,5 @@ public class SettingsActions {
                 JOptionPane.showMessageDialog(null, I18nManager.get("Lan_error"));
             }
         }
-
     }
-
 }

@@ -3,7 +3,7 @@ default:
     - docker
 
 image:
-  name: gradle:9-jdk25-alpine
+  name: altitude.otago.ac.nz:4567/hanro194/zip-tool-image/main:latest
   pull_policy: if-not-present
 
 before_script:
@@ -17,23 +17,74 @@ before_script:
     systemProp.https.proxyPort=3128
     systemProp.https.nonProxyHosts=altitude.otago.ac.nz|docker|172.17.0.* 
     EOF
-pages: 
+
+javadoc:
   stage: build
   script:
-    - echo "Attempting to generate Javadoc..."
-    - gradle javadoc
-    - echo "Publishing Javadoc..."
-    - mkdir public
-    - mv build/docs/javadoc/ public/
-    - ls -R public | head
-    - echo 'first ten public/ files listed'
+    - echo 'Attempting to generate JavaDoc documentation...'
+    - gradle -Dorg.gradle.welcome=never javadoc
+    - echo 'Done.'
   artifacts:
     paths:
-    - public
-  only:
-  - main
+      - build/docs
 
 unit-test-job:
   script:
   - echo "Attempting to run unit tests..."
   - gradle test
+  
+# List of stages for jobs, and their order of execution
+stages:
+  - build
+  - test
+  - package
+  - deploy
+  
+compile-code:
+  stage: build
+  script:
+    - echo 'Attempting to compile the code...'
+    - gradle -Dorg.gradle.welcome=never --no-daemon compileJava
+    - echo 'Done.'
+  artifacts:
+    paths:
+        - build
+test:
+  stage: test
+  script:
+    - echo 'Running unit tests...'
+    - gradle -Dorg.gradle.welcome=never --no-daemon test
+    - echo 'Done.'
+create-jar:
+  stage: package
+  script:
+    - echo 'Attempting to create JAR file...'
+    - gradle -Dorg.gradle.welcome=never --no-daemon jar
+    - echo 'Done.'
+  artifacts:
+    paths:
+        - build/libs/andie-1.0.0.jar
+
+pages:
+  stage: deploy
+  script:
+    - set +o pipefail
+
+    - echo "Preparing pages..."
+    - mkdir -p public/javadoc public/docs
+    - cp index.html public/index.html
+    - cp build/libs/andie-1.0.0.jar public/
+    - cp -r build/docs/javadoc/* public/javadoc/
+    - cp -r docs/* public/docs/ || true
+    - cd public
+    - zip -r9 ANDIE.zip andie-1.0.0.jar docs/
+    - cd -
+
+    - echo "Final structure:"
+    - ls -R public | head
+
+  artifacts:
+    paths:
+      - public
+  only:
+    - main

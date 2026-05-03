@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <title>ANDIE 101</title>
+</head>
+
+<body style="background-color:lightblue;">
+   <h1>ANDIE 101</h1>
+   <p><u>v1.0.0 Stable</u></p>
+   <p>ANDIE's developers</p>
+   <ul>
+      <li>Ritvik</li>
+      <li>Robert</li>
+      <li>Loek</li>
+      <li>Maleena</li>
+   </ul>
+
+   <p>Welcome to the guide for ANDIE image editor, we hope you enjoy using the editor as much as we did developing it
+      :D </p>
+   <p>ANDIE is a <b>'A Non Destructive Editor'</b> (gives rise to the name of our editor :D) with simple and
+      efficent features</p>
+
+   <p>This document serves the purpose to help user navigate through ANDIE and be productive as possible. If there
+      is anything that is disambiguous in the documentation please let us know.</p>
+
+   <h3>Undo/Redo is important!</h3>
+   <p>Andie keeps a <strong>linear history of edits</strong>, allowing you to undo and redo actions. However, if
+      you undo an action and then perform a new one, the undone actions are permanently removed from the history,
+      so keep that in mind! </p>
+
+   <h2>Features</h2>
+   <p>Andie comes with a wide range of features ranging from drawing to manipulating image color. Pretty cool
+      isn't it? Each of the following sections below will give a concise summary of features in ANDIE and how they
+      can be useful to you while you edit.</p>
+
+   <p> Whenever you make an edit to your image, you <strong><u>WILL</u></strong></strog> be reminded to save your
+      work. </p>
+   <b>ANDIE at start-up</b>
+
+   <div style="text-align:center;">
+      <img src="main-ui.png" alt="Main UI"
+         style="width:600px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.2);">
+   </div>
+
+   <h3>Dual Language Support</h3>
+   <p>ANDIE supports two languages at the moment:<br>
+      * <strong>English</strong><br>
+      * <strong>Dutch</strong>
+   </p>
+   <p>There is a possibility more languages will be supported in the future.</p>
+   <h3>Save When Exiting Andie</h3>
+   <p></p>
+
+   Prompts the user to save, save as, exit without saving or cancel whenever the program might exit.<br>
+   If the user cancels a save as operation it returns to the program and functions as if the user just clicked the
+   cancel on the original save menu.<br>
+   <strong>Note</strong> - You will have to save your image, then retry changing the app language.</p>
+
+   <h3>File Operations</h3>
+   <p> You can export images which prompts the users to enter a file name, and select from the possible formats, a
+      decided on the file placement. If the user cancels the export operation its returns to the program. Otherwise, if
+      the users approves to save then image is export as current into the select file directory. Exporting a file that
+      does not support its specific format type notifies the user with an appropriate error message. </p>
+
+   <h3>Edit Operations</h3>
+   <p><b>Resizing</b> - The image will be scaled up or down depending on the factor provided (a percentage). If it is
+      less than 100% the image will be scaled down, else the image will be scaled up accordingly.<br> <b>Rotate 90
+         Clockwise</b> - Rotate a image by 90 degrees clockwise.<br><b>Rotate 90 Anti-Clockwise</b> - rotate a image by
+      90 degrees anti-clockwise.<br><b>Rotate 180 degrees</b> - rotate a image by 180 degrees (mirror
+      image).<br><b>Horizontal flip</b>- Flip image horizontally in place.<br><b>Vertical flip</b> - Flip image
+      vertically in place.</p>
+
+   <h3>View Options</h3>
+   <p>You can zoom in and out of the selected picture - pretty straightforward.</p>
+
+   <h3>Image Filters</h3>
+   <p>Andie supports many filters to use for your images. <br> <b>Note: </b>Edge detection - All filters have image edge
+      detection and will use the closest available pixel if the kernel overhangs the edge of the image.<br></p>
+   <p>
+      <b>Mean</b> - Applys a box blur using a kernel of a user inputted radius.<br>
+      <b>Sharpen</b> - Applys a sharpen filter to the working image using a kernel and convolution. No user input is
+      required.<br>
+      <b>Gaussian</b> - Applys a Gaussian filter to the working image using a given radius to apply values to a kernel
+      and then is applied via convolution. This has a maximum radius of 10 and will default to 1 if limits are exceeded
+      or subceeded, though using the built in menu will confine itself to the limits.<br>
+      <b>Median</b> - Applys a median filter to the working image by averaging the colour channel (inlcuding alpha
+      channel) of each surrounding pixel and then making the new pixel the median of the surrounding pixels. This
+      operation is applied to a new image so it does not reuse already processed pixels. This has a maximum radius of 10
+      and will default to 1 if limits are exceeded or subceeded, though using the built in menu will confine itself to
+      the limits.<br>
+      <b>Emboss</b> - Applys an embossing filter to the working image by applying a user specified directional emboss
+      convolution. A kernel is hardcoded for each (cardinal) direction and passed to the convolution based on user
+      input.<br>
+      <b>Sobel</b> - Applys a Sobel filter to the working image in a very similar way to emboss except with 3 different
+      hardcoded Sobel kernels.<br>
+      <b>Contrast mask</b> - Enhances the local contrast by creating a blurred inverted greyscale version of the image
+      and blending it back with the original image. User inputs a blur radius and strength of the effect.<br>
+      <b>Random scattering</b> - Create a scattered effect by replacing each output pixel with a randomly chosen pixel
+      from within a user-specified radius around the original pixel location
+   </p>
+   <b>Selections of filters-hover on icon to see filter type</b>
+   <div style="text-align:center;">
+      <img src="filter-tab.png" alt="Main UI"
+         style="width:600px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.2);">
+   </div>
+
+   <h3>Colour Operations</h3>
+   <p><b>Threshold</b> - Converts a colour image to black and white based on a specified intensity threshold. Pixels
+      with average brightness above the threshold become white, and those below become black. The original alpha
+      (transparency) of each pixel is preserved. The threshold value is provided by the user, between 0 and 255.<br>
+      <b>Colour Channel Swapping</b> - Reorders the red, green, and blue channels of the working image according to a
+      user-specified permutation (e.g., RGB, GBR, BRG). The user inputs the desired channel order via a dialog box.
+      Alpha (transparency) values are preserved. Invalid input will leave the image unchanged.<br>
+      <b>Image Inversion</b> - Inverts all colours of the working image by subtracting each RGB channel from 255. For
+      example, a pixel with (R=100, G=150, B=200) becomes (R=155, G=105, B=55). The alpha (transparency) channel is
+      preserved. No user input is required.<br>
+      <b>Contrast mask</b> - Enhances the local contrast by creating a blurred inverted greyscale version of the image
+      and blending it back with the original image. User inputs a blur radius and strength of the effect.<br>
+      <b>Random scattering</b> - Create a scattered effect by replacing each output pixel with a randomly chosen pixel
+      from within a user-specified radius around the original pixel location
+   </p>
+   <b>Selections of color ops-hover on icon to see color op type</b>
+   <div style="text-align:center;">
+      <img src="color-tab.png" alt="Main UI"
+         style="width:600px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.2);">
+   </div>
+
+   <h3>Image Cropping And Drawing</h3>
+   <p>
+
+      User can now selected a portion of the loaded image to crop and select as the new image to edit. If they dont want
+      to crop, they can select to draw a few different shapes in the selected area with customisation options.<br>
+      <u>Summary:</u><br>
+
+      * User can crop a rectangle or ellipse out of selected region<br>
+      * User can draw a rectangle or ellipse on the selected region (fill or outlined)<br>
+      * User can draw line between two selected points<br>
+      * User decides color of each object from the color palette
+   </p>
+
+   <b>Drawing in action</b>
+   <div style="text-align:center;">
+      <img src="drawing-tools.png" alt="Main UI"
+         style="width:600px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.2);">
+   </div>
+
+   <h3>Macros</h3>
+   <p>Macros allow users to record and replay a sequence of editing actions, making repetitive tasks faster and more
+      efficient. This feature integrates with ANDIE’s non-destructive history model, meaning recorded actions can still
+      be undone or modified after execution.</p>
+
+   <h3>Shortcuts</h3>
+   <p>The following keyboard shortcuts will help accelerate your productivity.</p>
+   <ul>
+      <li><strong>Undo:</strong> Ctrl/Cmd + Z</li>
+      <li><strong>Redo:</strong> Ctrl/Cmd + Shift + Z</li>
+      <li><strong>Resize:</strong> Ctrl/Cmd + Shift + R</li>
+      <li><strong>Flip Horizontally:</strong> Ctrl/Cmd + Shift + H</li>
+      <li><strong>Flip Vertically:</strong> Ctrl/Cmd + Shift + V</li>
+      <li><strong>Rotate 90° Clockwise:</strong> Ctrl/Cmd + Shift + Right</li>
+      <li><strong>Rotate 90° Anti-Clockwise:</strong> Ctrl/Cmd + Shift + Left</li>
+      <li><strong>Rotate 180°:</strong> Ctrl/Cmd + Shift + Down</li>
+   </ul>
+
+   <h2>Bugs</h2>
+   <p>ANDIE was developed and tested thoroughly before being released to the public. We have tried out best to keep bugs
+      out of the stable version. If you find any bugs please let us know!</p>
+   <h2>Contributing to Andie</h2>
+   <p>If you have any ideas that would benefit ANDIE or would like to contribute to ANDIE please let us know.</p>
+</body>
+
+</html>

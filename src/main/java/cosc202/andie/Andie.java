@@ -3,11 +3,8 @@ package cosc202.andie;
 import static cosc202.andie.ImageAction.target;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-<<<<<<< HEAD
 import java.awt.event.KeyEvent;
-=======
 import java.awt.event.MouseAdapter;
->>>>>>> 7e39d27587ae5f150dee9d080a8259ab63ad5058
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.net.URI;
@@ -40,16 +37,12 @@ import java.awt.event.MouseEvent;
  */
 public class Andie {
 
-<<<<<<< HEAD
-    private static JButton activeButton;
-    
+    static JButton activeButton;
     //get control for windows and command for macos
     static final int shortcut = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
-=======
     private static final String url = "https://andie-aa9d21.cspages.otago.ac.nz/docs/";
-    static JButton activeButton;
     public static Preferences prefs = Preferences.userNodeForPackage(Andie.class);
->>>>>>> 7e39d27587ae5f150dee9d080a8259ab63ad5058
+
 
     /**
      * <p>
@@ -97,52 +90,43 @@ public class Andie {
 
         // create the top row for all the main actions headers
         JPanel mainRow = new JPanel(new FlowLayout(FlowLayout.LEFT));
-<<<<<<< HEAD
         mainRow.setBackground(Color.WHITE);
+        
         // File menus are pretty standard, so things that usually go in File menus go here.
-=======
-        mainRow.setBackground(new Color(255, 255, 255));
-        // File menus are pretty standard, so things that usually go in File menus go
-        // here.
->>>>>>> 7e39d27587ae5f150dee9d080a8259ab63ad5058
         FileActions fileActions = new FileActions();
         JButton fileButton = new JButton(I18nManager.get("file_Title"));
         mainRow.add(fileButton);
         bindFileShortcuts(frame.getRootPane(), fileActions);
+        
         // Likewise Edit menus are very common, so should be clear what might go here.
         EditActions editActions = new EditActions();
         JButton editButton = new JButton(I18nManager.get("Edit_title"));
         mainRow.add(editButton);
-<<<<<<< HEAD
         bindEditShortcuts(frame.getRootPane(), editActions);
+        
         // View actions control how the image is displayed, but do not alter its actual content
         ViewActions viewActions = new ViewActions();
         JButton viewButton = new JButton(I18nManager.get("View_title"));
         mainRow.add(viewButton);
         bindViewShortcuts(frame.getRootPane(), viewActions);
+        
         // Filters apply a per-pixel operation to the image, generally based on a local window
-=======
-        // View actions control how the image is displayed, but do not alter its actual
-        // content
-        ViewActions viewActions = new ViewActions();
-        JButton viewButton = new JButton(I18nManager.get("View_title"));
-        mainRow.add(viewButton);
-        // Filters apply a per-pixel operation to the image, generally based on a local
-        // window
->>>>>>> 7e39d27587ae5f150dee9d080a8259ab63ad5058
         FilterActions filterActions = new FilterActions();
         JButton filterButton = new JButton(I18nManager.get("Filter_title"));
         mainRow.add(filterButton);
         bindFilterShortcuts(frame.getRootPane(), filterActions);
+        
         // Actions that affect the representation of colour in the image
         ColourActions colourActions = new ColourActions();
         JButton colourButton = new JButton(I18nManager.get("colour_title"));
         mainRow.add(colourButton);
+        
         // Macros action controls
         MacroActions macroActions = new MacroActions();
         JButton macroButton = new JButton("Macro");
         mainRow.add(macroButton);
         bindMacroShortcuts(frame.getRootPane(), macroActions);
+        
         // Language action controls language of the app
         SettingsActions settingsActions = new SettingsActions();
         JButton settingsButton = new JButton(I18nManager.get("Setting_title"));
@@ -209,14 +193,8 @@ public class Andie {
         fileButton.addActionListener(e -> {
             filePopup.show(fileButton, 0, fileButton.getHeight());
         });
-<<<<<<< HEAD
-        
-        
-        JMenu settingsMenu = settingsActions.createMenu();
-=======
 
-        JMenu settingsMenu = languageActions.createMenu();
->>>>>>> 7e39d27587ae5f150dee9d080a8259ab63ad5058
+        JMenu settingsMenu = settingsActions.createMenu();
         JPopupMenu settingsPopup = settingsMenu.getPopupMenu();
 
         settingsButton.addActionListener(e -> {
@@ -363,6 +341,7 @@ public class Andie {
         bindShortcut(rootPane, KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, shortcut), "zoom out", viewActions.zoomOut);
         bindShortcut(rootPane, KeyStroke.getKeyStroke(KeyEvent.VK_F, shortcut | KeyEvent.SHIFT_DOWN_MASK), "zoom full", viewActions.zoomFull);
     }
+
     //binds the shortcuts for all the filter options
     private static void bindFilterShortcuts(JRootPane rootPane, FilterActions filterActions){ 
         bindShortcut(rootPane, KeyStroke.getKeyStroke(KeyEvent.VK_M, shortcut | KeyEvent.SHIFT_DOWN_MASK), "mean", filterActions.mean);
@@ -371,7 +350,10 @@ public class Andie {
         bindShortcut(rootPane, KeyStroke.getKeyStroke(KeyEvent.VK_D, shortcut | KeyEvent.SHIFT_DOWN_MASK), "median", filterActions.median);
         bindShortcut(rootPane, KeyStroke.getKeyStroke(KeyEvent.VK_E, shortcut | KeyEvent.SHIFT_DOWN_MASK), "emboss", filterActions.emboss);
         bindShortcut(rootPane, KeyStroke.getKeyStroke(KeyEvent.VK_B, shortcut | KeyEvent.SHIFT_DOWN_MASK), "sobel", filterActions.sobel);
-        bindShortcut(rootPane, KeyStroke.getKeyStroke(KeyEvent.VK_C, shortcut | KeyEvent.SHIFT_DOWN_MASK), "contrast mask", filterActions.contrastMask);      
+        bindShortcut(rootPane, KeyStroke.getKeyStroke(KeyEvent.VK_C, shortcut | KeyEvent.SHIFT_DOWN_MASK), "contrastMask", filterActions.contrastMask);
+        bindShortcut(rootPane, KeyStroke.getKeyStroke(KeyEvent.VK_J, shortcut | KeyEvent.SHIFT_DOWN_MASK), "fir", filterActions.fir);
+        bindShortcut(rootPane, KeyStroke.getKeyStroke(KeyEvent.VK_N, shortcut | KeyEvent.SHIFT_DOWN_MASK), "randomScattering", filterActions.randomScattering);
+        
     }
     //binds the shortcuts for all the macro options
     private static void bindMacroShortcuts(JRootPane rootPane, MacroActions macroActions){
@@ -380,9 +362,11 @@ public class Andie {
         bindShortcut(rootPane, KeyStroke.getKeyStroke(KeyEvent.VK_L, shortcut | KeyEvent.SHIFT_DOWN_MASK), "loadMacro", macroActions.loadMacro);
     }
     
-    //binds the shortcuts for all the macro options
+    //binds the shortcuts for all the settings options
     private static void bindSettingsShortcuts(JRootPane rootPane, SettingsActions settingsActions){
-        bindShortcut(rootPane, KeyStroke.getKeyStroke(KeyEvent.VK_I, shortcut | KeyEvent.SHIFT_DOWN_MASK), "startMacro", settingsActions.language);
+        bindShortcut(rootPane, KeyStroke.getKeyStroke(KeyEvent.VK_I, shortcut | KeyEvent.SHIFT_DOWN_MASK), "language", settingsActions.language);
+        bindShortcut(rootPane, KeyStroke.getKeyStroke(KeyEvent.VK_P, shortcut | KeyEvent.SHIFT_DOWN_MASK), "popUp", settingsActions.popUp);
+        bindShortcut(rootPane, KeyStroke.getKeyStroke(KeyEvent.VK_U, shortcut | KeyEvent.SHIFT_DOWN_MASK), "document", settingsActions.document);
     }
     
     

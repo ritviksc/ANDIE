@@ -87,7 +87,7 @@ public class MacroActions extends ToolbarActions {
         }
         
     }
-    //checks if there is a Macros folder, else then it creates one in home directory,
+    //checks if there is a Macros folder, if not then it creates one in home directory,
     private static void createMacroFolder() {
     if (macroFolder == null) {
         macroFolder = new File(System.getProperty("user.home"), "Macros_Folder");
@@ -97,7 +97,7 @@ public class MacroActions extends ToolbarActions {
         }
     }
 }
-          
+    //starts recoding    
     public class StartMacroAction extends ImageAction {
         
         private JButton button;       
@@ -105,7 +105,7 @@ public class MacroActions extends ToolbarActions {
         StartMacroAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
         }
-        
+        //this signals the button has ben clicked, visually representation
         public void setButton(JButton button){
             this.button = button;
         }
@@ -117,13 +117,13 @@ public class MacroActions extends ToolbarActions {
                 JOptionPane.showMessageDialog(target, I18nManager.get("no_Image"));
                 return;
             }
-            
+            //calls to start
             MacroManager.start();
             setActiveButton(button);
             
         }
     }
-    
+    //this ends the recroding
     public class StopMacroAction extends ImageAction {
 
         StopMacroAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
@@ -132,25 +132,25 @@ public class MacroActions extends ToolbarActions {
         
         @Override
         public void actionPerformed(ActionEvent e) {
-
+             
             JFileChooser chooser = new JFileChooser();
             chooser.setDialogTitle(I18nManager.get("saveMacro_title"));
-            
+            //calls to check if there is a folder to save to
             createMacroFolder();
 
             chooser.setCurrentDirectory(macroFolder);
-            
+            //saves as a .macro file format
             FileNameExtensionFilter macroFormat = new FileNameExtensionFilter("Macro (*.macro)", "macro");
             chooser.addChoosableFileFilter(macroFormat);
             chooser.setAcceptAllFileFilterUsed(false);
             chooser.setFileFilter(macroFormat);
-
+            //name from user
             int result = chooser.showSaveDialog(null);
-
+            //if the user clicks save
             if (result == JFileChooser.APPROVE_OPTION) {
                 File file = chooser.getSelectedFile();
 
-                //macro extension
+                //checks if user has .macro as the end of there file name if so keeps it else, if not adds .macro to the end
                 if (!file.getName().toLowerCase().endsWith(".macro")) {
                     file = new File(file.getAbsolutePath() + ".macro");
                 }
@@ -186,7 +186,7 @@ public class MacroActions extends ToolbarActions {
             createMacroFolder();
 
             JFileChooser chooser = new JFileChooser();
-            chooser.setDialogTitle(I18nManager.get("macroLoad_title"));
+            chooser.setDialogTitle(I18nManager.get("loadMacro_title"));
             chooser.setCurrentDirectory(macroFolder);
             
             
@@ -197,8 +197,9 @@ public class MacroActions extends ToolbarActions {
                 File file = chooser.getSelectedFile();
 
                 try {
+                    //gets the arrary of all the image operation of a macro
                     ArrayList<ImageOperation> ops = MacroManager.loadMacro(file);
-
+                    //loops through all the operations and applies them to the current image
                     for (ImageOperation op : ops) {
                         target.getImage().apply(op);
                     }

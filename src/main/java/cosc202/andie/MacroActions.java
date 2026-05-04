@@ -32,7 +32,6 @@ public class MacroActions extends ToolbarActions {
     public Action startMacro;
     public Action stopMacro;
     public Action loadMacro;
-    I18nManager.get
     public MacroActions(){
         actions = new ArrayList<>();
         startMacro = new StartMacroAction(I18nManager.get("start_macro"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Macro/start.png")), I18nManager.get("startMacro_desc"), null); 

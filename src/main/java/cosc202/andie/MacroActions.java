@@ -32,14 +32,14 @@ public class MacroActions extends ToolbarActions {
     public Action startMacro;
     public Action stopMacro;
     public Action loadMacro;
-    
+    I18nManager.get
     public MacroActions(){
         actions = new ArrayList<>();
-        startMacro = new StartMacroAction("start recording", new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Macro/start.png")), "Starts recording", null); 
+        startMacro = new StartMacroAction(I18nManager.get("start_macro"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Macro/start.png")), I18nManager.get("startMacro_desc"), null); 
         actions.add(startMacro);
-        stopMacro = new StopMacroAction("stop recording", new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Macro/stop.png")), "Stops recording", null); 
+        stopMacro = new StopMacroAction(I18nManager.get("stop_macro"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Macro/stop.png")), I18nManager.get("stopMacro_desc"), null); 
         actions.add(stopMacro);
-        loadMacro = new LoadMacroAction("load macro", new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Macro/load.png")), "Loads Macro", null); 
+        loadMacro = new LoadMacroAction(I18nManager.get("load_macro"), new ImageIcon(Andie.class.getClassLoader().getResource("ToolbarIcons/Macro/load.png")), I18nManager.get("loadMacro_desc"), null); 
         actions.add(loadMacro);
     }
     
@@ -135,7 +135,7 @@ public class MacroActions extends ToolbarActions {
         public void actionPerformed(ActionEvent e) {
 
             JFileChooser chooser = new JFileChooser();
-            chooser.setDialogTitle("Save Macro");
+            chooser.setDialogTitle(I18nManager.get("saveMacro_title"));
             
             createMacroFolder();
 
@@ -160,13 +160,13 @@ public class MacroActions extends ToolbarActions {
                     boolean saved = MacroManager.stop(file);
 
                     if (!saved) {
-                        JOptionPane.showMessageDialog(null, "No operations recorded.");
+                        JOptionPane.showMessageDialog(null, I18nManager.get("no_ops"));
                     }
                     
                     clearActiveButton();
 
                 } catch (IOException ex) {
-                    JOptionPane.showMessageDialog(null, "Error saving macro.");
+                    JOptionPane.showMessageDialog(null, I18nManager.get("macro_save_error"));
                 }
             }
         }
@@ -187,7 +187,7 @@ public class MacroActions extends ToolbarActions {
             createMacroFolder();
 
             JFileChooser chooser = new JFileChooser();
-            chooser.setDialogTitle("Load Macro");
+            chooser.setDialogTitle(I18nManager.get("macroLoad_title"));
             chooser.setCurrentDirectory(macroFolder);
             
             
@@ -208,7 +208,7 @@ public class MacroActions extends ToolbarActions {
                     target.getParent().revalidate();
 
                 } catch (IOException | ClassNotFoundException ex) {
-                    JOptionPane.showMessageDialog(null, "Error loading macro.");
+                    JOptionPane.showMessageDialog(null, I18nManager.get("macro_load_error"));
                 }
             }
         }

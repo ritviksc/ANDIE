@@ -4,7 +4,10 @@ import static cosc202.andie.ConvolutionFilter.Mode.EMBOSS;
 import java.awt.image.BufferedImage;
 
 /**
- *
+ * <p>
+ * An edge detection filter that works 'vertically'
+ * applied via convolution
+ * </p>
  * @author rober
  */
 public class FIRFilter implements ImageOperation, java.io.Serializable {

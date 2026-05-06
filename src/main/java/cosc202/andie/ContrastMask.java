@@ -5,24 +5,51 @@ import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
 
 /**
+ * Applies a contrast mask effect to an image.
+ * <p>
+ * The effect is created by:
+ * <ol>
+ * <li>Creating a copy of the original image</li>
+ * <li>Converting the copy to greyscale</li>
+ * <li>Inverting the image colours</li>
+ * <li>Applying Gaussian blur</li>
+ * <li>Blending the mask with the original image using soft light blending</li>
+ * </ol>
+ * This increases local contrast and can create a sharpening-style effect.
+ * </p>
  *
  * @author malee
+ * @version 1.0
  */
 public class ContrastMask implements ImageOperation, java.io.Serializable {
 
-    // Blur radius for Gaussian blur
+    /**
+     * Radius used for the Gaussian blur effect.
+     */
     protected int radius;
 
-    //Strength of effect from 0 - 100
+    /**
+     * Strength of the contrast mask effect from 0 to 100.
+     */
     protected int strength;
 
-    // Create contrastMask operation
+    /**
+     * Creates a new contrast mask operation.
+     *
+     * @param radius Radius used for Gaussian blur.
+     * @param strength Strength of the effect from 0 to 100.
+     */
     public ContrastMask(int radius, int strength) {
         this.radius = radius;
         this.strength = strength;
     }
 
-    // Apply contrast mask effect to an image
+    /**
+     * Applies the contrast mask effect to an image.
+     *
+     * @param input The image to process.
+     * @return A new image with the contrast mask effect applied.
+     */
     public BufferedImage apply(BufferedImage input) {
         if (input == null) {
             return null;
@@ -56,6 +83,7 @@ public class ContrastMask implements ImageOperation, java.io.Serializable {
                 int originalPixel = input.getRGB(x, y);
                 int maskPixel = mask.getRGB(x, y);
 
+                // Extract alpha channel from original pixel
                 int a = (originalPixel >> 24) & 0xFF;
 
                 int rOrig = (originalPixel >> 16) & 0xFF;
@@ -66,6 +94,7 @@ public class ContrastMask implements ImageOperation, java.io.Serializable {
                 int gMask = (maskPixel >> 8) & 0xFF;
                 int bMask = maskPixel & 0xFF;
 
+                // Blend original and mask channels using soft light blending.
                 int r = blendSoftLight(rOrig, rMask, maskAlpha);
                 int g = blendSoftLight(gOrig, gMask, maskAlpha);
                 int b = blendSoftLight(bOrig, bMask, maskAlpha);
@@ -75,12 +104,13 @@ public class ContrastMask implements ImageOperation, java.io.Serializable {
             }
         }
 
+        // Returns modified image.
         return output;
     }
-    
-     /**
+
+    /**
      * Creates a deep copy of an image.
-     * 
+     *
      * @param image The image to copy.
      * @return A deep copy of the image.
      */
@@ -90,12 +120,11 @@ public class ContrastMask implements ImageOperation, java.io.Serializable {
         WritableRaster raster = image.copyData(null);
         return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
     }
-    
-    
+
     /**
      * Blends one colour channel using a soft light blend and applies the mask
      * strength as a weight.
-     * 
+     *
      * @param original The original channel value.
      * @param mask The mask channel value.
      * @param weight The blend strength from 0.0 to 1.0.
@@ -110,10 +139,12 @@ public class ContrastMask implements ImageOperation, java.io.Serializable {
 
         return clamp((int) Math.round(result * 255.0));
     }
-    
+
     /**
      * Clamps a colour value so it stays within the valid range 0 to 255.
-     * 
+     *
+     * @param value The colour value to clamp.
+     * @return The clamped colour value.
      */
     private int clamp(int value) {
         return Math.max(0, Math.min(255, value));

@@ -36,20 +36,20 @@ public class FIRFilter implements ImageOperation, java.io.Serializable {
      * </p>
      *
      * @param input The image to apply the FIR filter to.
-     * @return The resulting (sharpened) image.
+     * @return The resulting (embossed) image.
      */
     @Override
     public BufferedImage apply(BufferedImage input) {
         
         
-        // Note this is a simplified laplacian kernel for a 3x3 kernel
+        // Note this is a simplified laplacian approximation for a 3x3 kernel
         float[] array = {0, -1.0f, 0,
                         -1.0f, 4.0f, -1.0f,
                         0, -1.0f, 0
         };
         ConvolutionFilter convOp = new ConvolutionFilter();
         
-        BufferedImage output = convOp.applyConvolution(input, array, EMBOSS);
+        BufferedImage output = convOp.applyConvolution(input, array, EMBOSS); // Apply to a new image
 
         return output;
     }

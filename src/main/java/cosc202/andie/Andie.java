@@ -208,7 +208,14 @@ public class Andie {
         topPanel.add(toolbarPanel);
 
         frame.add(topPanel, BorderLayout.NORTH);
-
+        
+        
+        // Save on exit functionality
+        // Reuses export code which is inefficient
+        // but such is technical debt as it was
+        // implemented in such a way that this was 
+        // fastest without having to retool the program
+        
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -230,7 +237,7 @@ public class Andie {
 
                     switch (saveOption) {
 
-                        case 0:
+                        case 0: // Save
 
                             try {
                                 target.getImage().save();
@@ -240,7 +247,7 @@ public class Andie {
                             }
                             break;
 
-                        case 1:
+                        case 1: // Save as
 
                             JFileChooser fileChooser = new JFileChooser();
 
@@ -292,12 +299,12 @@ public class Andie {
                             }
                             break;
 
-                        case 2:
+                        case 2: // Exit without saving
 
                             e.getWindow().dispose();
                             break;
 
-                        case 3:
+                        case 3: // Cancel/close
                             target.windowClosed = false;
                             break;
 

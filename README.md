@@ -38,9 +38,10 @@ Unchanged as of 20/03
 * Median - Applys a median filter to the working image by averaging the colour channel (inlcuding alpha channel) of each surrounding pixel and then making the new pixel the median of the surrounding pixels. This operation is applied to a new image so it does not reuse already processed pixels. This has a maximum radius of 10 and will default to 1 if limits are exceeded or subceeded, though using the built in menu will confine itself to the limits.
 * Emboss - Applys an embossing filter to the working image by applying a user specified directional emboss convolution. A kernel is hardcoded for each (cardinal) direction and passed to the convolution based on user input.
 * Sobel - Applys a Sobel filter to the working image in a very similar way to emboss except with 3 different hardcoded Sobel kernels.
-* FIR - Applys a FIR filter tot he working image as a negative compatible filter. Acts as an 'out of the page' edge dection filter.
+* FIR - Applys a FIR filter to the working image as another negative compatible filter. Acts as an 'out of the page' edge dection filter.
 * Contrast mask - Enhances the local contrast by creating a blurred inverted greyscale version of the image and blending it back with the original image. User inputs a blur radius and strength of the effect.
 * Random scattering - Create a scattered effect by replacing each output pixel with a randomly chosen pixel from within a user-specified radius around the original pixel location
+* Convolution filter - A dedicated convolution filter class has been implemented into ANDIE rather than using the convolution from the java library.
 
 ### Colour
 
@@ -69,7 +70,12 @@ Unchanged as of 20/03
 
 ## Testing
 
-Newly developed functions were tested with undo and redo operations, saving, saving as and exporting. The save and exit was tested when switching language as well as using the exit button and exiting via the x. Not every combination of filter, edit, or colour manipualtion has been tested but they should all _theoretically_ work. Trying to apply operations without an image will result in an error occuring. As well as trying to open a new image with an image open already. Trying to export an image to jpeg that has transparency will result in an error message. Invalid inputs physically cannot be entered into number boxes so there is not much testing required. 
+Newly developed functions were tested with undo and redo operations, saving, saving as and exporting.
+The save and exit was tested when switching language as well as using the exit button and exiting via the x.
+Not every combination of filter, edit, or colour manipualtion has been tested but they should all _theoretically_ work.
+Trying to apply operations without an image will result in an error occuring. As well as trying to open a new image with an image open already.
+Trying to export an image to jpeg that has transparency will result in an error message.
+Invalid inputs physically cannot be entered into number boxes so there is not much testing required. 
 
 ## Known bugs
 

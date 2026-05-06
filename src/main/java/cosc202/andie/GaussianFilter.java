@@ -79,8 +79,11 @@ public class GaussianFilter implements ImageOperation, java.io.Serializable {
         int size = (2 * radius + 1) * (2 * radius + 1);
 
         float[] array = new float[size];
+        
         float sigma = (float) (1 / 3.0 * radius); // Used in calculating Gaussian
-        for (int y = -radius; y <= radius; y++) {
+        
+        for (int y = -radius; y <= radius; y++) { // For each co-ordinate in the kernel treating the centre
+                                                  // co-ordinate as (0,0)
 
             for (int x = -radius; x <= radius; x++) {
 

@@ -84,7 +84,7 @@ public class EmbossFilter implements ImageOperation, java.io.Serializable {
         
         float[] kernel = new float[9];
         
-        switch(direction){
+        switch(direction){  // Each cardinal direction going clock wise starting from right
             
             case 0: // Right
                     kernel = new float[] {0.0f, 0.0f, 0.0f,
@@ -138,7 +138,7 @@ public class EmbossFilter implements ImageOperation, java.io.Serializable {
         }
         
         ConvolutionFilter convOp = new ConvolutionFilter();
-        BufferedImage output = convOp.applyConvolution(input, kernel, EMBOSS);
+        BufferedImage output = convOp.applyConvolution(input, kernel, EMBOSS); // Apply to a new output image
         return output;
     }
 

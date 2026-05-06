@@ -6,14 +6,14 @@ import java.awt.image.BufferedImage;
  * <p>
  * A class used to apply a convolution to a given input BufferedImage
  * </p>
- * 
+ *
  * <p>
- * Uses convolution to apply various image filters based on a given kernel.
- * It does this by gathering the sum of each colour in the kernel radius around
- * each pixel in the image and multiplying it by the kernel modifier at the equivalent
- * kernel position.
+ * Uses convolution to apply various image filters based on a given kernel. It
+ * does this by gathering the sum of each colour in the kernel radius around
+ * each pixel in the image and multiplying it by the kernel modifier at the
+ * equivalent kernel position.
  * </p>
- * 
+ *
  * @author Robert Hannaford
  * @version 1.0
  */
@@ -25,33 +25,40 @@ public class ConvolutionFilter {
     private static final int RED = 1;
     private static final int GREEN = 2;
     private static final int BLUE = 3; // For clarity
+
     /**
      * Default constructor
      */
     public ConvolutionFilter() {
     }
-    
+
     /**
-     * Used to determine what kind of filter is used
+     * Used to determine what kind of filter is used BLUR = non-negative values,
+     * uses alpha weights to calculate new pixel alpha EMBOSS = negative values,
+     * does not consider alpha weights in calculating new pixels EDGE =
+     * currently unused
      */
     public enum Mode {
         BLUR,
         EMBOSS,
         EDGE
     }
-    
+
     /**
-     * 
+     *
      * <p>
-     * Applys a convolution to a BufferedImage based on given inputs
+     * Applys a convolution to a BufferedImage based on given inputs Note only
+     * works for odd square kernels - 1x1 3x3 5x5 etc... Also must take a 1D
+     * kernel so {{1, 1, 2},{1, 1, 3},{1, 1, 4}} must be of the form {1, 1, 2,
+     * 1, 1, 3, 1, 1, 4}
      * </p>
-     * 
+     *
      * @param input The image you want to create a modified copy of
-     * @param kernel The kernel to use in the convolution
+     * @param kernel A 1D kernel to use in the convolution
      * @param mode The type of convolution to be used
      * @return A copy of the input image with the convolution applied
      */
-    public BufferedImage applyConvolution(BufferedImage input, float[] kernel, Mode mode) {
+    public BufferedImage applyConvolution(BufferedImage input, float[] kernel, Mode mode) throws IllegalArgumentException {
 
         boolean normalise = false;
         boolean useAlphaWeighting = false;
@@ -71,26 +78,33 @@ public class ConvolutionFilter {
                 break;
         }
 
-        int radius = (int) Math.sqrt(kernel.length) / 2;
-
-        int size = (2 * radius + 1) * (2 * radius + 1);
-        int kWdith = (2 * radius + 1);
+        int size = kernel.length; // Determine how many values are in the kernel
+        
+        if (Math.sqrt(size) % 1 != 0 || size % 2 == 0) { // If the kernel is invalid throw an error
+                                                         // Does this by checking if the square root has a decimal part
+                                                         // Or if the kernel size is even => an even squared matrix
+            throw new IllegalArgumentException("Kernel must be of the form (n x n) for odd n");
+        }
+        int radius = (int) Math.sqrt(size) / 2; // Get the radius of the kernel based off its size
+        
+        int kWdith = (2 * radius + 1); // No kHeight as is equal to width
         int height = input.getHeight();
         int width = input.getWidth();
 
+        // Don't modify the original image so we make a copy and modify that
         BufferedImage output = new BufferedImage(input.getColorModel(),
                 input.copyData(null), input.isAlphaPremultiplied(), null);
-        // Don't modify the original image
+        
 
         float kernelSum = 0;
-        
-        for (float value : kernel) {
+
+        for (float value : kernel) { // Gather total of kernel values
             kernelSum += value;
         }
-        
+
         if (kernelSum != 0 && normalise == true) { // normalise if required/applicable
-            for (int i = 0; i < kernel.length; i++) {
-                kernel[i] /= kernelSum;
+            for (int i = 0; i < size; i++) {
+                kernel[i] /= kernelSum; // Dividing by kernel sum so prevent it from being 0 in the if
             }
         }
 
@@ -110,8 +124,8 @@ public class ConvolutionFilter {
 
                         int yCorrected = Math.max(0, Math.min(yInitial, height - 1));
                         int xCorrected = Math.max(0, Math.min(xInitial, width - 1)); // Ensure pixel is in the image when iterating
-                                                                                     // over the kernel by clamping it to the closest
-                                                                                     // valid pixel
+                        // over the kernel by clamping it to the closest
+                        // valid pixel
 
                         int argb = input.getRGB(xCorrected, yCorrected);    // Grab the pixel based on kernel off-set
 
@@ -121,7 +135,7 @@ public class ConvolutionFilter {
                         int b = argb & 0xFF; // Extract argb values
 
                         float filterWeight = kernel[(ky + radius) * kWdith + (kx + radius)]; // get the value at the KERNEL co-ordinate
-                        
+
                         sums[ALPHA] += a * filterWeight; // Gather alphas together
 
                         if (useAlphaWeighting) { // For normal convolution
@@ -142,7 +156,7 @@ public class ConvolutionFilter {
                 }
 
                 int newR, newG, newB;
-                
+
                 if (useAlphaWeighting) {
                     newR = sumWeight == 0 ? 0 : (int) (sums[RED] / sumWeight);
                     newG = sumWeight == 0 ? 0 : (int) (sums[GREEN] / sumWeight);
@@ -154,7 +168,7 @@ public class ConvolutionFilter {
                 }
 
                 if (applyBias) { // For convolution that requires negative values
-                                 // Shift the bits
+                    // Shift the bits
                     newR += 128;
                     newG += 128;
                     newB += 128;

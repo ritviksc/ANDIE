@@ -61,7 +61,7 @@ public class ImagePanel extends JPanel {
     /**
      * <p>
      * Create a new ImagePanel and register mouse actions.
-     * Using those mouse actions, deterimine what Image Operation is to be carried
+     * Using those mouse actions, determine what Image Operation is to be carried
      * out, if it is the case.
      * </p>
      *

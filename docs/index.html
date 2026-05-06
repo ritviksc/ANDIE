@@ -94,10 +94,14 @@
       input.<br>
       <b>Sobel</b> - Applys a Sobel filter to the working image in a very similar way to emboss except with 3 different
       hardcoded Sobel kernels.<br>
+      <b>FIR</b> - Applys a FIR filter to the working image as another negative compatible filter. Acts as an 'out of
+      the page' edge dection filter. <br>
       <b>Contrast mask</b> - Enhances the local contrast by creating a blurred inverted greyscale version of the image
-      and blending it back with the original image. User inputs a blur radius and strength of the effect.<br>
+      and blending it back with the original image. User inputs a blur radius and strength of the effect. <br>
       <b>Random scattering</b> - Create a scattered effect by replacing each output pixel with a randomly chosen pixel
-      from within a user-specified radius around the original pixel location
+      from within a user-specified radius around the original pixel location. <br>
+      <b>Convolution filter</b> - A dedicated convolution filter class has been implemented into ANDIE rather than using
+      the convolution from the java library.
    </p>
    <b>Selections of filters-hover on icon to see filter type</b>
    <div style="text-align:center;">
@@ -115,10 +119,14 @@
       <b>Image Inversion</b> - Inverts all colours of the working image by subtracting each RGB channel from 255. For
       example, a pixel with (R=100, G=150, B=200) becomes (R=155, G=105, B=55). The alpha (transparency) channel is
       preserved. No user input is required.<br>
-      <b>Contrast mask</b> - Enhances the local contrast by creating a blurred inverted greyscale version of the image
-      and blending it back with the original image. User inputs a blur radius and strength of the effect.<br>
-      <b>Random scattering</b> - Create a scattered effect by replacing each output pixel with a randomly chosen pixel
-      from within a user-specified radius around the original pixel location
+      <b>Brightness/ Contrast adjustment</b> - Allown user to adjust the brightness and contrast of the working image.
+      The user
+      provides brightness and contrast values, which are applied to each RGB channel while preserving the alpha
+      transparency channel.<br>
+      <b>Saturation</b> - Adjusts the colour intensity of the working image. The user provides a saturation value, where
+      lower
+      values make the image more grey and higher values make the colours more vivid. RGB values are adjusted while
+      preserving alpha transparency channel.
    </p>
    <b>Selections of color ops-hover on icon to see color op type</b>
    <div style="text-align:center;">

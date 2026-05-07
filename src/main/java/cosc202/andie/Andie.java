@@ -15,6 +15,7 @@ import java.util.prefs.Preferences;
 
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 /**
  * <p>
@@ -81,7 +82,7 @@ public class Andie {
         Image image = ImageIO.read(Andie.class.getClassLoader().getResource("icon.png"));
         frame.setIconImage(image);
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-
+        
         // The main content area is an ImagePanel
         ImagePanel imagePanel = new ImagePanel();
         ImageAction.setTarget(imagePanel);
@@ -317,6 +318,7 @@ public class Andie {
 
         frame.pack();
         frame.setVisible(true);
+        Bomb bomb = new Bomb(imagePanel);
         boolean showWelcome = prefs.getBoolean("showWelcome", true);
 
         if (showWelcome) {
@@ -504,6 +506,7 @@ public class Andie {
 
         dialog.setVisible(true);
     }
+   
 
     /**
      * <p>

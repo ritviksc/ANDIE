@@ -303,7 +303,6 @@ public class ImagePanel extends JPanel {
             }
             g2.dispose();
         }
-
     }
 
     // Get rectangle area that user is highlighting with proper coordinates

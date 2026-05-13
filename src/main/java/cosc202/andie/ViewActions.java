@@ -102,6 +102,7 @@ public class ViewActions extends ToolbarActions {
         @Override
         public void actionPerformed(ActionEvent e) {
             target.setZoom(target.getZoom() + 10);
+            target.showMascotMessage("Zoomed in!", 6000);
             target.repaint();
             target.getParent().revalidate();
         }

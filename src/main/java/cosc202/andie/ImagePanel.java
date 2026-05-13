@@ -1,4 +1,3 @@
-
 package cosc202.andie;
 
 import java.awt.*;
@@ -38,6 +37,8 @@ public class ImagePanel extends JPanel {
     private Point startPoint; // Where the user clicks first
     private Point endPoint; // Where user releases mouse after dragging it
     private Rectangle selection; // Rectangle formed between starPoint and endPoint
+    private Mascot mascot;
+    private Timer mascotTimer;
 
     /**
      * <p>
@@ -60,9 +61,9 @@ public class ImagePanel extends JPanel {
 
     /**
      * <p>
-     * Create a new ImagePanel and register mouse actions.
-     * Using those mouse actions, determine what Image Operation is to be carried
-     * out, if it is the case.
+     * Create a new ImagePanel and register mouse actions. Using those mouse
+     * actions, determine what Image Operation is to be carried out, if it is
+     * the case.
      * </p>
      *
      * <p>
@@ -72,10 +73,24 @@ public class ImagePanel extends JPanel {
     public ImagePanel() {
         image = new EditableImage();
         scale = 1.0;
+
+        Image sprite = new ImageIcon(
+                getClass().getResource("/Avatar.gif")
+        ).getImage();
+
+        mascot = new Mascot(sprite);
+
+        mascotTimer = new Timer(16, e -> {
+            mascot.update();   // animation logic
+            repaint();         // redraw panel
+        });
+        mascotTimer.start();
+
         addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
-                if (!image.hasImage())
+                if (!image.hasImage()) {
                     return;
+                }
                 startPoint = new Point(
                         (int) (e.getX() / scale),
                         (int) (e.getY() / scale));
@@ -84,8 +99,9 @@ public class ImagePanel extends JPanel {
             }
 
             public void mouseReleased(MouseEvent e) {
-                if (!image.hasImage())
+                if (!image.hasImage()) {
                     return;
+                }
                 endPoint = new Point(
                         (int) (e.getX() / scale),
                         (int) (e.getY() / scale));
@@ -93,16 +109,18 @@ public class ImagePanel extends JPanel {
                 updateSelection();
                 repaint();
 
-                if (selection == null) return;
-                
+                if (selection == null) {
+                    return;
+                }
+
                 if (selection != null) {
                     String[] options = {
-                            I18nManager.get("crop_rectangle"),
-                            I18nManager.get("crop_ellipse"),
-                            I18nManager.get("draw_line"),
-                            I18nManager.get("draw_rectangle"),
-                            I18nManager.get("draw_ellipse"),
-                            I18nManager.get("cancel_crop")
+                        I18nManager.get("crop_rectangle"),
+                        I18nManager.get("crop_ellipse"),
+                        I18nManager.get("draw_line"),
+                        I18nManager.get("draw_rectangle"),
+                        I18nManager.get("draw_ellipse"),
+                        I18nManager.get("cancel_crop")
                     };
 
                     int choice = JOptionPane.showOptionDialog(
@@ -171,8 +189,9 @@ public class ImagePanel extends JPanel {
 
         addMouseMotionListener(new MouseMotionAdapter() {
             public void mouseDragged(MouseEvent e) {
-                if (!image.hasImage())
+                if (!image.hasImage()) {
                     return;
+                }
                 endPoint = new Point(
                         (int) (e.getX() / scale),
                         (int) (e.getY() / scale));
@@ -180,6 +199,10 @@ public class ImagePanel extends JPanel {
                 repaint();
             }
         });
+    }
+
+    public void showMascotMessage(String msg, int duration) {
+        mascot.showMessage(msg, duration);
     }
 
     /**
@@ -301,8 +324,12 @@ public class ImagePanel extends JPanel {
                 g2.setColor(Color.BLUE);
                 g2.drawRect(selection.x, selection.y, selection.width, selection.height);
             }
+
             g2.dispose();
         }
+
+        mascot.draw((Graphics2D) g.create(), getWidth(), getHeight());
+
     }
 
     // Get rectangle area that user is highlighting with proper coordinates
@@ -320,18 +347,17 @@ public class ImagePanel extends JPanel {
      * </p>
      *
      * <p>
-     * A panel is launched so the user can select the color, and 'solidness' of the
-     * object to be drawn.
-     * 
+     * A panel is launched so the user can select the color, and 'solidness' of
+     * the object to be drawn.
+     *
      * </p>
      *
-     * @return Instance of the ShapeOptions class that collects users preferences
-     *         and uses those for
-     *         operation to be carried out
+     * @return Instance of the ShapeOptions class that collects users
+     * preferences and uses those for operation to be carried out
      */
     private ShapeOptions getShapeOptions() {
         JColorChooser colorChooser = new JColorChooser();
-        String[] styles = { I18nManager.get("outline"), I18nManager.get("solid") };
+        String[] styles = {I18nManager.get("outline"), I18nManager.get("solid")};
         JComboBox<String> styleBox = new JComboBox<>(styles);
 
         JPanel panel = new JPanel(new BorderLayout());

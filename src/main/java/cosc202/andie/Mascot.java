@@ -18,9 +18,6 @@ public class Mascot {
     }
 
     public void showMessage(String msg, int durationMs) {
-        if (message != null) {
-            return;
-        }
         this.message = msg;
         this.messageExpiry = Math.max(messageExpiry, System.currentTimeMillis() + durationMs);
     }
@@ -35,10 +32,42 @@ public class Mascot {
         int x = panelWidth - 80;
         int y = panelHeight - 80;
 
-        g.drawImage(sprite, x, y, 64, 64, null);
+        g.drawImage(sprite, x, y, 80, 80, null);
 
         if (message != null) {
-            drawBubble(g, message, x - 60, y - 20);
+            FontMetrics fm = g.getFontMetrics();
+
+            int padding = 8;
+            int textWidth = fm.stringWidth(message);
+            int textHeight = fm.getHeight();
+
+            int bubbleWidth = textWidth + padding * 2;
+            int bubbleHeight = textHeight + padding * 2;
+
+            // Default position (above mascot)
+            int bubbleX = x - bubbleWidth - 10;
+            int bubbleY = y - bubbleHeight;
+
+            // Clamp LEFT edge
+            if (bubbleX < 0) {
+                bubbleX = 10;
+            }
+
+            // Clamp TOP edge
+            if (bubbleY < 0) {
+                bubbleY = y + 10;
+            }
+            // Clamp RIGHT edge
+            if (bubbleX + bubbleWidth > panelWidth) {
+                bubbleX = panelWidth - bubbleWidth - 10;
+            }
+
+            // Clamp BOTTOM edge
+            if (bubbleY + bubbleHeight > panelHeight) {
+                bubbleY = panelHeight - bubbleHeight - 10;
+            }
+
+            drawBubble(g, message, bubbleX, bubbleY);
         }
     }
 

@@ -154,7 +154,6 @@ public class FileActions {
 
                 }
             }
-
             target.repaint();
             target.getParent().revalidate();
         }

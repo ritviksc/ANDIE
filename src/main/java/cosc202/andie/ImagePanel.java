@@ -85,7 +85,7 @@ public class ImagePanel extends JPanel {
             repaint();         // redraw panel
         });
         mascotTimer.start();
-
+        
         addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 if (!image.hasImage()) {
@@ -203,6 +203,12 @@ public class ImagePanel extends JPanel {
 
     public void showMascotMessage(String msg, int duration) {
         mascot.showMessage(msg, duration);
+    }
+
+    public void stopMascotTimer() {
+        if (mascotTimer != null) {
+            mascotTimer.stop();
+        }
     }
 
     /**

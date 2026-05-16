@@ -160,6 +160,7 @@ public class FilterActions extends ToolbarActions {
 
             // Create and apply the filter
             target.getImage().apply(new MeanFilter(radius));
+            target.showMascotMessage(I18nManager.get("mean_filter"), 3000);
             target.repaint();
             target.getParent().revalidate();
         }
@@ -212,6 +213,7 @@ public class FilterActions extends ToolbarActions {
 
             // Create and apply the filter
             target.getImage().apply(new SharpenFilter());
+            target.showMascotMessage(I18nManager.get("sharpen_filter"), 3000);
             target.repaint();
             target.getParent().revalidate();
         }
@@ -295,6 +297,7 @@ public class FilterActions extends ToolbarActions {
 
             // Create and apply the filter
             target.getImage().apply(new GaussianFilter(radius));
+            target.showMascotMessage(I18nManager.get("gaussian_filter"), 3000);
             target.repaint();
             target.getParent().revalidate();
         }
@@ -378,6 +381,7 @@ public class FilterActions extends ToolbarActions {
 
             // Create and apply the filter
             target.getImage().apply(new MedianFilter(radius));
+            target.showMascotMessage(I18nManager.get("median_filter"), 3000);
             target.repaint();
             target.getParent().revalidate();
         }
@@ -453,6 +457,7 @@ public class FilterActions extends ToolbarActions {
 
             // Create and apply the filter
             target.getImage().apply(new EmbossFilter(direction));
+            target.showMascotMessage(I18nManager.get("emboss_filter"), 3000);
             target.repaint();
             target.getParent().revalidate();
         }
@@ -523,6 +528,7 @@ public class FilterActions extends ToolbarActions {
 
             // Create and apply the filter
             target.getImage().apply(new SobelFilter(direction));
+            target.showMascotMessage(I18nManager.get("sobel_filter"), 3000);
             target.repaint();
             target.getParent().revalidate();
         }
@@ -575,6 +581,7 @@ public class FilterActions extends ToolbarActions {
 
             // Create and apply the filter
             target.getImage().apply(new FIRFilter());
+            target.showMascotMessage(I18nManager.get("FIR_filter"), 3000);
             target.repaint();
             target.getParent().revalidate();
         }
@@ -695,6 +702,7 @@ public class FilterActions extends ToolbarActions {
 
             // Apply contrast mask
             target.getImage().apply(new ContrastMask(radius, strength));
+            target.showMascotMessage(I18nManager.get("contrast_mask_filter"), 3000);
             target.repaint();
             target.getParent().revalidate();
         }
@@ -756,6 +764,7 @@ public class FilterActions extends ToolbarActions {
             }
 
             target.getImage().apply(new RandomScattering(radius));
+            target.showMascotMessage(I18nManager.get("random_scattering_fitler"), 3000);
             target.repaint();
             target.getParent().revalidate();
         }

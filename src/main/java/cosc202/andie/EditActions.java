@@ -145,6 +145,7 @@ public class EditActions extends ToolbarActions{
         @Override
         public void actionPerformed(ActionEvent e) {
             target.getImage().undo();
+            target.showMascotMessage(I18nManager.get("undo_action"), 3000);
             target.repaint();
             target.getParent().revalidate();
         }
@@ -189,6 +190,7 @@ public class EditActions extends ToolbarActions{
         @Override
         public void actionPerformed(ActionEvent e) {
             target.getImage().redo();
+            target.showMascotMessage(I18nManager.get("redo_action"), 3000);
             target.repaint();
             target.getParent().revalidate();
         }
@@ -274,6 +276,7 @@ public class EditActions extends ToolbarActions{
             }
             if (target.getImage().hasImage()){
                 target.getImage().apply(new ImageResize((double)factor));
+                target.showMascotMessage(I18nManager.get("resize_action"), 3000);
                 target.repaint();
                 target.getParent().revalidate();
             } 
@@ -332,6 +335,7 @@ public class EditActions extends ToolbarActions{
 
             if (target.getImage().hasImage()){
                 target.getImage().apply(new ImageFlipHorizontal());
+                target.showMascotMessage(I18nManager.get("flip_horizontal"), 3000);
                 target.repaint();
                 target.getParent().revalidate();
             } 
@@ -390,6 +394,7 @@ public class EditActions extends ToolbarActions{
 
             if (target.getImage().hasImage()){
                 target.getImage().apply(new ImageFlipVertically());
+                target.showMascotMessage(I18nManager.get("flip_vertically"), 3000);
                 target.repaint();
                 target.getParent().revalidate();
             } 
@@ -448,6 +453,7 @@ public class EditActions extends ToolbarActions{
 
             if (target.getImage().hasImage()){
                 target.getImage().apply(new ImageRotate90C());
+                target.showMascotMessage(I18nManager.get("rotate_90c"), 3000);
                 target.repaint();
                 target.getParent().revalidate();
             } 
@@ -506,6 +512,7 @@ public class EditActions extends ToolbarActions{
 
             if (target.getImage().hasImage()){
                 target.getImage().apply(new ImageRotate90CC());
+                target.showMascotMessage(I18nManager.get("rotate_90cc"), 3000);
                 target.repaint();
                 target.getParent().revalidate();
             } 
@@ -564,6 +571,7 @@ public class EditActions extends ToolbarActions{
 
             if (target.getImage().hasImage()){
                 target.getImage().apply(new ImageRotate180());
+                target.showMascotMessage(I18nManager.get("rotate_180"), 3000);
                 target.repaint();
                 target.getParent().revalidate();
             } 

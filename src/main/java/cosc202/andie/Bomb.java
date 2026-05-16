@@ -20,7 +20,7 @@ public class Bomb {
     //max time for new bomb to spawn 15sec
     private static final int maxDelay = 15000;
     //time it take before boom explodes 5sec
-    private static final int fuse = 5000;
+    private static final int fuse = 50000;
 
     private static final int bWidth = 88;
     private static final int bHeight = 72;

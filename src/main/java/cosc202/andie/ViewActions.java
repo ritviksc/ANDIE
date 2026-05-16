@@ -102,7 +102,7 @@ public class ViewActions extends ToolbarActions {
         @Override
         public void actionPerformed(ActionEvent e) {
             target.setZoom(target.getZoom() + 10);
-            target.showMascotMessage("Zoomed in!", 6000);
+            target.showMascotMessage(I18nManager.get("zoomed_in"), 3000);
             target.repaint();
             target.getParent().revalidate();
         }
@@ -151,6 +151,7 @@ public class ViewActions extends ToolbarActions {
         @Override
         public void actionPerformed(ActionEvent e) {
             target.setZoom(target.getZoom() - 10);
+            target.showMascotMessage(I18nManager.get("zoomed_out"), 3000);
             target.repaint();
             target.getParent().revalidate();
         }
@@ -199,6 +200,7 @@ public class ViewActions extends ToolbarActions {
         @Override
         public void actionPerformed(ActionEvent e) {
             target.setZoom(100);
+            target.showMascotMessage(I18nManager.get("zoom_full"), 3000);
             target.repaint();
             target.getParent().revalidate();
         }

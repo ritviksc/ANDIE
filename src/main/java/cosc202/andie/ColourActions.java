@@ -115,6 +115,7 @@ public class ColourActions extends ToolbarActions {
         @Override
         public void actionPerformed(ActionEvent e) {
             target.getImage().apply(new ConvertToGrey());
+            target.showMascotMessage(I18nManager.get("converted_to_greyscale"), 3000);
             target.repaint();
             target.getParent().revalidate();
         }
@@ -196,6 +197,7 @@ public class ColourActions extends ToolbarActions {
 
             target.getImage().apply(new ConvertToGrey());
             target.getImage().apply(new ImageThresholdingFilter(threshold));
+            target.showMascotMessage(I18nManager.get("threshold_applied"), 3000);
             target.repaint();
             target.getParent().revalidate();
         }
@@ -232,6 +234,7 @@ public class ColourActions extends ToolbarActions {
         public void actionPerformed(ActionEvent e) {
 
             target.getImage().apply(new ImageInversion());
+            target.showMascotMessage(I18nManager.get("colours_inverted"), 3000);
             target.repaint();
             target.getParent().revalidate();
         }
@@ -298,6 +301,7 @@ public class ColourActions extends ToolbarActions {
 
             int selectedIndex = colourChannelCycle.getSelectedIndex(); // 0–5
             target.getImage().apply(new ColourChannelSwapping(selectedIndex));
+            target.showMascotMessage(I18nManager.get("channels_swapped"), 3000);
             target.repaint();
             target.getParent().revalidate();
         }
@@ -354,6 +358,7 @@ public class ColourActions extends ToolbarActions {
             }
 
             target.getImage().apply(new BrightnessAndContrastAdjustment(brightness, contrast));
+            target.showMascotMessage(I18nManager.get("brightness_contrast_adjusted"), 3000);
             target.repaint();
             target.getParent().revalidate();
         }
@@ -412,6 +417,7 @@ public class ColourActions extends ToolbarActions {
             int saturation = saturationSlider.getValue();
 
             target.getImage().apply(new SaturationFilter(saturation));
+            target.showMascotMessage(I18nManager.get("saturation_adjusted"), 3000);
             target.repaint();
             target.getParent().revalidate();
         }

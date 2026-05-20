@@ -7,6 +7,8 @@ Maleena
 Brightness adjustment
 Contrast adjustment/mask
 Random scattering
+Saturation Filter (extra function)
+Avatar (extra function)
 
 Ritvik
 Mouse selection

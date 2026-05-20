@@ -18,7 +18,7 @@ import java.awt.image.WritableRaster;
  * This increases local contrast and can create a sharpening-style effect.
  * </p>
  *
- * @author malee
+ * @author Maleena Taia
  * @version 1.0
  */
 public class ContrastMask implements ImageOperation, java.io.Serializable {
@@ -76,7 +76,7 @@ public class ContrastMask implements ImageOperation, java.io.Serializable {
                 BufferedImage.TYPE_INT_ARGB
         );
         // Convert strength percentage into alpha weight
-        double maskAlpha = strength / 100.0;
+        int maskAlpha = (int) (255 * (strength / 100.0));
 
         for (int y = 0; y < input.getHeight(); y++) {
             for (int x = 0; x < input.getWidth(); x++) {
@@ -93,11 +93,13 @@ public class ContrastMask implements ImageOperation, java.io.Serializable {
                 int rMask = (maskPixel >> 16) & 0xFF;
                 int gMask = (maskPixel >> 8) & 0xFF;
                 int bMask = maskPixel & 0xFF;
+                
+                double weight = maskAlpha / 255.0;
 
                 // Blend original and mask channels using soft light blending.
-                int r = blendSoftLight(rOrig, rMask, maskAlpha);
-                int g = blendSoftLight(gOrig, gMask, maskAlpha);
-                int b = blendSoftLight(bOrig, bMask, maskAlpha);
+                int r = blendSoftLight(rOrig, rMask, weight);
+                int g = blendSoftLight(gOrig, gMask, weight);
+                int b = blendSoftLight(bOrig, bMask, weight);
 
                 int newPixel = (a << 24) | (r << 16) | (g << 8) | b;
                 output.setRGB(x, y, newPixel);
@@ -115,9 +117,11 @@ public class ContrastMask implements ImageOperation, java.io.Serializable {
      * @return A deep copy of the image.
      */
     private BufferedImage deepCopy(BufferedImage image) {
+        
         ColorModel cm = image.getColorModel();
         boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
         WritableRaster raster = image.copyData(null);
+        
         return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
     }
 
@@ -131,12 +135,18 @@ public class ContrastMask implements ImageOperation, java.io.Serializable {
      * @return The blended channel value.
      */
     private int blendSoftLight(int original, int mask, double weight) {
+        
+        // Convert channel values into ratios between 0 and 1
         double base = original / 255.0;
         double blend = mask / 255.0;
 
+        // Soft light blend formula
         double blended = (1.0 - 2.0 * blend) * base * base + 2.0 * blend * base;
+        
+        // Apply weighted blend
         double result = blended * weight + base * (1.0 - weight);
 
+        // Convert back into RGB range
         return clamp((int) Math.round(result * 255.0));
     }
 

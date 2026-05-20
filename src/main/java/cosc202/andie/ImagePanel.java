@@ -37,8 +37,8 @@ public class ImagePanel extends JPanel {
     private Point startPoint; // Where the user clicks first
     private Point endPoint; // Where user releases mouse after dragging it
     private Rectangle selection; // Rectangle formed between starPoint and endPoint
-    private Mascot mascot;
-    private Timer mascotTimer;
+    private Mascot mascot; // Avatar in the bottom right corner of the panel
+    private Timer mascotTimer; // Animation logic
 
     /**
      * <p>
@@ -74,6 +74,7 @@ public class ImagePanel extends JPanel {
         image = new EditableImage();
         scale = 1.0;
 
+        // Creates new avatar in the bottom right corner of the image panel
         Image sprite = new ImageIcon(
                 getClass().getResource("/Avatar.gif")
         ).getImage();
@@ -201,10 +202,12 @@ public class ImagePanel extends JPanel {
         });
     }
 
+    // The mascot will tell you what action you just preformed
     public void showMascotMessage(String msg, int duration) {
         mascot.showMessage(msg, duration);
     }
 
+    // Exits mascot when panel is closed
     public void stopMascotTimer() {
         if (mascotTimer != null) {
             mascotTimer.stop();

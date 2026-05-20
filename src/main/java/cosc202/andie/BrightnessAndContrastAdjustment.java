@@ -9,17 +9,22 @@ import javax.swing.JOptionPane;
  * This operation modifies the RGB colour channel of every pixel
  * while preserving the alpha (transparency) channel
  * Brightness and contrast values are provided as percentages
- * Brightness increases or decreases overall lightless
+ * Brightness increases or decreases overall lightness
  * Contrast increases or decreases the difference between light and dark areas
  * </p>
- * @author maleena
+ * @author Maleena Taia
  * Version 1.0
  */
 public class BrightnessAndContrastAdjustment implements ImageOperation, java.io.Serializable {
 
-    /** Percentage value used to adjust image brightness*/
+    /** 
+     * Percentage value used to adjust image brightness
+     */
     private double brightness;
-    /** Percentage value used to adjust image contrast*/
+    
+    /** 
+     * Percentage value used to adjust image contrast
+     */
     private double contrast;
 
     /** 
@@ -107,7 +112,8 @@ public class BrightnessAndContrastAdjustment implements ImageOperation, java.io.
         // Round the calculated value to the nearest integer.
         int result = (int) Math.round(newValue);
 
-        // Clamps the result to the valid RGB range.
+        // Clamps the result to the valid RGB range 0 - 255
+        // Used to make sure values cant go out of bounds.
         if (result < 0) {
             result = 0;
         }

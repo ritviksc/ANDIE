@@ -14,7 +14,7 @@ import java.util.Random;
  * pixel is copied into the output image.
  * </p>
  *
- * @author malee
+ * @author Maleena Taia
  * @version 1.0
  */
 public class RandomScattering implements ImageOperation, java.io.Serializable {
@@ -32,8 +32,8 @@ public class RandomScattering implements ImageOperation, java.io.Serializable {
     /**
      * Creates a random scattering effect with the specified radius.
      *
-     * @param radius The maximum distance from each pixel to randomly sample
-     * from.
+     * @param radius The maximum distance from each pixel used 
+     * when randomly selecting neighbouring pixels.
      */
     public RandomScattering(int radius) {
         this.radius = radius;

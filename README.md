@@ -89,10 +89,10 @@ Note - not internationalised
 Adds an avatar to the bottom right corner of ANDIE that comments on any action made by the user
 Is internationalised
 
-### ANDIE manual && Welcome message
+### ANDIE Manual && Welcome Message
 
 A welcome message as been added to make UI experience smoother (can be disabled), and it links to the ANDIE manual that has all the infomation required to use the image editor as a pro.
-You can also access the manual from the settings tab.
+You can also access the manual from the settings tab.  
 Note - the manual is hosted on GitLab pages.
 
 ## Known bugs

@@ -83,6 +83,7 @@ Invalid inputs physically cannot be entered into number boxes so there is not mu
 
 Randomly spawns a bomb that if not clicked on in time will close the program without saving your work.
 Note - not internationalised
+Known bug where timer runs while image processing is occuring for longer image effects such as filters
 
 ### Avatar
 

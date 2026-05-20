@@ -77,6 +77,18 @@ Trying to apply operations without an image will result in an error occuring. As
 Trying to export an image to jpeg that has transparency will result in an error message.
 Invalid inputs physically cannot be entered into number boxes so there is not much testing required. 
 
+## Miscellaneuos extra featues
+
+### The bomb
+
+Randomly spawns a bomb that if not clicked on in time will close the program without saving your work.
+Note - not internationalised
+
+### Avatar
+
+Adds an avatar to the bottom right corner of ANDIE that comments on any action made by the user
+Is internationalised
+
 ## Known bugs
 
 ## Refactoring

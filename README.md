@@ -1,4 +1,7 @@
 # ANDIE by Great People
+## University of Otago Project
+
+### Note - ANDIE manual is not hosted on github, so wont work.
 
 ## Authors:
 * Maleena Taia

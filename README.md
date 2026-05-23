@@ -1,4 +1,4 @@
-# ANDIE (A Non-Destructive Image Editor) by Great People
+# ANDIE (A Non-Destructive Image Editor) 
 ## University of Otago Project
 
 ### Note - ANDIE manual is not hosted on github, so wont work.
